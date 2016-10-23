@@ -1,13 +1,14 @@
 ﻿using MongoDB.Driver;
+using MyMoods.Domain;
 
 namespace MyMoods.Contracts
 {
     public interface IStorage
     {
-        IMongoCollection<Domain.Company> Companies { get; }
-        IMongoCollection<Domain.Form> Forms { get; }
-        IMongoCollection<Domain.Question> Questions { get; }
-        IMongoCollection<Domain.Review> Reviews { get; }
-        IMongoCollection<Domain.Tagg> Tags { get; }
+        IMongoCollection<Company> Companies { get; }
+        IMongoCollection<Form> Forms { get; }
+        IMongoCollection<Question> Questions { get; }
+        IMongoCollection<Review> Reviews { get; }
+        IMongoCollection<Tagg> Tags { get; }
     }
 }

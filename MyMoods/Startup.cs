@@ -28,6 +28,7 @@ namespace MyMoods
             services.AddMvc();
             services.AddScoped(x => Mongo.Database.Get());
             services.AddScoped<IStorage, Mongo.Storage>();
+            services.AddScoped<IMoodsService, MoodsService>();
             services.AddScoped<IFormsService, FormsService>();
         }
 

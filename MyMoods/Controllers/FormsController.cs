@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyMoods.Contracts;
+using System.Threading.Tasks;
 
 namespace MyMoods.Controllers
 {
@@ -14,9 +15,9 @@ namespace MyMoods.Controllers
         }
 
         [HttpGet("{id}/metadata")]
-        public IActionResult GetMetadata(string id)
+        public async Task<IActionResult> GetMetadata(string id)
         {
-            return Ok(_formsService.GetMetadata(id));
+            return Ok(await _formsService.GetMetadataAsync(id));
         }
     }
 }

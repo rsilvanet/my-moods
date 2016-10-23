@@ -5,6 +5,6 @@ namespace MyMoods.Contracts
 {
     public interface IFormsService
     {
-        Task<FormMetadataDTO> GetMetadata(string id);
+        Task<MetadataDTO> GetMetadataAsync(string id);
     }
 }

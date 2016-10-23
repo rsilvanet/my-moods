@@ -1,11 +1,22 @@
-﻿namespace MyMoods.Domain
+﻿using System.ComponentModel;
+
+namespace MyMoods.Domain
 {
     public enum MoodType
     {
+        [Description("Triste")]
         sad = 1,
+
+        [Description("Insatisfeito")]
         unsatisfied,
+
+        [Description("Normal")]
         normal,
+
+        [Description("Feliz")]
         happy,
+
+        [Description("Apaixonado")]
         inLove
     }
 
