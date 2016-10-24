@@ -38,6 +38,8 @@ namespace MyMoods
             loggerFactory.AddDebug();
 
             app.UseMvc();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }
