@@ -1,0 +1,11 @@
+.main-container {
+    padding-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.mood-image {
+    width: 45px;
+    margin-left: 2px;
+    margin-right: 2px;
+}

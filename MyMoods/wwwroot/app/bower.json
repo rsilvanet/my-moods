@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Robson da Silva <sc.robson@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/rsilva93/my-moods",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "bootstrap": "^3.3.7"
+  }
+}

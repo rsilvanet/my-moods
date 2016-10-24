@@ -33,7 +33,7 @@ namespace MyMoods.Services
                     return "Talvez dê pra melhorar. Só nos ajude a identificar onde.";
                 case MoodType.happy:
                     return "Que ótimo! Diz aí pra gente o motivo da sua felicidade.";
-                case MoodType.inLove:
+                case MoodType.loving:
                     return "Perfeito. Aponta pra gente o que te deixou tão apaixonado.";
                 default:
                     return string.Empty;

@@ -3,3 +3,5 @@ MyMoods/bin/**
 MyMoods/obj/**
 MyMoods/project.lock.json
 MyMoods/MyMoods.xproj.user
+MyMoods/wwwroot/app/node_modules/**
+MyMoods/wwwroot/app/bower_components/**

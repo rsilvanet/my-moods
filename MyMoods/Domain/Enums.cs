@@ -17,7 +17,7 @@ namespace MyMoods.Domain
         happy,
 
         [Description("Apaixonado")]
-        inLove
+        loving
     }
 
     public enum QuestionType
