@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyMoods.Contracts;
 using MyMoods.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace MyMoods
 {
@@ -25,11 +27,13 @@ namespace MyMoods
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
             services.AddScoped(x => Mongo.Database.Get());
             services.AddScoped<IStorage, Mongo.Storage>();
             services.AddScoped<IMoodsService, MoodsService>();
             services.AddScoped<IFormsService, FormsService>();
+
+            services.AddMvc();
+            services.AddMvcCore().AddJsonFormatters(x => ConfigureJson(x));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -40,6 +44,14 @@ namespace MyMoods
             app.UseMvc();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+
+        }
+
+        public void ConfigureJson(JsonSerializerSettings settings)
+        {
+            settings.Converters.Add(new StringEnumConverter());
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
         }
     }
 }
