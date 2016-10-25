@@ -8,4 +8,20 @@
     width: 45px;
     margin-left: 2px;
     margin-right: 2px;
+    cursor: pointer;
+}
+
+.tag {
+    padding: 5px 10px 5px 10px;
+    margin: 5px;
+    border: 1px solid black;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    display: inline-flex;
+}
+
+.bordered-div {
+    width: 100%;
+    border: 1px solid black;
 }

@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
     'use strict';
 
     var model = null;
@@ -12,23 +12,62 @@
 
     function load(data) {
         model = data;
-        injectMoods(model.moods);
+
+        var container = $('#main-container');
+        injectMoodsPanel(container, model.moods);
+        injectTagsPanel(container, model.tags);
+        injectQuestionsPanel(container, model.questions);
     }
 
-    function injectMoods(moods) {
+    function injectMoodsPanel(container, moods) {
 
         var html = '';
-        var container = $('#moods-container');
 
-        html += '<div class="text-center">';
+        html += '<div class="bordered-div">';
+        html += 'Como você está se sentindo?';
+        html += '</div>';
+        html += '<div class="bordered-div">';
 
         moods.forEach(function (mood) {
-            html += '<img src="' + mood.image + '" class="mood-image" />';
+            html += '<img src="' + mood.image + '" class="mood-image"></img>';
         }, this);
 
         html += '</div>';
 
-        container.html(html);
+        container.append(html);
+    }
+
+    function injectTagsPanel(container, tags) {
+
+        var html = '';
+
+        html += '<div class="bordered-div">';
+        html += 'Título das tags';
+        html += '</div>';
+        html += '<div class="bordered-div">';
+
+        tags.forEach(function (tag) {
+            html += '<div class="tag">' + tag.title + '</div>';
+        }, this);
+
+        html += '</div>';
+
+        container.append(html);
+    }
+
+    function injectQuestionsPanel(container, questions) {
+
+        var html = '';
+
+        questions.forEach(function (question) {
+            html += '<div class="bordered-div">';
+            html += question.title;
+            html += '</div>';
+            html += '<div class="bordered-div">';
+            html += '</div>';
+        }, this);
+
+        container.append(html);
     }
 
 })();
