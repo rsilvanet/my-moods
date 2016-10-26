@@ -23,10 +23,10 @@
 
         var html = '';
 
-        html += '<div class="bordered-div">';
+        html += '<div class="panel moods-panel">';
+        html += '<div class="panel-header moods-panel-header">';
         html += 'Como você está se sentindo?';
         html += '</div>';
-        html += '<div class="bordered-div">';
 
         moods.forEach(function (mood) {
             html += '<img src="' + mood.image + '" class="mood-image"></img>';
@@ -41,10 +41,10 @@
 
         var html = '';
 
-        html += '<div class="bordered-div">';
-        html += 'Título das tags';
+        html += '<div class="panel tags-panel">';
+        html += '<div class="panel-header tags-panel-header">';
+        html += 'Tags';
         html += '</div>';
-        html += '<div class="bordered-div">';
 
         tags.forEach(function (tag) {
             html += '<div class="tag">' + tag.title + '</div>';
@@ -60,11 +60,20 @@
         var html = '';
 
         questions.forEach(function (question) {
-            html += '<div class="bordered-div">';
-            html += question.title;
+
+            html += '<div class="panel questions-panel">';
+            html += '<div class="panel-header questions-panel-header">';
+            html += '<span>' + question.title + '</span>';
             html += '</div>';
-            html += '<div class="bordered-div">';
+
+            if (question.type == 'text') {
+                html += '<div class="padded-holder">';
+                html += '<textarea class="free-text"></textarea>';
+                html += '</div>';
+            }
+
             html += '</div>';
+
         }, this);
 
         container.append(html);

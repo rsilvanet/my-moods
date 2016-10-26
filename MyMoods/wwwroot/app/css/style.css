@@ -1,7 +1,49 @@
+html {
+    font-family: Arial;
+}
+
 .main-container {
     padding-top: 15px;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.panel {
+    border-radius: 5px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: white;
+}
+
+.panel-header {
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.moods-panel {
+    background-color: rgb(141, 193, 204);
+}
+
+.moods-panel-header {
+    background-color: rgb(96, 178, 199);
+}
+
+.tags-panel {
+    background-color: rgb(61, 184, 143);
+}
+
+.tags-panel-header {
+    background-color: rgb(23, 175, 125);
+}
+
+.questions-panel {
+    background-color: rgb(220, 61, 62);
+}
+
+.questions-panel-header {
+    background-color: rgb(184, 61, 62);
 }
 
 .mood-image {
@@ -14,14 +56,23 @@
 .tag {
     padding: 5px 10px 5px 10px;
     margin: 5px;
-    border: 1px solid black;
+    border: 1px solid white;
     border-radius: 15px;
     font-size: 12px;
     cursor: pointer;
     display: inline-flex;
 }
 
-.bordered-div {
+.free-text {
+    resize: none;
     width: 100%;
-    border: 1px solid black;
+    box-sizing: border-box;
+    border-radius: 5px;
+    min-height: 60px;
+    margin-top: 5px;
+}
+
+.padded-holder {
+    padding-left: 10px;
+    padding-right: 10px;
 }
