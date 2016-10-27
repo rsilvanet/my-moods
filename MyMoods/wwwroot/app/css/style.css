@@ -70,6 +70,12 @@ html {
     display: inline-flex;
 }
 
+.tag-selected {
+    color: rgb(23, 175, 125);
+    background-color: white;
+    border: 1px solid black;
+}
+
 .free-text {
     resize: none;
     width: 100%;

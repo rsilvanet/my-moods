@@ -8,7 +8,8 @@ var postModel = null;
 function activate() {
 
     postModel = {
-        selectedMood: null
+        selectedMood: null,
+        tags: []
     };
 
     getForm('57976abd266b3c042d6217f6');
@@ -45,7 +46,7 @@ function injectMoodsPanel(container, moods) {
     html += '</div>';
 
     moods.forEach(function (mood) {
-        html += '<img id="' + mood.value + '" src="' + mood.image + '" class="mood-image" onclick="selectMood(\'' + mood.value + '\')"></img>';
+        html += '<img id="mood_' + mood.value + '" src="' + mood.image + '" class="mood-image" onclick="selectMood(\'' + mood.value + '\')"></img>';
     }, this);
 
     html += '<br>';
@@ -65,7 +66,7 @@ function injectTagsPanel(container, tags) {
     html += '</div>';
 
     tags.forEach(function (tag) {
-        html += '<div class="tag">' + tag.title + '</div>';
+        html += '<div id="tag_' + tag.id + '" class="tag" onclick="selectTag(\'' + tag.id + '\')">' + tag.title + '</div>';
     }, this);
 
     html += '</div>';
@@ -100,12 +101,32 @@ function injectQuestionsPanel(container, questions) {
 function selectMood(mood) {
 
     if (postModel.selectedMood) {
-        $('#' + postModel.selectedMood).removeClass('mood-image-selected');
+        $('#mood_' + postModel.selectedMood).removeClass('mood-image-selected');
     }
 
     postModel.selectedMood = mood;
-    $('#' + postModel.selectedMood).addClass('mood-image-selected');
+    $('#mood_' + postModel.selectedMood).addClass('mood-image-selected');
     $('#selected-mood-label').html(getMoodTitle(mood));
+}
+
+function selectTag(id) {
+
+    var tag = _.first(model.tags, function (item) {
+        return item.id == id;
+    });
+
+    var isSelected = _.some(postModel.tags, function (item) {
+        return item == id;
+    });
+
+    if (isSelected) {
+        postModel.tags = _.reject(postModel.tags, function (item) { return item == id; });
+        $('#tag_' + id).removeClass('tag-selected');
+    }
+    else {
+        postModel.tags.push(id);
+        $('#tag_' + id).addClass('tag-selected');
+    }
 }
 
 function getMoodTitle(mood) {
