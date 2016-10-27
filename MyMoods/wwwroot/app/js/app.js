@@ -41,18 +41,18 @@ function injectMoodsPanel(container, moods) {
 
     html += '<div class="panel moods-panel">';
     html += '<div class="panel-header moods-panel-header">';
-    html += 'Como você está se sentindo?';
+    html += '<span>Como você está se sentindo?</span>';
     html += '</div>';
 
     moods.forEach(function (mood) {
-        html += '<img id="testando" src="' + mood.image + '" class="mood-image" onclick="selectMood(\'' + mood.value + '\')"></img>';
+        html += '<img id="' + mood.value + '" src="' + mood.image + '" class="mood-image" onclick="selectMood(\'' + mood.value + '\')"></img>';
     }, this);
 
+    html += '<br>';
+    html += '<span id="selected-mood-label"></span>';
     html += '</div>';
 
     container.append(html);
-
-    $("#testando").click(selectMood(1));
 }
 
 function injectTagsPanel(container, tags) {
@@ -98,5 +98,28 @@ function injectQuestionsPanel(container, questions) {
 }
 
 function selectMood(mood) {
+
+    if (postModel.selectedMood) {
+        $('#' + postModel.selectedMood).removeClass('mood-image-selected');
+    }
+
     postModel.selectedMood = mood;
+    $('#' + postModel.selectedMood).addClass('mood-image-selected');
+    $('#selected-mood-label').html(getMoodTitle(mood));
+}
+
+function getMoodTitle(mood) {
+
+    var title = '';
+
+    if (model) {
+        model.moods.forEach(function (item) {
+            if (item.value == mood) {
+                title = item.title;
+                return;
+            }
+        });
+    }
+
+    return title;
 }
