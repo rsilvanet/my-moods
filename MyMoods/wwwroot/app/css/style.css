@@ -40,10 +40,20 @@ html {
 
 .submit-panel {
     text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
 .submit-button {
     width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background-color: darkblue;
+    color: white;
+    font: 16px bold;
+    font-family: Arial;
+    cursor: pointer;
 }
 
 .moods-panel {

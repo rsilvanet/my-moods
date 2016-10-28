@@ -39,6 +39,7 @@ function loadForm(data) {
     injectSubmitPanel(container);
     disableTagsPanel();
     disableQuestionsPanel();
+    disableSubmitPanel();
 }
 
 function injectCompanyPanel(container, company) {
@@ -134,12 +135,20 @@ function disableQuestionsPanel() {
     $('.questions-panel').addClass('panel-disabled');
 }
 
+function disableSubmitPanel() {
+    $('.submit-panel').addClass('panel-disabled');
+}
+
 function enableTagsPanel() {
     $('.tags-panel').removeClass('panel-disabled');
 }
 
 function enableQuestionsPanel() {
     $('.questions-panel').removeClass('panel-disabled');
+}
+
+function enableSubmitPanel() {
+    $('.submit-panel').removeClass('panel-disabled');
 }
 
 function selectMood(mood) {
@@ -176,9 +185,11 @@ function selectTag(id) {
     }
 
     enableQuestionsPanel();
+    enableSubmitPanel();
 
     if (!_.some(postModel.tags)) {
         disableQuestionsPanel();
+        disableSubmitPanel();
     }
 }
 
@@ -212,4 +223,8 @@ function getTagsHelpText(mood) {
     }
 
     return text;
+}
+
+function readQuestions() {
+
 }
