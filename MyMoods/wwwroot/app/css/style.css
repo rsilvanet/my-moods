@@ -6,6 +6,8 @@ html {
     padding-top: 15px;
     padding-left: 10px;
     padding-right: 10px;
+    max-width: 800px;
+    margin: auto;
 }
 
 .panel {
@@ -16,10 +18,32 @@ html {
     color: white;
 }
 
+.panel-disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
 .panel-header {
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;
+}
+
+.company-panel {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.company-logo {
+    max-width: 100%;
+}
+
+.submit-panel {
+    text-align: center;
+}
+
+.submit-button {
+    width: 200px;
 }
 
 .moods-panel {
