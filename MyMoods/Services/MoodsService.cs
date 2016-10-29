@@ -28,7 +28,7 @@ namespace MyMoods.Services
                 case MoodType.sad:
                     return "Nossa! Conta pra gente o que tá te deixando triste.";
                 case MoodType.unsatisfied:
-                    return "Isso não é legal. Nos diga com o que você está insatisfeito.";
+                    return "Nada legal. Nos diga com o que você está insatisfeito.";
                 case MoodType.normal:
                     return "Talvez dê pra melhorar. Nos ajude a identificar onde ou como.";
                 case MoodType.happy:

@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using MyMoods.Contracts;
+using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System.Threading.Tasks;
 
@@ -17,7 +18,15 @@ namespace MyMoods.Services
             _moodsService = moodsService;
         }
 
-        public async Task<MetadataDTO> GetMetadataAsync(string id)
+        public async Task<Form> GetFormAsync(string id)
+        {
+            var oid = new ObjectId(id);
+            var form = await _storage.Forms.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
+
+            return form;
+        }
+
+        public async Task<FormMetadataDTO> GetMetadataAsync(string id)
         {
             var oid = new ObjectId(id);
             var form = await _storage.Forms.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
@@ -26,7 +35,7 @@ namespace MyMoods.Services
             var tags = await _storage.Tags.Find(x => true).ToListAsync();
             var moods = _moodsService.GetMoods();
 
-            return new MetadataDTO(form, company, questions, tags, moods);
+            return new FormMetadataDTO(form, company, questions, tags, moods);
         }
     }
 }

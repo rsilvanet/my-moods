@@ -12,17 +12,5 @@
         public string Id { get; set; }
         public string Title { get; set; }
         public CompanyDTO Company { get; set; }
-
-        public class CompanyDTO
-        {
-            public CompanyDTO(Company company)
-            {
-                Name = company.Name;
-                Logo = company.Logo;
-            }
-
-            public string Name { get; set; }
-            public string Logo { get; set; }
-        }
     }
 }

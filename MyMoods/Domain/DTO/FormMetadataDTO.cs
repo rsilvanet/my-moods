@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace MyMoods.Domain.DTO
 {
-    public class MetadataDTO
+    public class FormMetadataDTO
     {
-        public MetadataDTO(Form form, Company company, IList<Question> questions, IList<Tagg> tags, IList<MoodDTO> moods)
+        public FormMetadataDTO(Form form, Company company, IList<Question> questions, IList<Tagg> tags, IList<MoodDTO> moods)
         {
             Form = new FormDTO(form, company);
             Questions = questions.Select(x => new QuestionDTO(x)).ToList();
