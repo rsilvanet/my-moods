@@ -10,7 +10,28 @@
 </head>
 
 <body>
-    <form id="main-container" class="main-container"></form>
+    <div class="main-container">
+        <div class="company-panel">
+            <div id="company-injector"></div>
+        </div>
+        <div class="panel moods-panel">
+            <div class="panel-header moods-panel-header">
+                <span>Como você está se sentindo?</span>
+            </div>
+            <div id="moods-injector"></div>
+            <span id="selected-mood-label"></span>
+        </div>
+        <div class="panel tags-panel">
+            <div class="panel-header tags-panel-header">
+                <span id="tag-title">-</span>
+            </div>
+            <div id="tags-injector"></div>
+        </div>
+        <div id="questions-injector"></div>
+        <div class="submit-panel">
+            <button type="submit" class="submit-button" onclick="submit()">Enviar</button>
+        </div>
+    </div>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/lodash/dist//lodash.min.js"></script>
     <script src="js/app.js"></script>
