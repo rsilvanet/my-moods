@@ -25,8 +25,9 @@ function getForm() {
 
     promise.then(function (response) {
         loadForm(response);
+        showForm();
     }, function (response) {
-        alert(response);
+        showError();
     });
 }
 
@@ -41,11 +42,17 @@ function loadForm(data) {
     disableTagsPanel();
     disableQuestionsPanel();
     disableSubmitPanel();
-    showForm();
+}
+
+function showError() {
+    $('.loading-panel').css('display', 'none');
+    $('.error-panel').css('display', 'block');
+    $('.main-container').css('display', 'none');
 }
 
 function showForm() {
-    $('.loading').css('display', 'none');
+    $('.loading-panel').css('display', 'none');
+    $('.error-panel').css('display', 'none');
     $('.main-container').css('display', 'block');
 }
 
@@ -65,7 +72,7 @@ function injectMoods(moods) {
     var container = $('#moods-injector');
 
     moods.forEach(function (mood) {
-        html += '<img id="mood-' + mood.value + '" src="' + mood.image + '" class="mood-image" onclick="selectMood(\'' + mood.value + '\')"></img>';
+        html += '<img id="mood-' + mood.value + '" src="' + mood.image + '" class="mood-image" onclick="selectMood(\'' + mood.value + '\')" />';
     });
 
     container.html(html);

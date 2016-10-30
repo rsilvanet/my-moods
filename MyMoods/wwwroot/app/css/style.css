@@ -2,13 +2,21 @@ html {
     font-family: Arial;
 }
 
-.loading {
+.loading-panel {
+    display: block;
     height: 100%;
     text-align: center;
     padding: 20px;
 }
 
-.loading img {
+.error-panel {
+    display: none;
+    height: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
+.initial-panel-img {
     width: 100%;
     max-width: 200px;
 }

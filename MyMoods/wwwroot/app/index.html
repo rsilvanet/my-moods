@@ -10,10 +10,19 @@
 </head>
 
 <body>
-    <div class="loading">
-        <img id="mood-happy" src="/assets/emojis/happy.png" onclick="selectMood('happy')">
+    <div class="loading-panel">
+        <img src="/assets/emojis/happy.png" class="initial-panel-img" />
         <br>
         <h3>Carregando...</h3>
+    </div>
+    <div class="error-panel">
+        <img src="/assets/emojis/sad.png" class="initial-panel-img" />
+        <br>
+        <h3>
+            Não foi possível carregar o formulário.
+            <br />
+            Tente novamente em breve.
+        </h3>
     </div>
     <div class="main-container">
         <div class="company-panel">
