@@ -4,6 +4,7 @@
 
 var model = null;
 var postModel = null;
+var formId = null;
 
 function activate() {
 
@@ -13,10 +14,12 @@ function activate() {
         answers: []
     };
 
-    getForm('57976abd266b3c042d6217f6');
+    formId = '57976abd266b3c042d6217f6';
+
+    getForm();
 }
 
-function getForm(formId) {
+function getForm() {
 
     var promise = $.get('/api/forms/' + formId + '/metadata');
 
@@ -222,6 +225,17 @@ function submit() {
 
     postModel.answers = readAnswers();
 
-    console.log(postModel);
-
+    var promise = $.ajax({
+        type: 'POST',
+        url: '/api/forms/' + formId + '/reviews',
+        data: JSON.stringify(postModel),
+        dataType: 'text',
+        contentType: "application/json",
+        success: function (response) {
+            //Fazer redirect
+        },
+        error: function (response) {
+            //Tratar erros
+        }
+    });
 }
