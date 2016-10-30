@@ -41,6 +41,12 @@ function loadForm(data) {
     disableTagsPanel();
     disableQuestionsPanel();
     disableSubmitPanel();
+    showForm();
+}
+
+function showForm() {
+    $('.loading').css('display', 'none');
+    $('.main-container').css('display', 'block');
 }
 
 function injectCompany(company) {
