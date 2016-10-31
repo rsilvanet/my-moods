@@ -14,8 +14,7 @@ function activate() {
         answers: []
     };
 
-    formId = '57976abd266b3c042d6217f6';
-
+    getIdFromUrl();
     getForm();
 }
 
@@ -29,6 +28,15 @@ function getForm() {
     }, function (response) {
         showError();
     });
+}
+
+function getIdFromUrl() {
+
+    var url = location.href.split('#')[1];
+
+    formId = url.replace('/', '');
+
+    //57976abd266b3c042d6217f6
 }
 
 function loadForm(data) {
