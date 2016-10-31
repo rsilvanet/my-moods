@@ -116,27 +116,27 @@ function injectQuestions(questions) {
 }
 
 function disableTagsPanel() {
-    $('.tags-panel').addClass('panel-disabled');
+    $('.tags-panel').addClass('disabled');
 }
 
 function disableQuestionsPanel() {
-    $('.questions-panel').addClass('panel-disabled');
+    $('.questions-panel').addClass('disabled');
 }
 
 function disableSubmitPanel() {
-    $('.submit-panel').addClass('panel-disabled');
+    $('.submit-panel').addClass('disabled');
 }
 
 function enableTagsPanel() {
-    $('.tags-panel').removeClass('panel-disabled');
+    $('.tags-panel').removeClass('disabled');
 }
 
 function enableQuestionsPanel() {
-    $('.questions-panel').removeClass('panel-disabled');
+    $('.questions-panel').removeClass('disabled');
 }
 
 function enableSubmitPanel() {
-    $('.submit-panel').removeClass('panel-disabled');
+    $('.submit-panel').removeClass('disabled');
 }
 
 function selectMood(mood) {
@@ -238,6 +238,8 @@ function submit() {
 
     postModel.answers = readAnswers();
 
+    startSubmitLoading();
+
     var promise = $.ajax({
         type: 'POST',
         url: '/api/forms/' + formId + '/reviews',
@@ -245,10 +247,23 @@ function submit() {
         dataType: 'text',
         contentType: "application/json",
         success: function (response) {
-            //Fazer redirect
+            //TODO: Salvar cache!
+            endSubmitLoading();
+            window.location.href = 'success';
         },
         error: function (response) {
-            //Tratar erros
+            //TODO: Tratar erros
+            endSubmitLoading();
         }
     });
+}
+
+function startSubmitLoading() {
+    $('#submit-button').addClass('disabled');
+    $('#submit-button').html('Enviando');
+}
+
+function endSubmitLoading() {
+    $('#submit-button').removeClass('disabled');
+    $('#submit-button').html('Enviar');
 }

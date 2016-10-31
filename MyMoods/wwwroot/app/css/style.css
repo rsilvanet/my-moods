@@ -16,6 +16,13 @@ html {
     padding: 20px;
 }
 
+.success-panel {
+    display: block;
+    height: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
 .initial-panel-img {
     width: 100%;
     max-width: 200px;
@@ -38,7 +45,7 @@ html {
     color: white;
 }
 
-.panel-disabled {
+.disabled {
     opacity: 0.4;
     pointer-events: none;
 }
