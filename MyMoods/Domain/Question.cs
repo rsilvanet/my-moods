@@ -1,11 +1,11 @@
 ﻿using MongoDB.Bson;
+using MyMoods.Mongo;
 using System.Collections.Generic;
 
 namespace MyMoods.Domain
 {
-    public class Question
+    public class Question : Entity
     {
-        public ObjectId Id { get; set; }
         public string Title { get; set; }
         public QuestionType Type { get; set; }
         public bool Required { get; set; }

@@ -1,12 +1,11 @@
 ﻿using MongoDB.Bson;
+using MyMoods.Mongo;
 
 namespace MyMoods.Domain
 {
-    public class Tagg
+    public class Tagg : Entity
     {
-        public ObjectId Id { get; set; }
         public TagType Type { get; set; }
         public string Title { get; set; }
-        public object __v { get; set; }
     }
 }

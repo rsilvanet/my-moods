@@ -19,7 +19,7 @@
     ]);
 
     app.constant('APP_CONFIG', {
-        API_BASE_URL: 'https://moodz-api.herokuapp.com/analytics/api/'
+        API_BASE_URL: '/api/analytics'
     });
 
     app.config(function ($httpProvider, $stateProvider, $urlRouterProvider) {

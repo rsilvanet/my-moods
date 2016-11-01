@@ -10,5 +10,6 @@ namespace MyMoods.Contracts
         IMongoCollection<Question> Questions { get; }
         IMongoCollection<Review> Reviews { get; }
         IMongoCollection<Tagg> Tags { get; }
+        IMongoCollection<User> Users { get; }
     }
 }

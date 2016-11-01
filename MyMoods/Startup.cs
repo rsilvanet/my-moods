@@ -32,6 +32,7 @@ namespace MyMoods
             services.AddScoped<IFormsService, FormsService>();
             services.AddScoped<IMoodsService, MoodsService>();
             services.AddScoped<IReviewsService, ReviewsService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddMvc();
             services.AddMvcCore().AddJsonFormatters(x => ConfigureJson(x));

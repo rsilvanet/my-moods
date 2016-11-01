@@ -21,7 +21,14 @@ namespace MyMoods.Controllers
         [HttpGet("{id}/metadata")]
         public async Task<IActionResult> GetMetadata(string id)
         {
-            return Ok(await _formsService.GetMetadataAsync(id));
+            try
+            {
+                return Ok(await _formsService.GetMetadataAsync(id));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
 
         [HttpPost("{id}/reviews")]

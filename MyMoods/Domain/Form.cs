@@ -1,10 +1,10 @@
 ﻿using MongoDB.Bson;
+using MyMoods.Mongo;
 
 namespace MyMoods.Domain
 {
-    public class Form
+    public class Form : Entity
     {
-        public ObjectId Id { get; set; }
         public string Title { get; set; }
         public ObjectId Company { get; set; }
     }
