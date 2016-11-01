@@ -260,7 +260,7 @@ function submit() {
             window.location.href = 'success';
         },
         error: function (response) {
-            //TODO: Tratar erros
+            //TODO: Tratar erros!
             endSubmitLoading();
         }
     });

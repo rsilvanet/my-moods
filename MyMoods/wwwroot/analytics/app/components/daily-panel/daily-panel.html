@@ -1,0 +1,32 @@
+<div class="ls-sm-margin-top" ng-show="isLoaded">
+    <h3 class="ls-txt-center">{{formattedDay}}</h3>
+    <br><br>
+    <ul class="ls-tabs-nav">
+        <li ng-repeat="item in items track by $index" ng-class="{ 'ls-active' : activeItem == item }">
+            <a data-ls-module="tabs" href="" ng-click="activateItem(item)">
+                <img ng-src="{{item.image}}" style="height: 25px;"> x {{item.count}}
+            </a>
+        </li>
+    </ul>
+    <div class="ls-tabs-container">
+        <div class="ls-tab-content ls-active">
+            <span ng-repeat="tag in activeItem.tags track by $index">
+                <a href="#" class="ls-tag daily-panel-tag">{{tag}}</a>
+            </span>
+            <br><br>
+            <div ng-repeat="question in activeItem.questions track by $index">
+                <div class="ls-box" ng-show="question.answers.length">
+                    <div class="ls-list-title ">
+                        <h5 class="ls-title-5">{{question.title}}</h5>
+                    </div>
+                    <br>
+                    <div class="ls-list-description">
+                        <ul>
+                            <li ng-repeat="answer in question.answers track by $index">{{answer}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

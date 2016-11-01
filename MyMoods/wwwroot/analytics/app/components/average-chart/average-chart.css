@@ -1,0 +1,8 @@
+.average-chart-holder {
+    overflow-x: auto;
+    margin-bottom: 30px;
+}
+
+.average-chart-holder > canvas {
+    margin: auto;
+}

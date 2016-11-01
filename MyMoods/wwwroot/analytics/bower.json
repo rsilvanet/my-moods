@@ -1,0 +1,26 @@
+{
+  "name": "moodz-analytics",
+  "description": "Moodz Analytics",
+  "main": "src/index.html",
+  "version": "1.0.0",
+  "license": "ISC",
+  "homepage": "https://github.com/rsilva93/moodz-analytics",
+  "authors": [
+    "Robson da Silva <sc.robson@gmail.com>"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "angular": "^1.5.8",
+    "locawebstyle": "^3.9.0",
+    "lodash": "^4.15.0",
+    "moment": "^2.15.0",
+    "angular-ui-router": "^0.3.1",
+    "sly": "^1.6.1",
+    "c3": "^0.4.11",
+    "chart.js": "^2.3.0"
+  }
+}
