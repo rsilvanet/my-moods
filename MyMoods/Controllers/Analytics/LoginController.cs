@@ -9,9 +9,9 @@ namespace MyMoods.Controllers.Analytics
     [Route("api/analytics/login")]
     public class LoginController : BaseController
     {
-        private readonly IUserService _userService;
+        private readonly IUsersService _userService;
 
-        public LoginController(IUserService userService)
+        public LoginController(IUsersService userService)
         {
             _userService = userService;
         }

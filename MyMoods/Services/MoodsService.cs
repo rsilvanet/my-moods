@@ -11,14 +11,15 @@ namespace MyMoods.Services
     {
         public IList<MoodDTO> GetMoods()
         {
-            var moods = new List<MoodDTO>();
+            return Enum.GetValues(typeof(MoodType))
+                .Cast<MoodType>()
+                .Select(x => new MoodDTO(x, GetImage(x), GetTagsHelpText(x)))
+                .ToList();
+        }
 
-            foreach (var item in Enum.GetValues(typeof(MoodType)).Cast<MoodType>())
-            {
-                moods.Add(new MoodDTO(item, GetTagsHelpText(item)));
-            }
-
-            return moods;
+        public string GetImage(MoodType mood)
+        {
+            return $"/assets/emojis/{mood.ToString()}.png";
         }
 
         public string GetTagsHelpText(MoodType mood)

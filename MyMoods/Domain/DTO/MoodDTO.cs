@@ -4,12 +4,12 @@ namespace MyMoods.Domain.DTO
 {
     public class MoodDTO
     {
-        public MoodDTO(MoodType type, string tagsHelpText)
+        public MoodDTO(MoodType type, string image, string tagsHelpText)
         {
             Value = type.ToString();
             Title = type.GetDescription();
             Points = (int)type;
-            Image = $"/assets/emojis/{Value}.png";
+            Image = image;
             TagsHelpText = tagsHelpText;
         }
 

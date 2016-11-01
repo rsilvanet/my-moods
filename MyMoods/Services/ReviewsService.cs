@@ -5,16 +5,25 @@ using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System.Linq;
 using MongoDB.Driver;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace MyMoods.Services
 {
     public class ReviewsService : IReviewsService
     {
         private readonly IStorage _storage;
+        private readonly IMoodsService _moodsService;
 
-        public ReviewsService(IStorage storage)
+        public ReviewsService(IStorage storage, IMoodsService moodsService)
         {
             _storage = storage;
+            _moodsService = moodsService;
+        }
+
+        private async Task<IList<Review>> GetReviewsAsync(Form form)
+        {
+            return await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
         }
 
         public async Task InsertAsync(Review review)
@@ -112,6 +121,31 @@ namespace MyMoods.Services
             #endregion
 
             return result;
+        }
+
+        public async Task<IList<ReportItemDTO>> GetTopReportAsync(Form form)
+        {
+            var reviews = await GetReviewsAsync(form);
+            var groupByDay = reviews.GroupBy(x => x.Date.Date);
+            var items = new List<ReportItemDTO>();
+
+            foreach (var day in groupByDay)
+            {
+                var topMood = day.GroupBy(x => x.Mood).OrderByDescending(x => x.Count()).First().Key;
+
+                //var item = new ItemDTO()
+                //{
+                //    Date = day.Key,
+                //    Mood = topMood,
+                //    Image = _moodsService.GetImage(topMood),
+                //    TopCount = day.Count(x => x.Mood == topMood),
+                //    TotalCount = day.Count()
+                //};
+
+                //items.Add(item);
+            }
+
+            return items;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace MyMoods.Contracts
 {
-    public interface IUserService
+    public interface IUsersService
     {
         Task<User> AuthenticateAsync(string email, string password);
     }
