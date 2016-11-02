@@ -1,7 +1,9 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MyMoods.Domain
 {
+    [BsonIgnoreExtraElements]
     public class Answer
     {
         public Answer()

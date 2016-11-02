@@ -40,5 +40,21 @@ namespace MyMoods.Services
                     return string.Empty;
             }
         }
+
+        public MoodType GetMoodByPoints(double points)
+        {
+            var rounded = Math.Round(points);
+
+            if (rounded < 1)
+            {
+                return MoodType.sad;
+            }
+            else if (rounded > 5)
+            {
+                return MoodType.loving;
+            }
+
+            return (MoodType)rounded;
+        }
     }
 }

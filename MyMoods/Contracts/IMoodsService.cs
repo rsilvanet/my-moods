@@ -9,5 +9,6 @@ namespace MyMoods.Contracts
         IList<MoodDTO> GetMoods();
         string GetImage(MoodType mood);
         string GetTagsHelpText(MoodType mood);
+        MoodType GetMoodByPoints(double points);
     }
 }
