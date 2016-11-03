@@ -5,7 +5,6 @@
         
         'ui.router',
 
-        'app.calendar',
         'app.charts',
         'app.daily',
         'app.login',
@@ -27,7 +26,10 @@
         $stateProvider.state({
             name: 'home',
             url: '/',
-            template: '<h3 style="margin: 10px;">Oi</h3>'
+            template: '<h3 style="margin: 10px;">Bem-vindo!</h3>',
+            controller: function ($http) {
+                $http.get('/api/analytics/ping').then();
+            }
         });
 
         $urlRouterProvider.otherwise('/');

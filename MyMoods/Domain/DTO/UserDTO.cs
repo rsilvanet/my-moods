@@ -7,15 +7,15 @@ namespace MyMoods.Domain.DTO
     {
         public UserDTO(User user)
         {
-            Id = user.ToString();
+            Id = user.Id.ToString();
+            Name = user.Name;
             Email = user.Email;
-            Password = user.Password;
             Companies = user.Companies.Select(x => x.ToString()).ToList();
         }
 
         public string Id { get; set; }
+        public string Name { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
         public IList<string> Companies { get; set; }
     }
 }

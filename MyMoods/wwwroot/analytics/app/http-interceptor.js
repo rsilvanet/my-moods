@@ -17,7 +17,7 @@
             config.headers = config.headers || {};
 
             if ($rootScope.user && $rootScope.user.companyId) {
-                config.headers['X-Company-Id'] = $rootScope.user.companyId;
+                config.headers['X-Company'] = $rootScope.user.companyId;
             }
 
             return config;

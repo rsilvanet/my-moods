@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using MyMoods.Contracts;
 using MyMoods.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Threading.Tasks;
 
 namespace MyMoods
 {
@@ -43,10 +47,11 @@ namespace MyMoods
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseMiddleware<AnalyticsAuthorizationMiddleware>();
+
             app.UseMvc();
             app.UseDefaultFiles();
             app.UseStaticFiles();
-
         }
 
         public void ConfigureJson(JsonSerializerSettings settings)
@@ -54,6 +59,46 @@ namespace MyMoods
             settings.Converters.Add(new StringEnumConverter());
             settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+        }
+
+        public class AnalyticsAuthorizationMiddleware
+        {
+            private readonly IStorage _storage;
+            private readonly RequestDelegate _next;
+
+            public AnalyticsAuthorizationMiddleware(RequestDelegate next, IStorage storage)
+            {
+                _next = next;
+                _storage = storage;
+            }
+
+            public async Task Invoke(HttpContext context)
+            {
+                if (context.Request.Path.Value.ToLower().StartsWith("/api/analytics/"))
+                {
+                    if (context.Request.Path.Value.ToLower() != "/api/analytics/login")
+                    {
+                        if (!context.Request.Headers.Keys.Contains("X-Company"))
+                        {
+                            context.Response.StatusCode = 401;
+                            return;
+                        }
+
+                        ObjectId oid;
+                        ObjectId.TryParse(context.Request.Headers["X-Company"], out oid);
+
+                        var company = await _storage.Companies.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
+
+                        if (company == null)
+                        {
+                            context.Response.StatusCode = 401;
+                            return;
+                        }
+                    }
+                }
+                
+                await _next.Invoke(context);
+            }
         }
     }
 }
