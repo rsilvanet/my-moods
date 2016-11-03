@@ -15,7 +15,7 @@
 
                 scope.isLoaded = false;
 
-                ReviewsService.getAverageList(scope.formId)
+                ReviewsService.getResume(scope.formId)
                     .then(function (response) {
 
                         scope.points = [];
@@ -26,12 +26,12 @@
                         response.data.forEach(function (item) {
 
                             var img = new Image();
-                            img.src = item.averageMoodImage;
+                            img.src = item.avg.image;
 
                             scope.points.push(img);
-                            scope.averages.push(item.average.toFixed(2));
-                            scope.dates.push(moment(item.date).toDate());
-                            scope.formattedDates.push(moment(item.date).format('DD/MM'));
+                            scope.averages.push(item.avg.points.toFixed(2));
+                            scope.dates.push(moment(item.date).utc());
+                            scope.formattedDates.push(moment(item.date).utc().format('DD/MM'));
                         });
 
                         draw();
@@ -48,7 +48,6 @@
                             datasets: [{
                                 label: 'Pontos',
                                 data: scope.averages,
-                                pointStyle: scope.points,
                                 borderWidth: 1
                             }]
                         },

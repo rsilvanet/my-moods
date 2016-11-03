@@ -180,7 +180,7 @@ namespace MyMoods.Services
 
             var groupByDay = reviews.GroupBy(x => x.Date.Date);
 
-            return groupByDay.Select(x => ResumeReviews(x.Key, x.ToList())).ToList();
+            return groupByDay.Select(x => ResumeReviews(x.Key, x.ToList())).OrderBy(x => x.Date).ToList();
         }
 
         public async Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date)
@@ -198,7 +198,7 @@ namespace MyMoods.Services
             var questions = await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
             var groupByMood = reviews.GroupBy(x => x.Mood);
 
-            return groupByMood.Select(x => DetailDailyMood(date, x.Key, x.ToList(), questions, tags)).ToList();
+            return groupByMood.Select(x => DetailDailyMood(date, x.Key, x.ToList(), questions, tags)).OrderBy(x => (int)x.Mood).ToList();
         }
     }
 }

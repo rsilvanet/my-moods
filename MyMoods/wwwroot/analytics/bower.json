@@ -1,17 +1,18 @@
 {
-  "name": "moodz-analytics",
-  "description": "Moodz Analytics",
-  "main": "src/index.html",
-  "version": "1.0.0",
-  "license": "ISC",
-  "homepage": "https://github.com/rsilva93/moodz-analytics",
+  "name": "my-moods-analytics",
+  "description": "My Moods - Analytics",
+  "main": "index.html",
   "authors": [
     "Robson da Silva <sc.robson@gmail.com>"
   ],
+  "license": "ISC",
+  "homepage": "https://github.com/rsilva93/my-moods",
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components"
+    "bower_components",
+    "test",
+    "tests"
   ],
   "dependencies": {
     "angular": "^1.5.8",

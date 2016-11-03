@@ -1,0 +1,6 @@
+.daily-chart-holder {
+}
+
+.daily-chart-holder > canvas {
+    margin: auto;
+}

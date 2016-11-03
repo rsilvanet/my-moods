@@ -11,7 +11,7 @@
     <div class="ls-tabs-container">
         <div class="ls-tab-content ls-active">
             <span ng-repeat="tag in activeItem.tags track by $index">
-                <a href="#" class="ls-tag daily-panel-tag">{{tag}}</a>
+                <a class="ls-tag daily-panel-tag">{{tag.title}}</a>
             </span>
             <br><br>
             <div ng-repeat="question in activeItem.questions track by $index">

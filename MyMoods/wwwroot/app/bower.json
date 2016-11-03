@@ -1,7 +1,7 @@
 {
-  "name": "app",
-  "description": "",
-  "main": "index.js",
+  "name": "my-moods-app",
+  "description": "My Moods - App",
+  "main": "index.html",
   "authors": [
     "Robson da Silva <sc.robson@gmail.com>"
   ],

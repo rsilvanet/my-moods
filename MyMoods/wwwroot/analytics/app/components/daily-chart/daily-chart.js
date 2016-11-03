@@ -58,6 +58,12 @@
                                 backgroundColor: scope.colors,
                                 borderWidth: 1
                             }]
+                        },
+                        options: {
+                            responsive: false,
+                            legend: {
+                                position: 'bottom'
+                            }
                         }
                     });
                 }

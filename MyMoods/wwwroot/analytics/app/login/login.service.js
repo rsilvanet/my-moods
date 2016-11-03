@@ -25,10 +25,10 @@
 
         function loadUserOnStorage(user) {
 
-            localStorage.setItem('moodz_analytics_user_id', user.id);
-            localStorage.setItem('moodz_analytics_user_email', user.email);
-            localStorage.setItem('moodz_analytics_user_name', user.name);
-            localStorage.setItem('moodz_analytics_company_id', user.companies[0]);
+            localStorage.setItem('my_moods_analytics_user_id', user.id);
+            localStorage.setItem('my_moods_analytics_user_email', user.email);
+            localStorage.setItem('my_moods_analytics_user_name', user.name);
+            localStorage.setItem('my_moods_analytics_company_id', user.companies[0]);
 
             loadLoggedUserOnApp();
         }
@@ -37,12 +37,12 @@
 
             $rootScope.user = null;
 
-            if (localStorage.getItem('moodz_analytics_user_id')) {
+            if (localStorage.getItem('my_moods_analytics_user_id')) {
                 $rootScope.user = {
-                    id: localStorage.getItem('moodz_analytics_user_id'),
-                    email: localStorage.getItem('moodz_analytics_user_email'),
-                    name: localStorage.getItem('moodz_analytics_user_name'),
-                    companyId: localStorage.getItem('moodz_analytics_company_id')
+                    id: localStorage.getItem('my_moods_analytics_user_id'),
+                    email: localStorage.getItem('my_moods_analytics_user_email'),
+                    name: localStorage.getItem('my_moods_analytics_user_name'),
+                    companyId: localStorage.getItem('my_moods_analytics_company_id')
                 };
 
                 $location.path('/home');

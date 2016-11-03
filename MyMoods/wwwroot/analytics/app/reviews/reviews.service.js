@@ -8,17 +8,12 @@
     function reviewsService($http, APP_CONFIG) {
 
         return {
-            getTopList: getTopList,
-            getAverageList: getAverageList,
+            getResume: getResume,
             getDaily: getDaily
         };
 
-        function getTopList(formId) {
-            return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews/top');
-        }
-
-        function getAverageList(formId) {
-            return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews/average');
+        function getResume(formId) {
+            return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews/resume');
         }
 
         function getDaily(formId, date) {

@@ -60,7 +60,7 @@
 
                 var sly = new Sly(frame, options, events).init();
 
-                ReviewsService.getTopList(scope.formId)
+                ReviewsService.getResume(scope.formId)
                     .then(function (response) {
 
                         var items = response.data;
@@ -76,8 +76,8 @@
                             var date = moment(item.date);
 
                             scope.days.unshift({
-                                date: date.toDate(),
-                                formatted: date.format('DD/MM/YYYY')
+                                date: date.utc(),
+                                formatted: date.utc().format('DD/MM/YYYY')
                             });
 
                             addSlyItem(item);
@@ -92,16 +92,16 @@
                     });
 
                 function addSlyItem(item) {
+
                     var html = '';
                     var day = moment(item.date);
 
                     html += '<li>';
-                    html += '<span>' + day.format('DD/MM/YYYY') + '</span>';
+                    html += '<span>' + day.utc().format('DD/MM/YYYY') + '</span>';
                     html += '<br><br><br>';
-                    html += '<img src="' + item.topMoodImage + '" style="height: 100px;">';
+                    html += '<img src="' + item.top.image + '" style="height: 100px;">';
                     html += '<br><br>';
-                    html += '<span>' + item.topMoodCount + ' / ' + item.totalReviews + '</span>';
-
+                    html += '<span>' + item.top.count + ' / ' + item.count + '</span>';
                     html += '</li>';
 
                     sly.add(html, 0);
