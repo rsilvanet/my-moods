@@ -4,8 +4,8 @@ namespace MyMoods.Domain
 {
     public enum MoodType
     {
-        [Description("Triste")]
-        sad = 1,
+        [Description("Irritado")]
+        angry = 1,
 
         [Description("Insatisfeito")]
         unsatisfied,

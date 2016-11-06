@@ -26,8 +26,8 @@ namespace MyMoods.Services
         {
             switch (mood)
             {
-                case MoodType.sad:
-                    return "Nossa! Conta pra gente o que tá te deixando triste.";
+                case MoodType.angry:
+                    return "Nossa! Conta pra gente o que tá te irritando.";
                 case MoodType.unsatisfied:
                     return "Nada legal. Nos diga com o que você está insatisfeito.";
                 case MoodType.normal:
@@ -47,7 +47,7 @@ namespace MyMoods.Services
 
             if (rounded < 1)
             {
-                return MoodType.sad;
+                return MoodType.angry;
             }
             else if (rounded > 5)
             {
