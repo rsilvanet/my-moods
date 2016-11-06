@@ -1,0 +1,22 @@
+{
+  "name": "my-moods",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rsilva93/my-moods.git"
+  },
+  "author": "sc.robson@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rsilva93/my-moods/issues"
+  },
+  "homepage": "https://github.com/rsilva93/my-moods#readme",
+  "dependencies": {
+    "bower": "^1.7.9"
+  }
+}

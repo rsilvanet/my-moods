@@ -1,0 +1,152 @@
+html {
+    font-family: Arial;
+}
+
+.loading-panel {
+    display: block;
+    height: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
+.error-panel {
+    display: none;
+    height: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
+.success-panel {
+    display: block;
+    height: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
+.initial-panel-img {
+    width: 100%;
+    max-width: 200px;
+}
+
+.main-container {
+    padding-top: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    max-width: 800px;
+    margin: auto;
+    display: none;
+}
+
+.panel {
+    border-radius: 5px;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    color: white;
+}
+
+.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.panel-header {
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.company-panel {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.company-logo {
+    max-width: 100%;
+}
+
+.submit-panel {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.submit-button {
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background-color: darkblue;
+    color: white;
+    font: 16px bold;
+    font-family: Arial;
+    cursor: pointer;
+}
+
+.moods-panel {
+    background-color: rgb(141, 193, 204);
+}
+
+.moods-panel-header {
+    background-color: rgb(96, 178, 199);
+}
+
+.tags-panel {
+    background-color: rgb(61, 184, 143);
+}
+
+.tags-panel-header {
+    background-color: rgb(23, 175, 125);
+}
+
+.questions-panel {
+    background-color: rgb(220, 61, 62);
+}
+
+.questions-panel-header {
+    background-color: rgb(184, 61, 62);
+}
+
+.mood-image {
+    width: 45px;
+    margin-left: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.mood-image-selected {
+    opacity: 1;
+    border: 1px solid black;
+    border-radius: 30px;
+}
+
+.tag {
+    padding: 5px 10px 5px 10px;
+    margin: 5px;
+    border: 1px solid white;
+    border-radius: 15px;
+    font-size: 12px;
+    cursor: pointer;
+    display: inline-flex;
+}
+
+.tag-selected {
+    color: rgb(23, 175, 125);
+    background-color: white;
+    border: 1px solid black;
+}
+
+.free-text {
+    resize: none;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+    min-height: 60px;
+    margin-top: 5px;
+}
+
+.padded-holder {
+    padding-left: 10px;
+    padding-right: 10px;
+}
