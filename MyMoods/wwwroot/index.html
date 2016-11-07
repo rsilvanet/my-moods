@@ -16,13 +16,13 @@
         <img class="logo" src="assets/images/logo-black.png" />
         <p>Preocupado em manter seus colaboradores motivados?</p>
         <p>O <b>MY MOODS</b> vai te ajudar.</p>
-        <button type="button">Quero utilizar</button>
+        <button type="button" class="btn" data-toggle="modal" data-target="#register-modal">Quero utilizar</button>
     </section>
     <section class="attributes">
         <div class="row">
             <div class="col-md-4">
                 <img src="assets/images/hourglass.png" />
-                <p>As questões são simples e objetivas, evitando que o processo se torne chato e burocrático</p>
+                <p>A utilização é simples e objetiva, evitando que o processo se torne chato e burocrático</p>
             </div>
             <div class="col-md-4">
                 <img src="assets/images/chat.png" />
@@ -30,10 +30,40 @@
             </div>
             <div class="col-md-4">
                 <img src="assets/images/chart.png" />
-                <p>Os dados fornecidos pelos colaboradores são atualizados em tempo real, permitindo ações rápidas e bem direcionadas na solução dos problemas</p>
+                <p>Os dados fornecidos pelos colaboradores são atualizados em tempo real, permitindo ações rápidas e bem direcionadas para a solução dos problemas</p>
             </div>
         </div>
     </section>
+
+    <div id="register-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Cadastro</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="company">Empresa</label>
+                        <input type="text" class="form-control" id="company" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="text" class="form-control" id="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Senha</label>
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="btn-cadastrar" type="button" class="btn" data-dismiss="modal">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 </body>
 

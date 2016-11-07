@@ -13,10 +13,6 @@ section {
 }
 
 button {
-    border: 0;
-    border-radius: 5px;
-    font-size: 20px;
-    padding: 10px 15px;
     cursor: pointer;
     background-color: rgb(76, 76, 76)
 }
@@ -30,6 +26,7 @@ button {
         width: 100%;
         max-width: 300px;
         text-align: center;
+        margin-bottom: 30px;
     }
 
 .attributes {
@@ -53,3 +50,19 @@ button {
         margin: auto;
         margin-top: 10px;
     }
+
+.modal {
+    color: black;
+}
+
+.modal button {
+    color: white;
+}
+
+.modal-footer {
+    text-align: center;
+}
+
+.modal-header button {
+    color: black;
+}
