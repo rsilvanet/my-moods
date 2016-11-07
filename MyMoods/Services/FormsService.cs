@@ -37,5 +37,18 @@ namespace MyMoods.Services
 
             return new FormMetadataDTO(form, company, questions, tags, moods);
         }
+
+        public async Task<Form> GenerateDefaultForm(Company company)
+        {
+            var form = new Form()
+            {
+                Company = company.Id,
+                Title = "Formulário Padrão"
+            };
+
+            await _storage.Forms.InsertOneAsync(form);
+
+            return form;
+        }
     }
 }

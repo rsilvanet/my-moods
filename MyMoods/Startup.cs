@@ -33,6 +33,7 @@ namespace MyMoods
         {
             services.AddScoped(x => Mongo.Database.Get());
             services.AddScoped<IStorage, Mongo.Storage>();
+            services.AddScoped<ICompaniesService, CompaniesService>();
             services.AddScoped<IFormsService, FormsService>();
             services.AddScoped<IMoodsService, MoodsService>();
             services.AddScoped<IReviewsService, ReviewsService>();
@@ -96,7 +97,7 @@ namespace MyMoods
                         }
                     }
                 }
-                
+
                 await _next.Invoke(context);
             }
         }

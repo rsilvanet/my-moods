@@ -86,7 +86,7 @@ namespace MyMoods.Services
 
             #region Mood
 
-            if (string.IsNullOrEmpty(review.Mood))
+            if (string.IsNullOrWhiteSpace(review.Mood))
             {
                 result.Error("mood", "Mood não selecionado.");
             }

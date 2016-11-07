@@ -16,7 +16,7 @@
         <img class="logo" src="assets/images/logo-black.png" />
         <p>Preocupado em manter seus colaboradores motivados?</p>
         <p>O <b>MY MOODS</b> vai te ajudar.</p>
-        <button type="button" class="btn" data-toggle="modal" data-target="#register-modal">Quero utilizar</button>
+        <button id="btn-want-to-use" type="button" class="btn" data-toggle="modal" data-target="#register-modal">Quero utilizar</button>
     </section>
     <section class="attributes">
         <div class="row">
@@ -45,7 +45,11 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="company">Empresa</label>
-                        <input type="text" class="form-control" id="company" autofocus>
+                        <input type="text" class="form-control" id="company">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Seu Nome</label>
+                        <input type="text" class="form-control" id="name">
                     </div>
                     <div class="form-group">
                         <label for="email">E-mail</label>
@@ -57,7 +61,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button id="btn-cadastrar" type="button" class="btn" data-dismiss="modal">Cadastrar</button>
+                    <button id="btn-register" type="button" class="btn" data-dismiss="modal">Cadastrar</button>
                 </div>
             </div>
         </div>
@@ -65,6 +69,7 @@
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="index.js"></script>
 </body>
 
 </html>

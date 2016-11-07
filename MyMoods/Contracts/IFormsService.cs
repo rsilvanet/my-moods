@@ -8,5 +8,6 @@ namespace MyMoods.Contracts
     {
         Task<Form> GetFormAsync(string id);
         Task<FormMetadataDTO> GetMetadataAsync(string id);
+        Task<Form> GenerateDefaultForm(Company company);
     }
 }

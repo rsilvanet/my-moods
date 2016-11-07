@@ -43,6 +43,11 @@ namespace MyMoods.Controllers
                     return NotFound($"Formulário {id} não encontrado.");
                 }
 
+                if (review == null)
+                {
+                    return BadRequest("O conteúdo da requisição está inválido.");
+                }
+
                 var validation = await _reviewsService.ValidateToInsertAsync(form, review);
 
                 if (!validation.Success)
