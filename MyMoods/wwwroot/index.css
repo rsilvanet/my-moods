@@ -14,7 +14,7 @@ section {
 
 button {
     cursor: pointer;
-    background-color: rgb(76, 76, 76)
+    background-color: rgb(76, 76, 76);
 }
 
 .header {
@@ -31,7 +31,7 @@ button {
 
 .attributes {
     background-color: mediumseagreen;
-    padding: 50px;
+    padding: 20px;
 }
 
     .attributes div {
@@ -45,19 +45,46 @@ button {
     }
 
     .attributes p {
-        width: 250px;
+        max-width: 250px;
         text-align: center;
         margin: auto;
         margin-top: 10px;
     }
 
+.devices {
+    background-color: burlywood;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+    .devices img {
+        width: 1000px;
+        max-width: 100%;
+    }
+
+    .devices p {
+        max-width: 500px;
+        text-align: center;
+        color: black;
+        margin: auto;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+.footer {
+    background-color: rgb(76, 76, 76);
+    text-align: center;
+    padding: 15px;
+    padding-bottom: 5px;
+}
+
 .modal {
     color: black;
 }
 
-.modal button {
-    color: white;
-}
+    .modal button {
+        color: white;
+    }
 
 .modal-footer {
     text-align: center;
