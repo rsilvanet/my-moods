@@ -18,8 +18,10 @@ button {
 }
 
 .header {
-    background-color: cadetblue;
     text-align: center;
+    background-color: cadetblue;
+    padding-top: 100px;
+    padding-bottom: 250px;
 }
 
     .header .logo {
@@ -27,6 +29,20 @@ button {
         max-width: 300px;
         text-align: center;
         margin-bottom: 30px;
+    }
+
+    .header p {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .header a {
+        color: white;
+    }
+
+    .header button {
+        padding: 10px 20px;
+        font-size: 18px;
     }
 
 .attributes {
@@ -76,6 +92,10 @@ button {
     text-align: center;
     padding: 15px;
     padding-bottom: 5px;
+}
+
+.footer a {
+    color: white;
 }
 
 .modal {
