@@ -1,7 +1,9 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MyMoods.Services
@@ -20,8 +22,13 @@ namespace MyMoods.Services
             return await _storage.Users.Find(x => x.Email == email && x.Password == password).FirstOrDefaultAsync();
         }
 
-        public async Task InsertAsync(User user)
+        public async Task InsertAsync(Company company, User user)
         {
+            user.Companies = new List<ObjectId>
+            {
+                company.Id
+            };
+
             await _storage.Users.InsertOneAsync(user);
         }
 
