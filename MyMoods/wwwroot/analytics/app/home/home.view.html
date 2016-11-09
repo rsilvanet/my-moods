@@ -1,12 +1,14 @@
 <div ng-repeat="form in vm.forms">
     <h4>{{form.title}}</h4>
     <a href="../app/#/{{form.id}}" target="_blank">mymoods.co/app/#/{{form.id}}</a>
+    <br /><br />
 </div>
 
-<br /><br /><br /><br />
+<br /><br />
 
-<label class="ls-label-text">
-    <input type="text" placeholder="Título para o formulário">
-</label>
-
-<button type="button" class="ls-btn-dark">Criar</button>
+<form ng-submit="vm.createForm()">
+    <label class="ls-label-text">
+        <input type="text" placeholder="TÃ­tulo para o formulÃ¡rio" ng-model="vm.newModel.title" required />
+    </label>
+    <button type="submit" class="ls-btn-dark">Criar novo</button>
+</form>
