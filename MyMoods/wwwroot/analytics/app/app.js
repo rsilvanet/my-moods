@@ -1,16 +1,18 @@
 (function () {
     'use strict';
-    
-    var app = angular.module('app', [
-        
-        'ui.router',
 
+    var app = angular.module('app', [
+
+        'ui.router',
+        
         'app.charts',
         'app.daily',
+        'app.forms',
+        'app.home',
         'app.login',
         'app.logout',
         'app.reviews',
-        
+
         'app.components.average-chart',
         'app.components.daily-chart',
         'app.components.daily-panel',
@@ -22,18 +24,7 @@
     });
 
     app.config(function ($httpProvider, $stateProvider, $urlRouterProvider) {
-
-        $stateProvider.state({
-            name: 'home',
-            url: '/',
-            template: '<h3 style="margin: 10px;">Bem-vindo!</h3>',
-            controller: function ($http) {
-                $http.get('/api/analytics/ping').then();
-            }
-        });
-
         $urlRouterProvider.otherwise('/');
-
         $httpProvider.interceptors.push('HttpInterceptorService');
     });
 
