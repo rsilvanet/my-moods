@@ -1,14 +1,29 @@
-<div ng-repeat="form in vm.forms">
-    <h4>{{form.title}}</h4>
-    <a href="../app/#/{{form.id}}" target="_blank">mymoods.co/app/#/{{form.id}}</a>
-    <br /><br />
-</div>
+<h3>Olá {{user.name}},</h3>
+<br>
+<p class="home-text">Abaixo estão listados os formulários da sua empresa.</p>
+<p class="home-text">Você só precisa encaminhar o link deles para seus colaboradores para que eles possam fazer as avaliações.</p>
 
-<br /><br />
+<table class="ls-table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Link</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="form in vm.forms">
+            <td>{{form.title}}</td>
+            <td><a href="../app/#/{{form.id}}" target="_blank">mymoods.co/app/#/{{form.id}}</a></td>
+        </tr>
+    </tbody>
+</table>
+<br><br>
+<p class="home-text">Além disso você também pode criar novos formulários para organizar as avaliações por departamentos ou eventos específicos.</p>
 
 <form ng-submit="vm.createForm()">
     <label class="ls-label-text">
-        <input type="text" placeholder="Título para o formulário" ng-model="vm.newModel.title" required />
+        <input type="text" class="home-text-title" placeholder="Título para o novo formulário" ng-model="vm.newModel.title" required />
     </label>
-    <button type="submit" class="ls-btn-dark">Criar novo</button>
+    <br><br>
+    <button type="submit" class="ls-btn-dark home-create-btn">Criar</button>
 </form>
