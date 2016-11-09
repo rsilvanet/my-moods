@@ -1,19 +1,24 @@
 <div class="ls-login-parent login-remove-bg">
-	<div class="ls-login-inner">
-		<div class="ls-login-container">
-			<div class="ls-login-box">
-				<form role="form" class="ls-form ls-login-form" ng-submit="vm.login()">
-					<label class="ls-label">
-						<b class="ls-label-text ls-hidden-accessible">E-mail</b>
-						<input class="ls-login-bg-user ls-field-lg" type="text" placeholder="E-mail" required="" autofocus="" ng-model="vm.email">
-					</label>
-					<label class="ls-label">
-						<b class="ls-label-text ls-hidden-accessible">Senha</b>
-						<input id="password_field" class="ls-login-bg-password ls-field-lg" type="password" placeholder="Senha" required="" ng-model="vm.password">
-					</label>
-					<input type="submit" value="Entrar" class="ls-btn-primary ls-btn-block ls-btn-lg">
-				</form>
-			</div>
-		</div>
-	</div>
+    <div class="ls-login-inner">
+        <div class="ls-login-container">
+            <div class="ls-login-box">
+
+                <div class="login-logo-holder">
+                    <img src="../../../assets/images/logo-black.png" class="login-logo" />
+                </div>
+
+                <form role="form" class="ls-form ls-login-form" ng-submit="vm.login()">
+                    <label class="ls-label">
+                        <b class="ls-label-text ls-hidden-accessible">E-mail</b>
+                        <input class="ls-login-bg-user ls-field-lg" type="text" placeholder="E-mail" ng-model="vm.email" required autofocus>
+                    </label>
+                    <label class="ls-label">
+                        <b class="ls-label-text ls-hidden-accessible">Senha</b>
+                        <input id="password_field" class="ls-login-bg-password ls-field-lg" type="password" placeholder="Senha" ng-model="vm.password" required>
+                    </label>
+                    <input type="submit" value="Entrar" class="ls-btn-primary ls-btn-block ls-btn-lg">
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

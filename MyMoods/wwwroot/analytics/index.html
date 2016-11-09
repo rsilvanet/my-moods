@@ -16,77 +16,65 @@
 </head>
 
 <body ng-app="app">
-    <div class="ls-topbar">
 
-        <div class="ls-notification-topbar">
+    <div ng-hide="user">
+        <div class="ls-lg-margin-top">
+            <ui-view></ui-view>
+        </div>
+    </div>
 
-            <!--<div class="ls-alerts-list">
-                <a href="#" class="ls-ico-bell-o" data-counter="8" data-ls-module="topbarCurtain" data-target="#ls-notification-curtain3"><span>Notificações</span></a>
-            </div>-->
+    <div ng-show="user" ng-cloak>
+        <div class="ls-topbar">
 
+            <div class="ls-notification-topbar">
+
+                <div data-ls-module="dropdown" class="ls-dropdown ls-user-account">
+                    <a href="#" class="ls-ico-user">
+                        <span class="ls-name">{{user.name}}</span>
+                    </a>
+                    <nav class="ls-dropdown-nav ls-user-menu">
+                        <ul>
+                            <li><a href="#/logout">Sair</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+
+            <span class="ls-show-sidebar ls-ico-menu"></span>
+
+            <h1 class="ls-brand-name">
+                <a href="#/" class="ls-ico-bars">
+                    <small>Analytics</small>My Moods
+                </a>
+            </h1>
+
+        </div>
+
+        <main class="ls-main">
+            <div class="ls-lg-margin-top ls-lg-margin-left ls-lg-margin-right">
+                <ui-view></ui-view>
+            </div>
+        </main>
+
+        <aside class="ls-sidebar">
             <div data-ls-module="dropdown" class="ls-dropdown ls-user-account">
                 <a href="#" class="ls-ico-user">
-                    <span class="ls-name">{{user.name}}</span>
+                    <span class="ls-name">{{user.name}}</span>{{user.email}}
                 </a>
-                <nav class="ls-dropdown-nav ls-user-menu">
+                <nav class="ls-dropdown-nav ls-user-menu" aria-hidden="true">
+                    <a href="#/logout" class="ls-btn-logout" role="combobox" aria-expanded="false">Sair</a>
+                </nav>
+            </div>
+            <div class="ls-sidebar-inner">
+                <nav class="ls-menu">
                     <ul>
-                        <!--<li><a href="#/settings">Configurações</a></li>-->
-                        <li><a href="#/logout">Sair</a></li>
+                        <li><a href="#/daily" class="ls-ico-calendar-check">Daily</a></li>
+                        <li><a href="#/charts" class="ls-ico-chart-bar-up">Gráficos</a></li>
                     </ul>
                 </nav>
             </div>
-        </div>
-
-        <span class="ls-show-sidebar ls-ico-menu"></span>
-
-        <h1 class="ls-brand-name">
-            <a href="#/" class="ls-ico-earth">
-                <small>Analytics</small>My Moods
-            </a>
-        </h1>
-
+        </aside>
     </div>
-
-    <main class="ls-main">
-        <div class="ls-lg-margin-top ls-lg-margin-left ls-lg-margin-right">
-            <ui-view></ui-view>
-        </div>
-    </main>
-
-    <aside class="ls-sidebar">
-        <div data-ls-module="dropdown" class="ls-dropdown ls-user-account">
-            <a href="#" class="ls-ico-user">
-                <span class="ls-name">Usuário</span>usuario@gmail.com
-            </a>
-            <nav class="ls-dropdown-nav ls-user-menu" aria-hidden="true">
-                <!--<ul>
-                    <li><a href="#/settings">Configurações</a></li>
-                </ul>-->
-                <a href="#/logout" class="ls-btn-logout" role="combobox" aria-expanded="false">Sair</a>
-            </nav>
-        </div>
-        <div class="ls-sidebar-inner">
-            <nav class="ls-menu">
-                <ul>
-                    <li><a href="#/daily" class="ls-ico-dashboard">Daily</a></li>
-                    <li><a href="#/charts" class="ls-ico-chart-bar-up">Gráficos</a></li>
-                </ul>
-            </nav>
-        </div>
-    </aside>
-
-    <!--<aside class="ls-notification">
-        <nav class="ls-notification-list" id="ls-notification-curtain3">
-            <h3 class="ls-title-2">Notificações</h3>
-            <ul>
-                <li class="ls-dismissable">
-                    <a href="#">Você possui novas avaliações para verificar!</a>
-                    <a href="#" data-ls-module="dismiss" class="ls-ico-close ls-close-notification"></a>
-                </li>
-            </ul>
-            <p class="ls-no-notification-message">Não há notificações.</p>
-        </nav>
-    </aside>-->
 
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
     <script src="../bower_components/angular/angular.min.js"></script>

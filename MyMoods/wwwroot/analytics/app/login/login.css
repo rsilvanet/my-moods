@@ -1,3 +1,13 @@
 .login-remove-bg {
     background-color: transparent;
 }
+
+.login-logo-holder {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-logo {
+    width: 50%;
+}
