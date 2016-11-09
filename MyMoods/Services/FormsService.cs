@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MyMoods.Services
@@ -26,6 +27,14 @@ namespace MyMoods.Services
             return form;
         }
 
+        public async Task<IList<Form>> GetFormsByCompanyAsync(string companyId)
+        {
+            var companyOid = new ObjectId(companyId);
+            var forms = await _storage.Forms.Find(x => x.Company.Equals(companyOid)).ToListAsync();
+
+            return forms;
+        }
+
         public async Task<FormMetadataDTO> GetMetadataAsync(string id)
         {
             var oid = new ObjectId(id);
@@ -38,17 +47,24 @@ namespace MyMoods.Services
             return new FormMetadataDTO(form, company, questions, tags, moods);
         }
 
-        public async Task<Form> GenerateDefaultForm(Company company)
+        public async Task<Form> GenerateDefaultForm(string companyId, string title)
         {
             var form = new Form()
             {
-                Company = company.Id,
-                Title = "Formulário Padrão"
+                Title = title,
+                Company = new ObjectId(companyId)
             };
 
             await _storage.Forms.InsertOneAsync(form);
 
             return form;
+        }
+
+        public async Task RenameFormAsync(Form form, string title)
+        {
+            var builder = Builders<Form>.Update.Set(x => x.Title, title);
+
+            await _storage.Forms.UpdateOneAsync(x => x.Id.Equals(form.Id), builder);
         }
     }
 }

@@ -2,15 +2,13 @@
 {
     public class FormDTO
     {
-        public FormDTO(Form form, Company company)
+        public FormDTO(Form form)
         {
             Id = form.Id.ToString();
             Title = form.Title;
-            Company = new CompanyDTO(company);
         }
 
         public string Id { get; set; }
         public string Title { get; set; }
-        public CompanyDTO Company { get; set; }
     }
 }

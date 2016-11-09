@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MyMoods.Controllers.Analytics
 {
     [Route("api/analytics/forms/{formId}/reviews")]
-    public class ReviewsController : BaseController
+    public class ReviewsController : AnalyticsBaseController
     {
         private readonly IFormsService _formsService;
         private readonly IReviewsService _reviewsService;

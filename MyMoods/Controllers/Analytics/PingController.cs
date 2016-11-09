@@ -3,7 +3,7 @@
 namespace MyMoods.Controllers.Analytics
 {
     [Route("api/analytics/ping")]
-    public class PingAnalyticsController : BaseController
+    public class PingAnalyticsController : AnalyticsBaseController
     {
         [HttpGet]
         public IActionResult Get()

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MyMoods.Controllers.Analytics
 {
     [Route("api/analytics/login")]
-    public class LoginController : BaseController
+    public class LoginController : AnalyticsBaseController
     {
         private readonly IUsersService _userService;
 
