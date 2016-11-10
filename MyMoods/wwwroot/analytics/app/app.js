@@ -16,6 +16,7 @@
         'app.components.average-chart',
         'app.components.daily-chart',
         'app.components.daily-panel',
+        'app.components.form-selector',
         'app.components.sly-calendar'
     ]);
 

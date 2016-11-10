@@ -8,11 +8,13 @@
 
     /* @ngInject */
     function dailyController() {
-        
+
         var vm = this;
 
-        vm.formId = '57976abd266b3c042d6217f6';
-        
+        vm.formSelectCallback = function (id) {
+            vm.formId = id;
+        };
+
         vm.activeDayCallback = function (date) {
             vm.activeDay = date;
         };
