@@ -18,17 +18,10 @@
 
 <body ng-app="app">
 
-    <div ng-hide="user">
-        <div class="ls-lg-margin-top">
-            <ui-view></ui-view>
-        </div>
-    </div>
-
-    <div ng-show="user" ng-cloak>
-        <div class="ls-topbar">
+    <div ng-cloak>
+        <div class="ls-topbar" ng-show="user">
 
             <div class="ls-notification-topbar">
-
                 <div data-ls-module="dropdown" class="ls-dropdown ls-user-account">
                     <a href="#" class="ls-ico-user">
                         <span class="ls-name">{{user.name}}</span>
@@ -48,16 +41,15 @@
                     <small>Analytics</small>My Moods
                 </a>
             </h1>
-
         </div>
 
-        <main class="ls-main">
-            <div class="ls-lg-margin-top ls-lg-margin-left ls-lg-margin-right">
+        <main ng-class="{ 'ls-main': user }">
+            <div class="ls-lg-margin-top ls-lg-margin-bottom ls-lg-margin-left ls-lg-margin-right">
                 <ui-view></ui-view>
             </div>
         </main>
 
-        <aside class="ls-sidebar">
+        <aside class="ls-sidebar" ng-show="user">
             <div data-ls-module="dropdown" class="ls-dropdown ls-user-account">
                 <a href="#" class="ls-ico-user">
                     <span class="ls-name">{{user.name}}</span>{{user.email}}
