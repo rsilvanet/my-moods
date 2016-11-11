@@ -30,7 +30,26 @@
                                     scope.colors = [];
 
                                     response.data.forEach(function (item) {
-                                        scope.moods.push(item.mood);
+
+                                        var mood = '';
+
+                                        if (item.mood == 'angry') {
+                                            mood = 'Irritado';
+                                        }
+                                        else if (item.mood == 'unsatisfied') {
+                                            mood = 'Insatisfeito';
+                                        }
+                                        else if (item.mood == 'normal') {
+                                            mood = 'Normal';
+                                        }
+                                        else if (item.mood == 'happy') {
+                                            mood = 'Feliz';
+                                        }
+                                        else if (item.mood == 'loving') {
+                                            mood = 'Apaixonado';
+                                        }
+
+                                        scope.moods.push(mood);
                                         scope.counters.push(item.count);
                                         scope.colors.push(getColor(scope.colors.length));
                                     });

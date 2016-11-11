@@ -1,4 +1,7 @@
-<div class="average-chart-holder" ng-show="isLoaded">
-    <canvas id="myChart" width="1200" height="250"></canvas>
+<div style="text-align: center" ng-show="formId && !isLoaded">
+    Carregando...
+</div>
+<div class="average-chart-holder" ng-show="formId && isLoaded && averages && averages.length >= 2">
+    <canvas id="myChart" width="1000" height="250"></canvas>
     <br>
 </div>

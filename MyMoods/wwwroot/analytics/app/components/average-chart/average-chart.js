@@ -15,89 +15,100 @@
 
                 scope.isLoaded = false;
 
-                ReviewsService.getResume(scope.formId)
-                    .then(function (response) {
+                scope.$watch('formId', function () {
+                    if (scope.formId) {
+                        load();
+                    }
+                });
 
-                        scope.points = [];
-                        scope.averages = [];
-                        scope.dates = [];
-                        scope.formattedDates = [];
+                function load() {
 
-                        response.data.forEach(function (item) {
+                    scope.isLoaded = false;
 
-                            var img = new Image();
-                            img.src = item.avg.image;
+                    ReviewsService.getResume(scope.formId)
+                        .then(function (response) {
 
-                            scope.points.push(img);
-                            scope.averages.push(item.avg.points.toFixed(2));
-                            scope.dates.push(moment(item.date).utc());
-                            scope.formattedDates.push(moment(item.date).utc().format('DD/MM'));
+                            scope.points = [];
+                            scope.averages = [];
+                            scope.dates = [];
+                            scope.formattedDates = [];
+
+                            response.data.forEach(function (item) {
+
+                                var img = new Image();
+                                img.src = item.avg.image;
+
+                                scope.points.push(img);
+                                scope.averages.push(item.avg.points.toFixed(2));
+                                scope.dates.push(moment(item.date).utc());
+                                scope.formattedDates.push(moment(item.date).utc().format('DD/MM'));
+                            });
+
+                            draw();
+
+                            scope.isLoaded = true;
                         });
 
-                        draw();
+                    function draw() {
 
-                        scope.isLoaded = true;
-                    });
-
-                function draw() {
-
-                    scope.chart = new Chart($('#myChart'), {
-                        type: 'line',
-                        data: {
-                            labels: scope.formattedDates,
-                            datasets: [{
-                                label: 'Pontos',
-                                data: scope.averages,
-                                borderWidth: 1
-                            }]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        min: 0,
-                                        max: 6,
-                                        stepSize: 0.25
-                                    },
-                                    display: false
+                        scope.chart = new Chart($('#myChart'), {
+                            type: 'line',
+                            data: {
+                                labels: scope.formattedDates,
+                                datasets: [{
+                                    label: 'Pontos',
+                                    data: scope.averages,
+                                    borderWidth: 1
                                 }]
                             },
-                            legend: {
-                                display: false
-                            },
-                            responsive: false,
-                            scaleShowVerticalLines: false
-                        }
-                    });
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        ticks: {
+                                            min: 0,
+                                            max: 6,
+                                            stepSize: 0.25
+                                        },
+                                        display: false
+                                    }]
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                responsive: false,
+                                scaleShowVerticalLines: false
+                            }
+                        });
 
-                    $('#myChart').click(function (e) {
-                        var activePoints = scope.chart.getElementsAtEvent(e);
-                        var firstPoint = activePoints[0];
+                        $('#myChart').click(function (e) {
+                            var activePoints = scope.chart.getElementsAtEvent(e);
+                            var firstPoint = activePoints[0];
 
-                        if (firstPoint !== undefined) {
-                            $timeout(function () {
-                                scope.activeDay = scope.dates[firstPoint._index];
-                                scope.activeDayCallback({ date: scope.activeDay });
-                            }, 100);
-                        }
-                    });
+                            if (firstPoint !== undefined) {
+                                $timeout(function () {
+                                    scope.activeDay = scope.dates[firstPoint._index];
+                                    scope.activeDayCallback({ date: scope.activeDay });
+                                }, 100);
+                            }
+                        });
 
-                    $('#myChart').mousemove(function (e) {
+                        $('#myChart').mousemove(function (e) {
 
-                        var activePoints = scope.chart.getElementsAtEvent(e);
-                        var firstPoint = activePoints[0];
+                            var activePoints = scope.chart.getElementsAtEvent(e);
+                            var firstPoint = activePoints[0];
 
-                        if (firstPoint !== undefined) {
-                            $('#myChart').css('cursor', 'pointer');
-                        }
-                        else {
-                            $('#myChart').css('cursor', 'default');
-                        }
-                    });
+                            if (firstPoint !== undefined) {
+                                $('#myChart').css('cursor', 'pointer');
+                            }
+                            else {
+                                $('#myChart').css('cursor', 'default');
+                            }
+                        });
 
-                    $timeout(function () {
-                        scope.activeDayCallback({ date: scope.dates[scope.dates.length - 1] });
-                    }, 100);
+                        $timeout(function () {
+                            scope.activeDayCallback({ date: scope.dates[scope.dates.length - 1] });
+                        }, 100);
+                    }
                 }
             }
         };
