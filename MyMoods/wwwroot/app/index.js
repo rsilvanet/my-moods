@@ -35,8 +35,6 @@ function getIdFromUrl() {
     var url = location.href.split('#')[1];
 
     formId = url.replace('/', '');
-
-    //57976abd266b3c042d6217f6
 }
 
 function loadForm(data) {
@@ -69,7 +67,12 @@ function injectCompany(company) {
     var html = '';
     var container = $('#company-injector');
 
-    html += '<img class="company-logo" src="' + company.logo + '"></img>';
+    if (company.logo) {
+        html += '<img class="company-logo" src="' + company.logo + '"></img>';
+    }
+    else {
+        html += '<h3>' + company.name + '</h3>';
+    }
 
     container.html(html);
 }
