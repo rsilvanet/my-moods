@@ -35,14 +35,15 @@ namespace MyMoods.Services
             {
                 var company = await _storage.Companies.Find(x => x.Name.ToLower() == register.Company.ToLower()).FirstOrDefaultAsync();
 
-                if (company != null)
-                {
-                    result.Error("company", "Já existe uma empresa cadastrada com este nome.");
-                }
-                else
-                {
+                //TODO: Is it needed?
+                //if (company != null)
+                //{
+                //    result.Error("company", "Já existe uma empresa cadastrada com este nome.");
+                //}
+                //else
+                //{
                     result.ParsedObject.Name = register.Company;
-                }
+                //}
             }
 
             return result;

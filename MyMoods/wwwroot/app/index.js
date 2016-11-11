@@ -261,12 +261,12 @@ function submit() {
         dataType: 'text',
         contentType: "application/json",
         success: function (response) {
-            //TODO: Salvar cache!
+            //TODO: Save cache!
             endSubmitLoading();
             window.location.href = 'success';
         },
         error: function (response) {
-            //TODO: Tratar erros!
+            //TODO: Treat errors!
             endSubmitLoading();
             alert('Desculpe, não foi possível enviar a sua avaliação.');
         }
