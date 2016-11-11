@@ -1,10 +1,16 @@
-<div class="pagespan">
+<div style="text-align: center" ng-show="formId && !isLoaded">
+    Carregando...
+</div>
+<div style="text-align: center" ng-show="formId && isLoaded && sly.items && sly.items.length == 0">
+    Não há dados para este formulário.
+</div>
+<div class="pagespan" ng-show="formId">
     <div class="thewrap">
         <div id="theframe" class="frame">
             <ul class="clearfix"></ul>
         </div>
-        <div class="controls center">
-            <button class="ls-btn prev">    
+        <div class="controls center" ng-show="isLoaded && sly.items && sly.items.length > 0">
+            <button class="ls-btn prev">
                 <
             </button>
             <button class="ls-btn next">

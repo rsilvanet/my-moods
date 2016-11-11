@@ -20,11 +20,18 @@
                 };
 
                 scope.$watch('day', function (day) {
+
+                    scope.day = null;
+                    scope.formattedDay = null;
+                    scope.items = null;
+                    scope.activeItem = null;
+                    scope.isLoaded = false;
+
                     if (day) {
+
                         scope.day = day;
                         scope.formattedDay = moment(day).format('DD/MM/YYYY');
-                        scope.isLoaded = false;
-                        
+
                         $timeout(function () {
                             ReviewsService.getDaily(scope.formId, moment(day).format('YYYY-MM-DD'))
                                 .then(function (response) {
@@ -32,7 +39,6 @@
                                     scope.activeItem = scope.items[0];
                                     scope.isLoaded = true;
                                 });
-
                         }, 100);
                     }
                 });

@@ -13,6 +13,8 @@
             },
             link: function (scope) {
 
+                scope.isLoaded = false;
+
                 scope.$watch('formId', function () {
                     if (scope.formId) {
                         load();
@@ -20,6 +22,8 @@
                 });
 
                 function load() {
+
+                    scope.isLoaded = false;
 
                     var window = $($window);
                     var frame = $('#theframe');
@@ -112,6 +116,8 @@
                                     frame.sly('reload');
                                 });
                             }
+
+                            scope.isLoaded = true;
                         });
 
                     function addSlyItem(item) {
