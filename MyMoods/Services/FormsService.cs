@@ -57,6 +57,16 @@ namespace MyMoods.Services
 
             await _storage.Forms.InsertOneAsync(form);
 
+            var question = new Question()
+            {
+                Type = QuestionType.text,
+                Title = "Quer contar um pouco mais pra gente?",
+                Required = false,
+                Form = form.Id
+            };
+
+            await _storage.Questions.InsertOneAsync(question);
+
             return form;
         }
 
