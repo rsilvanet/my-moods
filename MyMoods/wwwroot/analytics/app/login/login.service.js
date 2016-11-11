@@ -45,7 +45,7 @@
                     companyId: localStorage.getItem('my_moods_analytics_company_id')
                 };
 
-                $location.path('/home');
+                //$location.path('/home');
             }
         }
     }

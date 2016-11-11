@@ -24,7 +24,7 @@ $('#form-register').submit(function (e) {
         contentType: "application/json",
         success: function (response) {
             endSubmitLoading();
-            window.location.href = 'analytics';
+            window.location.href = 'analytics/#/login';
         },
         error: function (response) {
             //TODO: Treat errors!

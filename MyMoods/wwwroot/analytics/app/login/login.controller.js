@@ -4,12 +4,14 @@
 
     login.controller('LoginController', loginController);
 
-    loginController.$inject = ['LoginService'];
+    loginController.$inject = ['LoginService', 'LogoutService'];
 
     /* @ngInject */
-    function loginController(LoginService) {
+    function loginController(LoginService, LogoutService) {
 
         var vm = this;
+
+        LogoutService.logout();
 
         vm.login = function () {
             LoginService.login(vm.email, vm.password)
