@@ -128,9 +128,9 @@
                         html += '<li>';
                         html += '<span>' + day.utc().format('DD/MM/YYYY') + '</span>';
                         html += '<br><br><br>';
-                        html += '<img src="' + item.top.image + '" style="height: 100px;">';
+                        html += '<img src="' + item.avg.image + '" style="height: 100px;">';
                         html += '<br><br>';
-                        html += '<span>' + item.top.count + ' / ' + item.count + '</span>';
+                        html += '<span>' + item.avg.points.toFixed(2) + ' pontos</span>';
                         html += '</li>';
 
                         scope.sly.add(html, 0);
