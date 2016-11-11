@@ -4,6 +4,8 @@ using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MyMoods.Services
@@ -17,17 +19,33 @@ namespace MyMoods.Services
             _storage = storage;
         }
 
+        private string CryptoPass(string password)
+        {
+            password = $"x8n5pT.{password}.3i1klM";
+
+            var md5 = MD5.Create();
+            byte[] bytes = Encoding.ASCII.GetBytes(password);
+            byte[] hash = md5.ComputeHash(bytes);
+
+            var builder = new StringBuilder();
+
+            for (int i = 0; i < hash.Length; i++)
+            {
+                builder.Append(hash[i].ToString("X2"));
+            }
+
+            return builder.ToString();
+        }
+
         public async Task<User> AuthenticateAsync(string email, string password)
         {
-            return await _storage.Users.Find(x => x.Email == email && x.Password == password).FirstOrDefaultAsync();
+            return await _storage.Users.Find(x => x.Email == email && x.Password == CryptoPass(password)).FirstOrDefaultAsync();
         }
 
         public async Task InsertAsync(Company company, User user)
         {
-            user.Companies = new List<ObjectId>
-            {
-                company.Id
-            };
+            user.Password = CryptoPass(user.Password);
+            user.Companies = new List<ObjectId> { company.Id };
 
             await _storage.Users.InsertOneAsync(user);
         }
