@@ -44,8 +44,6 @@
                     name: localStorage.getItem('my_moods_analytics_user_name'),
                     companyId: localStorage.getItem('my_moods_analytics_company_id')
                 };
-
-                //$location.path('/home');
             }
         }
     }

@@ -4,10 +4,10 @@
 
     login.controller('LoginController', loginController);
 
-    loginController.$inject = ['LoginService', 'LogoutService'];
+    loginController.$inject = ['LoginService', 'LogoutService', '$state'];
 
     /* @ngInject */
-    function loginController(LoginService, LogoutService) {
+    function loginController(LoginService, LogoutService, $state) {
 
         var vm = this;
 
@@ -17,6 +17,7 @@
             LoginService.login(vm.email, vm.password)
                 .then(function (response) {
                     LoginService.loadUserOnStorage(response.data);
+                    $state.go('home');
                 }, function (response) {
                     alert('Login inválido!');
                 });
