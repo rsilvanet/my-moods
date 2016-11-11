@@ -29,6 +29,7 @@ $('#form-register').submit(function (e) {
         error: function (response) {
             //TODO: Tratar erros!
             endSubmitLoading();
+            alert('Desculpe, não foi possível realizar o seu cadastro.');
         }
     });
 });

@@ -268,6 +268,7 @@ function submit() {
         error: function (response) {
             //TODO: Tratar erros!
             endSubmitLoading();
+            alert('Desculpe, não foi possível enviar a sua avaliação.');
         }
     });
 }
