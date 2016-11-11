@@ -33,18 +33,21 @@
                             scope.dates = [];
                             scope.formattedDates = [];
 
-                            response.data.forEach(function (item) {
+                            if (response.data && response.data.length) {
 
-                                var img = new Image();
-                                img.src = item.avg.image;
+                                response.data.forEach(function (item) {
 
-                                scope.points.push(img);
-                                scope.averages.push(item.avg.points.toFixed(2));
-                                scope.dates.push(moment(item.date).utc());
-                                scope.formattedDates.push(moment(item.date).utc().format('DD/MM'));
-                            });
+                                    var img = new Image();
+                                    img.src = item.avg.image;
 
-                            draw();
+                                    scope.points.push(img);
+                                    scope.averages.push(item.avg.points.toFixed(2));
+                                    scope.dates.push(moment(item.date).utc());
+                                    scope.formattedDates.push(moment(item.date).utc().format('DD/MM'));
+                                });
+
+                                draw();
+                            }
 
                             scope.isLoaded = true;
                         });
