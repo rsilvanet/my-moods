@@ -41,7 +41,7 @@ function loadForm(data) {
 
     model = data;
 
-    injectCompany(model.form.company);
+    injectCompany(model.form);
     injectMoods(model.moods);
     injectTags(model.tags);
     injectQuestions(model.questions);
@@ -62,10 +62,11 @@ function showForm() {
     $('.main-container').css('display', 'block');
 }
 
-function injectCompany(company) {
+function injectCompany(form) {
 
     var html = '';
     var container = $('#company-injector');
+    var company = form.company;
 
     if (company.logo) {
         html += '<img class="company-logo" src="' + company.logo + '"></img>';
@@ -73,6 +74,8 @@ function injectCompany(company) {
     else {
         html += '<h3>' + company.name + '</h3>';
     }
+
+    html += form.title;
 
     container.html(html);
 }
