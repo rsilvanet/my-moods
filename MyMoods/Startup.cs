@@ -31,7 +31,7 @@ namespace MyMoods
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped(x => Mongo.Database.Get());
+            services.AddScoped(x => Mongo.Database.Get(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IStorage, Mongo.Storage>();
             services.AddScoped<ICompaniesService, CompaniesService>();
             services.AddScoped<IFormsService, FormsService>();

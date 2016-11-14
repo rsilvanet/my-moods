@@ -6,9 +6,9 @@ namespace MyMoods.Mongo
 {
     public class Database
     {
-        public static IMongoDatabase Get()
+        public static IMongoDatabase Get(string connectionString)
         {
-            var url = new MongoUrl("mongodb://admin:admin@ds029665.mlab.com:29665/youtalkme-mongo");
+            var url = new MongoUrl(connectionString);
             var client = new MongoClient(url);
             var pack = new ConventionPack();
 
