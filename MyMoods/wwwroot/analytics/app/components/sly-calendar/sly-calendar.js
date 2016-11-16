@@ -103,7 +103,7 @@
 
                                     scope.days.unshift({
                                         date: date.date(),
-                                        formatted: date.date().format('DD/MM/YYYY')
+                                        formatted: date.format('DD/MM/YYYY')
                                     });
 
                                     addSlyItem(item);
@@ -126,7 +126,7 @@
                         var day = moment(item.date);
 
                         html += '<li>';
-                        html += '<span>' + day.date().format('DD/MM/YYYY') + '</span>';
+                        html += '<span>' + day.format('DD/MM/YYYY') + '</span>';
                         html += '<br><br><br>';
                         html += '<img src="' + item.avg.image + '" style="height: 100px;">';
                         html += '<br><br>';
