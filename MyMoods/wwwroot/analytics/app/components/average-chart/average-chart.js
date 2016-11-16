@@ -42,8 +42,8 @@
 
                                     scope.points.push(img);
                                     scope.averages.push(item.avg.points.toFixed(2));
-                                    scope.dates.push(moment(item.date).utc());
-                                    scope.formattedDates.push(moment(item.date).utc().format('DD/MM'));
+                                    scope.dates.push(moment(item.date).date());
+                                    scope.formattedDates.push(moment(item.date).date().format('DD/MM'));
                                 });
 
                                 draw();

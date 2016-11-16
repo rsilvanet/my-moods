@@ -102,8 +102,8 @@
                                     var date = moment(item.date);
 
                                     scope.days.unshift({
-                                        date: date.utc(),
-                                        formatted: date.utc().format('DD/MM/YYYY')
+                                        date: date.date(),
+                                        formatted: date.date().format('DD/MM/YYYY')
                                     });
 
                                     addSlyItem(item);
@@ -126,7 +126,7 @@
                         var day = moment(item.date);
 
                         html += '<li>';
-                        html += '<span>' + day.utc().format('DD/MM/YYYY') + '</span>';
+                        html += '<span>' + day.date().format('DD/MM/YYYY') + '</span>';
                         html += '<br><br><br>';
                         html += '<img src="' + item.avg.image + '" style="height: 100px;">';
                         html += '<br><br>';
