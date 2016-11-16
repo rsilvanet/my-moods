@@ -29,32 +29,35 @@
                                     scope.counters = [];
                                     scope.colors = [];
 
-                                    response.data.forEach(function (item) {
+                                    if (response.data && response.data.length) {
 
-                                        var mood = '';
+                                        response.data.forEach(function (item) {
 
-                                        if (item.mood == 'angry') {
-                                            mood = 'Irritado';
-                                        }
-                                        else if (item.mood == 'unsatisfied') {
-                                            mood = 'Insatisfeito';
-                                        }
-                                        else if (item.mood == 'normal') {
-                                            mood = 'Normal';
-                                        }
-                                        else if (item.mood == 'happy') {
-                                            mood = 'Feliz';
-                                        }
-                                        else if (item.mood == 'loving') {
-                                            mood = 'Apaixonado';
-                                        }
+                                            var mood = '';
 
-                                        scope.moods.push(mood);
-                                        scope.counters.push(item.count);
-                                        scope.colors.push(getColor(scope.colors.length));
-                                    });
+                                            if (item.mood == 'angry') {
+                                                mood = 'Irritado';
+                                            }
+                                            else if (item.mood == 'unsatisfied') {
+                                                mood = 'Insatisfeito';
+                                            }
+                                            else if (item.mood == 'normal') {
+                                                mood = 'Normal';
+                                            }
+                                            else if (item.mood == 'happy') {
+                                                mood = 'Feliz';
+                                            }
+                                            else if (item.mood == 'loving') {
+                                                mood = 'Apaixonado';
+                                            }
 
-                                    draw();
+                                            scope.moods.push(mood);
+                                            scope.counters.push(item.count);
+                                            scope.colors.push(getColor(scope.colors.length));
+                                        });
+
+                                        draw();
+                                    }
 
                                     scope.isLoaded = true;
                                 });

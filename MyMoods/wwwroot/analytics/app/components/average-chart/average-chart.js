@@ -42,7 +42,7 @@
 
                                     scope.points.push(img);
                                     scope.averages.push(item.avg.points.toFixed(2));
-                                    scope.dates.push(moment(item.date).date());
+                                    scope.dates.push(moment(item.date).toDate());
                                     scope.formattedDates.push(moment(item.date).format('DD/MM'));
                                 });
 

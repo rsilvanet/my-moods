@@ -102,7 +102,7 @@
                                     var date = moment(item.date);
 
                                     scope.days.unshift({
-                                        date: date.date(),
+                                        date: date.toDate(),
                                         formatted: date.format('DD/MM/YYYY')
                                     });
 
