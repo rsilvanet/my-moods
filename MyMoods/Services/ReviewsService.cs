@@ -82,7 +82,7 @@ namespace MyMoods.Services
             var result = new ValidationResultDTO<Review>();
 
             result.ParsedObject.Form = form.Id;
-            result.ParsedObject.Date = DateTime.Now;
+            result.ParsedObject.Date = DateTime.UtcNow;
 
             #region Mood
 

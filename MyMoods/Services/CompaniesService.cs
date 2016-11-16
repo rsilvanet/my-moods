@@ -25,7 +25,7 @@ namespace MyMoods.Services
         {
             var result = new ValidationResultDTO<Company>();
 
-            result.ParsedObject.RegisterDate = DateTime.Now;
+            result.ParsedObject.RegisterDate = DateTime.UtcNow;
 
             if (string.IsNullOrWhiteSpace(register.Company))
             {
