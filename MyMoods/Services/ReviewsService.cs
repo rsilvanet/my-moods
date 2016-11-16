@@ -28,7 +28,7 @@ namespace MyMoods.Services
 
             var resume = new DailySimpleDTO()
             {
-                Date = day.Date,
+                Date = day,
                 Count = reviews.Count(),
                 Top = new DailySimpleDTO.TopDTO()
                 {
@@ -169,7 +169,7 @@ namespace MyMoods.Services
             return result;
         }
 
-        public async Task<IList<DailySimpleDTO>> GetResumeAsync(Form form)
+        public async Task<IList<DailySimpleDTO>> GetResumeAsync(Form form, short timezone)
         {
             var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
 
@@ -178,16 +178,16 @@ namespace MyMoods.Services
                 return new List<DailySimpleDTO>();
             }
 
-            var groupByDay = reviews.GroupBy(x => x.Date.Date);
+            var groupByDay = reviews.GroupBy(x => x.Date.AddHours(timezone).Date);
 
-            return groupByDay.Select(x => ResumeReviews(x.Key, x.ToList())).OrderBy(x => x.Date).ToList();
+            return groupByDay.Select(x => ResumeReviews(x.Key.Date.AddHours(-timezone), x.ToList())).OrderBy(x => x.Date).ToList();
         }
 
-        public async Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date)
+        public async Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date, short timezone)
         {
-            var theDay = date.Date;
-            var theDayAfter = theDay.AddDays(1);
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theDayAfter).ToListAsync();
+            var theDay = date.Date.AddHours(timezone);
+            var theEndOfTheDay = theDay.AddDays(1).AddMilliseconds(-1);
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date <= theEndOfTheDay).ToListAsync();
 
             if (!reviews.Any())
             {
@@ -198,7 +198,7 @@ namespace MyMoods.Services
             var questions = await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
             var groupByMood = reviews.GroupBy(x => x.Mood);
 
-            return groupByMood.Select(x => DetailDailyMood(date, x.Key, x.ToList(), questions, tags)).OrderBy(x => (int)x.Mood).ToList();
+            return groupByMood.Select(x => DetailDailyMood(date.Date.AddHours(-timezone), x.Key, x.ToList(), questions, tags)).OrderBy(x => (int)x.Mood).ToList();
         }
     }
 }

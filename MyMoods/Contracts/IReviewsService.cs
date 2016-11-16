@@ -10,7 +10,7 @@ namespace MyMoods.Contracts
     {
         Task InsertAsync(Review review);
         Task<ValidationResultDTO<Review>> ValidateToInsertAsync(Form form, ReviewOnPostDTO review);
-        Task<IList<DailySimpleDTO>> GetResumeAsync(Form form);
-        Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date);
+        Task<IList<DailySimpleDTO>> GetResumeAsync(Form form, short timezone);
+        Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date, short timezone);
     }
 }

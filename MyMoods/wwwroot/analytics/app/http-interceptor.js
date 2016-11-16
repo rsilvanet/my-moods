@@ -20,6 +20,8 @@
                 config.headers['X-Company'] = $rootScope.user.companyId;
             }
 
+            config.headers['X-Timezone'] = -(new Date().getTimezoneOffset() / 60);
+
             return config;
         }
 

@@ -30,7 +30,7 @@ namespace MyMoods.Controllers.Analytics
                     return NotFound();
                 }
 
-                var resume = await _reviewsService.GetResumeAsync(form);
+                var resume = await _reviewsService.GetResumeAsync(form, ClientTimezone);
 
                 if (resume == null || !resume.Any())
                 {
@@ -57,7 +57,7 @@ namespace MyMoods.Controllers.Analytics
                     return NotFound();
                 }
 
-                var daily = await _reviewsService.GetDailyAsync(form, date);
+                var daily = await _reviewsService.GetDailyAsync(form, date, ClientTimezone);
 
                 if (daily == null || !daily.Any())
                 {
