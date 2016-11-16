@@ -185,7 +185,7 @@ namespace MyMoods.Services
 
         public async Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date, short timezone)
         {
-            var theDay = date.Date.AddHours(timezone);
+            var theDay = date.Date.AddHours(-timezone);
             var theEndOfTheDay = theDay.AddDays(1).AddMilliseconds(-1);
             var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date <= theEndOfTheDay).ToListAsync();
 
