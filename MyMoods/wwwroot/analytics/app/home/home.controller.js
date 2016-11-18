@@ -21,13 +21,9 @@
 
         vm.createForm = function () {
             FormsService.post(vm.newModel).then(function (response) {
-                
-                vm.forms.push({
-                    id: response.data,
-                    title: vm.newModel.title
-                });
-
-                vm.newModel.title = '';
+                vm.newModel.id = response.data;
+                vm.forms.push(vm.newModel);
+                vm.newModel = null;
             });
         };
     }

@@ -6,9 +6,11 @@
         {
             Id = form.Id.ToString();
             Title = form.Title;
+            UseDefaultTags = form.UseDefaultTags;
         }
 
         public string Id { get; set; }
         public string Title { get; set; }
+        public bool UseDefaultTags { get; set; }
     }
 }
