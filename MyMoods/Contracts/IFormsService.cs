@@ -10,7 +10,7 @@ namespace MyMoods.Contracts
         Task<Form> GetFormAsync(string id);
         Task<IList<Form>> GetFormsByCompanyAsync(string companyId);
         Task<FormMetadataDTO> GetMetadataAsync(string id);
-        Task<Form> GenerateDefaultForm(string companyId, string title);
-        Task RenameFormAsync(Form form, string title);
+        Task<Form> GenerateFormAsync(string companyId, string title, bool useDefaultTags);
+        Task UpdateFormAsync(Form form, string title, bool useDefaultTags);
     }
 }

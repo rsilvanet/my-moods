@@ -52,7 +52,7 @@ namespace MyMoods.Controllers.Analytics
                     return BadRequest("O título não foi informado.");
                 }
 
-                var form = await _formsService.GenerateDefaultForm(LoggedCompanyId, dto.Title);
+                var form = await _formsService.GenerateFormAsync(LoggedCompanyId, dto.Title, dto.UseDefaultTags);
 
                 return Created(form.Id.ToString());
             }
@@ -84,7 +84,7 @@ namespace MyMoods.Controllers.Analytics
                     return NotFound();
                 }
 
-                await _formsService.RenameFormAsync(form, dto.Title);
+                await _formsService.UpdateFormAsync(form, dto.Title, dto.UseDefaultTags);
 
                 return Ok();
             }

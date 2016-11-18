@@ -47,11 +47,12 @@ namespace MyMoods.Services
             return new FormMetadataDTO(form, company, questions, tags, moods);
         }
 
-        public async Task<Form> GenerateDefaultForm(string companyId, string title)
+        public async Task<Form> GenerateFormAsync(string companyId, string title, bool useDefaultTags)
         {
             var form = new Form()
             {
                 Title = title,
+                UseDefaultTags = useDefaultTags,
                 Company = new ObjectId(companyId)
             };
 
@@ -70,9 +71,11 @@ namespace MyMoods.Services
             return form;
         }
 
-        public async Task RenameFormAsync(Form form, string title)
+        public async Task UpdateFormAsync(Form form, string title, bool useDefaultTags)
         {
-            var builder = Builders<Form>.Update.Set(x => x.Title, title);
+            var builder = Builders<Form>.Update
+                .Set(x => x.Title, title)
+                .Set(x => x.UseDefaultTags, useDefaultTags);
 
             await _storage.Forms.UpdateOneAsync(x => x.Id.Equals(form.Id), builder);
         }

@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using MyMoods.Mongo;
 
 namespace MyMoods.Domain
@@ -9,15 +8,18 @@ namespace MyMoods.Domain
     {
         public Tagg()
         {
+            Active = true;
         }
 
         public Tagg(TagType type, string title)
         {
             Type = type;
             Title = title;
+            Active = true;
         }
 
         public TagType Type { get; set; }
         public string Title { get; set; }
+        public bool Active { get; set; }
     }
 }

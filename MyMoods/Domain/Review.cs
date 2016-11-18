@@ -11,6 +11,7 @@ namespace MyMoods.Domain
     {
         public Review()
         {
+            Date = DateTime.UtcNow;
             Tags = new List<ObjectId>();
             Answers = new List<Answer>();
         }

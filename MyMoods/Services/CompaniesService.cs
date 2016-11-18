@@ -2,7 +2,6 @@
 using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
-using System;
 using System.Threading.Tasks;
 
 namespace MyMoods.Services
@@ -25,8 +24,6 @@ namespace MyMoods.Services
         {
             var result = new ValidationResultDTO<Company>();
 
-            result.ParsedObject.RegisterDate = DateTime.UtcNow;
-
             if (string.IsNullOrWhiteSpace(register.Company))
             {
                 result.Error("company", "O nome da empresa não foi informado.");
@@ -35,15 +32,9 @@ namespace MyMoods.Services
             {
                 var company = await _storage.Companies.Find(x => x.Name.ToLower() == register.Company.ToLower()).FirstOrDefaultAsync();
 
-                //TODO: Is it needed?
-                //if (company != null)
-                //{
-                //    result.Error("company", "Já existe uma empresa cadastrada com este nome.");
-                //}
-                //else
-                //{
-                    result.ParsedObject.Name = register.Company;
-                //}
+                //TODO: Add some company unique validations
+
+                result.ParsedObject.Name = register.Company;
             }
 
             return result;

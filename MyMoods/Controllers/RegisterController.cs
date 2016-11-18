@@ -41,7 +41,7 @@ namespace MyMoods.Controllers
 
                 await _companiesService.InsertAsync(companyValidation.ParsedObject);
                 await _usersService.InsertAsync(companyValidation.ParsedObject, userValidation.ParsedObject);
-                await _formsService.GenerateDefaultForm(companyValidation.ParsedObject.Id.ToString(), "Geral");
+                await _formsService.GenerateFormAsync(companyValidation.ParsedObject.Id.ToString(), "Visão geral da empresa", true);
 
                 return Created(companyValidation.ParsedObject.Id.ToString());
             }
