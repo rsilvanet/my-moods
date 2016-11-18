@@ -107,25 +107,28 @@ namespace MyMoods.Services
 
             #region Tags
 
-            if (review.Tags == null || !review.Tags.Any())
+            if (form.UseDefaultTags)
             {
-                result.Error("tags", "Nenhuma tag foi selecionada.");
-            }
-            else
-            {
-                var tags = await _storage.Tags.Find(x => true).ToListAsync();
-
-                foreach (var id in review.Tags)
+                if (review.Tags == null || !review.Tags.Any())
                 {
-                    var tag = tags.FirstOrDefault(x => x.Id.ToString() == id);
+                    result.Error("tags", "Nenhuma tag foi selecionada.");
+                }
+                else
+                {
+                    var tags = await _storage.Tags.Find(x => true).ToListAsync();
 
-                    if (tag != null)
+                    foreach (var id in review.Tags)
                     {
-                        result.ParsedObject.Tags.Add(tag.Id);
-                    }
-                    else
-                    {
-                        result.Error($"tags[{id}]", $"Tag inválida.");
+                        var tag = tags.FirstOrDefault(x => x.Id.ToString() == id);
+
+                        if (tag != null)
+                        {
+                            result.ParsedObject.Tags.Add(tag.Id);
+                        }
+                        else
+                        {
+                            result.Error($"tags[{id}]", $"Tag inválida.");
+                        }
                     }
                 }
             }

@@ -43,7 +43,14 @@ function loadForm(data) {
 
     injectCompany(model.form);
     injectMoods(model.moods);
-    injectTags(model.tags);
+
+    if (model.form.useDefaultTags) {
+        injectTags(model.tags);
+    }
+    else {
+        hideTagsPanel();
+    }
+
     injectQuestions(model.questions);
     disableTagsPanel();
     disableQuestionsPanel();
@@ -60,6 +67,10 @@ function showForm() {
     $('.loading-panel').css('display', 'none');
     $('.error-panel').css('display', 'none');
     $('.main-container').css('display', 'block');
+}
+
+function hideTagsPanel() {
+    $('#tags-master-holder').css('display', 'none');
 }
 
 function injectCompany(form) {
@@ -164,7 +175,13 @@ function selectMood(mood) {
     $('#selected-mood-label').html(getMoodTitle(mood));
     $('#tag-title').html(getTagsHelpText(mood));
 
-    enableTagsPanel();
+    if (model.form.useDefaultTags) {
+        enableTagsPanel();
+    }
+    else {
+        enableQuestionsPanel();
+        enableSubmitPanel();
+    }
 }
 
 function selectTag(id) {

@@ -16,7 +16,9 @@
             <span ng-repeat="tag in activeItem.tags track by $index">
                 <a class="ls-tag daily-panel-tag">{{tag.title}}</a>
             </span>
-            <br><br>
+            <span ng-if="activeItem.tags && activeItem.tags.length">
+                <br><br>
+            </span>
             <div ng-repeat="question in activeItem.questions track by $index">
                 <div class="ls-box" ng-show="question.answers.length">
                     <div class="ls-list-title ">
