@@ -21,7 +21,7 @@ button {
     text-align: center;
     background-color: cadetblue;
     padding-top: 75px;
-    padding-bottom: 250px;
+    min-height: 100vh;
 }
 
     .header .logo {
@@ -32,8 +32,11 @@ button {
     }
 
     .header p {
+        margin: auto;
         margin-top: 15px;
-        margin-bottom: 15px;
+        margin-bottom: 25px;
+        line-height: 25px;
+        max-width: 300px;
     }
 
     .header a {
@@ -45,26 +48,53 @@ button {
         font-size: 18px;
     }
 
-.attributes {
+.for-who {
     background-color: mediumseagreen;
-    padding: 20px;
+    padding: 50px 20px;
+    text-align: center;
 }
 
-    .attributes div {
-        text-align: center;
-        margin-top: 30px;
-        margin-bottom: 30px;
-    }
-
-    .attributes img {
+    .for-who img {
         width: 200px;
     }
 
-    .attributes p {
+    .for-who p {
+        color: black;
+        text-align: center;
+        max-width: 450px;
+        margin: auto;
+    }
+
+    .for-who h4 {
+        text-align: center;
+        color: black;
+        margin-bottom: 30px;
+    }
+
+.advantages {
+    background-color: indianred;
+    padding: 50px 20px;
+}
+
+    .advantages div {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 10px;
+    }
+
+    .advantages img {
+        width: 200px;
+    }
+
+    .advantages p {
         max-width: 250px;
         text-align: center;
         margin: auto;
         margin-top: 10px;
+    }
+
+    .advantages h4 {
+        text-align: center;
     }
 
 .devices {
@@ -79,12 +109,18 @@ button {
     }
 
     .devices p {
-        max-width: 500px;
+        max-width: 550px;
         text-align: center;
         color: black;
         margin: auto;
         margin-top: 10px;
         margin-bottom: 20px;
+    }
+
+    .devices h4 {
+        text-align: center;
+        color: black;
+        margin-bottom: 30px;
     }
 
 .footer {
@@ -94,9 +130,9 @@ button {
     padding-bottom: 5px;
 }
 
-.footer a {
-    color: white;
-}
+    .footer a {
+        color: white;
+    }
 
 .modal {
     color: black;
