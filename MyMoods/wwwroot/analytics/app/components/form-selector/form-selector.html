@@ -1,7 +1,7 @@
 <div style="text-align: center" ng-hide="isLoaded">
     Carregando...
 </div>
-<div class="ls-sm-margin-top ls-lg-margin-bottom" ng-show="isLoaded">
+<div class="ls-sm-margin-top ls-md-margin-bottom" ng-show="isLoaded">
     <div class="ls-custom-select">
         <select class="ls-select" placehoder="Selecione" ng-options="form.id as form.title for form in forms" ng-model="selected" ng-change="doCallback()">
             <option value="" disabled selected>Selecione um formulário</option>

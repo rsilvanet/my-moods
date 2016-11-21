@@ -1,9 +1,22 @@
-<div style="text-align: center" ng-show="formId && day && !isLoaded">
+<div style="text-align: center" ng-show="formId && !isLoaded">
     Carregando...
 </div>
-<div class="ls-sm-margin-top" ng-show="formId && day && isLoaded">
-    <h3 class="ls-txt-center">{{formattedDay}}</h3>
-    <div class="daily-chart-holder">
+<div style="text-align: center" ng-show="formId && isLoaded && dates && dates.length == 0">
+    Não há dados suficientes para este formulário.
+</div>
+<div class="ls-sm-margin-top" ng-show="formId && isLoaded && dates && dates.length > 0">
+    <div class="ls-md-margin-bottom">
+        <div class="ls-custom-select ls-sm-margin-bottom">
+            <select class="ls-select" ng-options="date.value as date.formatted for date in dates" ng-model="selectedDate" ng-change="loadChart()"></select>
+        </div>
+    </div>
+    <div style="text-align: center" ng-show="!chartIsLoaded">
+        Carregando...
+    </div>
+    <div style="text-align: center" ng-show="chartIsLoaded && moods && moods.length == 0">
+        Não há dados suficientes para este dia.
+    </div>
+    <div class="daily-chart-holder" ng-show="chartIsLoaded && moods && moods.length > 0">
         <canvas id="myChart2" height="400"></canvas>
     </div>
 </div>

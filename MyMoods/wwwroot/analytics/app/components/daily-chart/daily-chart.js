@@ -8,23 +8,53 @@
             restrict: 'E',
             templateUrl: 'app/components/daily-chart/daily-chart.html',
             scope: {
-                day: '=',
                 formId: '='
             },
             link: function (scope) {
 
+                scope.dates = [];
+                scope.formId = null;
                 scope.isLoaded = false;
 
-                scope.$watch('day', function (day) {
-                    if (day) {
-                        scope.day = day;
-                        scope.formattedDay = moment(day).format('DD/MM/YYYY');
-                        scope.isLoaded = false;
+                scope.$watch('formId', function (formId) {
+                    scope.dates = [];
+                    scope.formId = null;
+                    scope.isLoaded = false;
 
+                    if (formId) {
+                        scope.formId = formId;
+
+                        ReviewsService.getResume(scope.formId)
+                            .then(function (response) {
+                                if (response.data) {
+                                    response.data.forEach(function (item) {
+                                        scope.dates.push({
+                                            value: item.date,
+                                            formatted: moment(item.date).format('DD/MM/YYYY')
+                                        });
+                                    });
+
+                                    scope.dates = _.orderBy(scope.dates, 'value', 'desc');
+
+                                    if (scope.dates && scope.dates.length) {
+                                        scope.selectedDate = scope.dates[0].value;
+                                        scope.loadChart();
+                                    }
+                                }
+
+                                scope.isLoaded = true;
+                            });
+                    }
+                });
+
+                scope.loadChart = function () {
+
+                    scope.chartIsLoaded = false;
+
+                    if (scope.selectedDate) {
                         $timeout(function () {
-                            ReviewsService.getDaily(scope.formId, moment(day).format('YYYY-MM-DD'))
+                            ReviewsService.getDaily(scope.formId, moment(scope.selectedDate).format('YYYY-MM-DD'))
                                 .then(function (response) {
-
                                     scope.moods = [];
                                     scope.counters = [];
                                     scope.colors = [];
@@ -53,17 +83,17 @@
 
                                             scope.moods.push(mood);
                                             scope.counters.push(item.count);
-                                            scope.colors.push(getColor(scope.colors.length));
+                                            scope.colors.push(getColor(item.mood));
                                         });
 
                                         draw();
                                     }
 
-                                    scope.isLoaded = true;
+                                    scope.chartIsLoaded = true;
                                 });
                         }, 100);
                     }
-                });
+                };
 
                 function draw() {
 
@@ -90,18 +120,18 @@
                     });
                 }
 
-                function getColor(index) {
-                    switch (index) {
-                        case 0:
-                            return 'purple';
-                        case 1:
-                            return 'red';
-                        case 2:
-                            return 'green';
-                        case 3:
-                            return 'yellow';
-                        case 3:
+                function getColor(mood) {
+                    switch (mood) {
+                        case 'angry':
                             return 'blue';
+                        case 'unsatisfied':
+                            return 'gray';
+                        case 'normal':
+                            return 'green';
+                        case 'happy':
+                            return 'purple';
+                        case 'loving':
+                            return 'red';
                         default:
                             return 'black';
                     }
