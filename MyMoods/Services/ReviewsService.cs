@@ -204,5 +204,21 @@ namespace MyMoods.Services
 
             return groupByMood.Select(x => DetailDailyMood(date.Date.AddHours(-timezone), x.Key, x.ToList(), questions, tags)).OrderBy(x => _moodsService.Evaluate(x.Mood)).ToList();
         }
+
+        public async Task<IList<MoodCounterDTO>> GetCountersAsync(Form form)
+        {
+            var counters = new List<MoodCounterDTO>();
+
+            foreach (MoodType mood in Enum.GetValues(typeof(MoodType)))
+            {
+                var count = await _storage.Reviews
+                    .Find(x => x.Form.Equals(form.Id) && x.Mood == mood)
+                    .CountAsync();
+
+                counters.Add(new MoodCounterDTO(mood, count));
+            }
+
+            return counters;
+        }
     }
 }

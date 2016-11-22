@@ -2,13 +2,13 @@
 {
     public class MoodCounterDTO
     {
-        public MoodCounterDTO(MoodType type, int count)
+        public MoodCounterDTO(MoodType type, long count)
         {
             Mood = type;
             Count = count;
         }
 
         public MoodType Mood { get; private set; }
-        public int Count { get; set; }
+        public long Count { get; set; }
     }
 }
