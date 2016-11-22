@@ -9,11 +9,11 @@ namespace MyMoods.Services
 {
     public class MoodsService : IMoodsService
     {
-        public IList<MoodDTO> GetMoods()
+        public IList<MoodDTO> Get()
         {
             return Enum.GetValues(typeof(MoodType))
                 .Cast<MoodType>()
-                .Select(x => new MoodDTO(x, GetImage(x), GetTagsHelpText(x)))
+                .Select(x => new MoodDTO(x, Evaluate(x), GetImage(x), GetTagsHelpText(x)))
                 .ToList();
         }
 
@@ -41,20 +41,39 @@ namespace MyMoods.Services
             }
         }
 
-        public MoodType GetMoodByPoints(double points)
+        public MoodType GetFromPoints(double points)
         {
             var rounded = Math.Round(points);
 
-            if (rounded < 1)
-            {
+            if (points < 1.25)
                 return MoodType.angry;
-            }
-            else if (rounded > 5)
-            {
-                return MoodType.loving;
-            }
+            if (points < 3.75)
+                return MoodType.unsatisfied;
+            if (points < 6.25)
+                return MoodType.normal;
+            if (points < 8.75)
+                return MoodType.happy;
 
-            return (MoodType)rounded;
+            return MoodType.loving;
+        }
+
+        public double Evaluate(MoodType mood)
+        {
+            switch (mood)
+            {
+                case MoodType.angry:
+                    return 0;
+                case MoodType.unsatisfied:
+                    return 2.5;
+                case MoodType.normal:
+                    return 5;
+                case MoodType.happy:
+                    return 7.5;
+                case MoodType.loving:
+                    return 10;
+                default:
+                    throw new NotImplementedException("Método não preparado para obter o valor do mood informado.");
+            }
         }
     }
 }

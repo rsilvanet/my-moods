@@ -6,9 +6,10 @@ namespace MyMoods.Contracts
 {
     public interface IMoodsService
     {
-        IList<MoodDTO> GetMoods();
+        IList<MoodDTO> Get();
         string GetImage(MoodType mood);
         string GetTagsHelpText(MoodType mood);
-        MoodType GetMoodByPoints(double points);
+        MoodType GetFromPoints(double points);
+        double Evaluate(MoodType mood);
     }
 }

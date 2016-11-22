@@ -42,7 +42,7 @@ namespace MyMoods.Services
             var company = await _storage.Companies.Find(x => x.Id.Equals(form.Company)).FirstOrDefaultAsync();
             var questions = await _storage.Questions.Find(x => x.Form.Equals(oid)).ToListAsync();
             var tags = await _storage.Tags.Find(x => true).ToListAsync();
-            var moods = _moodsService.GetMoods();
+            var moods = _moodsService.Get();
 
             return new FormMetadataDTO(form, company, questions, tags, moods);
         }

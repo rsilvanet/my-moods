@@ -3,6 +3,7 @@ using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,8 +23,8 @@ namespace MyMoods.Services
 
         private DailySimpleDTO ResumeReviews(DateTime day, IList<Review> reviews)
         {
-            var avg = reviews.Average(x => (int)x.Mood);
-            var avgMood = _moodsService.GetMoodByPoints(avg);
+            var avg = reviews.Average(x => _moodsService.Evaluate(x.Mood));
+            var avgMood = _moodsService.GetFromPoints(avg);
             var topMood = reviews.GroupBy(x => x.Mood).OrderByDescending(x => x.Count()).First().Key;
 
             var resume = new DailySimpleDTO()
@@ -201,7 +202,7 @@ namespace MyMoods.Services
             var questions = await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
             var groupByMood = reviews.GroupBy(x => x.Mood);
 
-            return groupByMood.Select(x => DetailDailyMood(date.Date.AddHours(-timezone), x.Key, x.ToList(), questions, tags)).OrderBy(x => (int)x.Mood).ToList();
+            return groupByMood.Select(x => DetailDailyMood(date.Date.AddHours(-timezone), x.Key, x.ToList(), questions, tags)).OrderBy(x => _moodsService.Evaluate(x.Mood)).ToList();
         }
     }
 }
