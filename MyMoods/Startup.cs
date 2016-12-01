@@ -35,6 +35,7 @@ namespace MyMoods
             services.AddScoped<IStorage, Mongo.Storage>();
             services.AddScoped<ICompaniesService, CompaniesService>();
             services.AddScoped<IFormsService, FormsService>();
+            services.AddScoped<IMailerService, MailerService>();
             services.AddScoped<IMoodsService, MoodsService>();
             services.AddScoped<IReviewsService, ReviewsService>();
             services.AddScoped<IUsersService, UsersService>();
