@@ -11,3 +11,11 @@
 .login-logo {
     width: 50%;
 }
+
+.login-center {
+    text-align: center !important;
+}
+
+.login-pointer {
+    cursor: pointer;
+}

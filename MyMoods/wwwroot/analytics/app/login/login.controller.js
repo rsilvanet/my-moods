@@ -23,5 +23,17 @@
                 });
         };
 
+        vm.openForgotPassModal = function () {
+            locastyle.modal.open("#forgot-pass-modal");
+        };
+
+        vm.requestPassReset = function () {
+            LoginService.reset(vm.email)
+                .then(function (response) {
+                    locastyle.modal.close("#forgot-pass-modal");
+                }, function (response) {
+                    alert('E-mail não encontrado!');
+                });
+        }
     }
 })();

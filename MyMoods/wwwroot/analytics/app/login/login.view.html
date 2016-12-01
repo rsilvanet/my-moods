@@ -5,7 +5,7 @@
                 <div class="login-logo-holder">
                     <img src="../../../assets/images/logo-black.png" class="login-logo" />
                 </div>
-                <form role="form" class="ls-form ls-login-form" ng-submit="vm.login()">
+                <form role="form" class="ls-form ls-login-form login-center" ng-submit="vm.login()">
                     <label class="ls-label">
                         <b class="ls-label-text ls-hidden-accessible">E-mail</b>
                         <input class="ls-login-bg-user ls-field-lg" type="text" placeholder="E-mail" ng-model="vm.email" required autofocus>
@@ -15,8 +15,25 @@
                         <input class="ls-login-bg-password ls-field-lg" type="password" placeholder="Senha" ng-model="vm.password" required>
                     </label>
                     <button type="submit" value="Entrar" class="ls-btn-primary ls-btn-block ls-btn-lg">Entrar</button>
+                    <a class="login-pointer" ng-click="vm.openForgotPassModal()">Esqueceu a senha?</a>
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="ls-modal" id="forgot-pass-modal">
+    <div class="ls-modal-box">
+        <div class="ls-modal-header">
+            <button data-dismiss="modal">&times;</button>
+            <h4 class="ls-modal-title">Solicite uma nova senha</h4>
+        </div>
+        <div class="ls-modal-body login-center">
+            <label class="ls-label">
+                <b class="ls-label-text ls-hidden-accessible">E-mail</b>
+                <input class="ls-login-bg-user ls-field-lg" type="text" placeholder="E-mail" ng-model="vm.email" required>
+            </label>
+            <button type="submit" class="ls-btn-primary" ng-click="vm.requestPassReset()">Solicitar</button>
         </div>
     </div>
 </div>

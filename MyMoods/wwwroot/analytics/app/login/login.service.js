@@ -9,6 +9,7 @@
 
         return {
             login: login,
+            reset: reset,
             loadUserOnStorage: loadUserOnStorage,
             loadLoggedUserOnApp: loadLoggedUserOnApp
         };
@@ -21,6 +22,15 @@
             };
 
             return $http.post(APP_CONFIG.API_BASE_URL + '/login', model);
+        }
+
+        function reset(email) {
+
+            var model = {
+                email: email,
+            };
+
+            return $http.post(APP_CONFIG.API_BASE_URL + '/reset', model);
         }
 
         function loadUserOnStorage(user) {
