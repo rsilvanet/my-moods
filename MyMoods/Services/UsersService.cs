@@ -42,7 +42,10 @@ namespace MyMoods.Services
 
         private string GeneratePass()
         {
-            return Guid.NewGuid().ToString().Substring(0, 10);
+            var guid = Guid.NewGuid().ToString();
+            var pass = $"{guid.Substring(0, 5)}{guid.Substring(10, 5)}{guid.Substring(20, 5)}";
+
+            return pass.Replace("-", "");
         }
 
         public async Task<User> AuthenticateAsync(string email, string password)
