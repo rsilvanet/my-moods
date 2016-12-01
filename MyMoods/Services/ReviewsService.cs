@@ -50,15 +50,26 @@ namespace MyMoods.Services
 
         private DailyDetailedDTO DetailDailyMood(DateTime date, MoodType mood, IList<Review> reviews, IList<Question> questions, IList<Tagg> tags)
         {
-            var tagsOnReviews = reviews.SelectMany(z => z.Tags).Distinct();
             var resume = ResumeReviews(date, reviews);
+            var tagsCounters = new List<TagCounterDTO>();
+            var tagsOnReviews = reviews.SelectMany(z => z.Tags).GroupBy(x => x);
+
+            foreach (var item in tagsOnReviews)
+            {
+                var tag = tags.FirstOrDefault(x => x.Id.ToString() == item.Key.ToString());
+
+                if (tag != null)
+                {
+                    tagsCounters.Add(new TagCounterDTO(tag, item.Count()));
+                }
+            }
 
             var detailed = new DailyDetailedDTO()
             {
                 Mood = mood,
                 Image = _moodsService.GetImage(mood),
                 Count = reviews.Count,
-                Tags = tags.Where(x => tagsOnReviews.Contains(x.Id)).Select(x => new TagDTO(x)).ToList(),
+                Tags = tagsCounters.OrderByDescending(x => x.Count).ToList(),
                 Questions = questions.Select(x => new QuestionWithAnswersDTO(x, ReadAnswers(x, reviews))).ToList()
             };
 

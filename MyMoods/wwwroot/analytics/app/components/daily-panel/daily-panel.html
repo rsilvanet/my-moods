@@ -14,10 +14,12 @@
     <div class="ls-tabs-container">
         <div class="ls-tab-content ls-active">
             <span ng-repeat="tag in activeItem.tags track by $index">
-                <a class="ls-tag daily-panel-tag">{{tag.title}}</a>
+                <a class="ls-tag daily-panel-tag">{{tag.title}}</a> 
+                <span>x{{tag.count}}</span>
+                <br>
             </span>
             <span ng-if="activeItem.tags && activeItem.tags.length">
-                <br><br>
+                <br>
             </span>
             <div ng-repeat="question in activeItem.questions track by $index">
                 <div class="ls-box" ng-show="question.answers.length">
