@@ -4,6 +4,6 @@ namespace MyMoods.Contracts
 {
     public interface IMailerService
     {
-        void SendNewPassword(User user);
+        void SendResetedPassword(User user, string password);
     }
 }

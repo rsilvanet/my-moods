@@ -3,7 +3,6 @@ using MailKit.Security;
 using MimeKit;
 using MyMoods.Contracts;
 using MyMoods.Domain;
-using System;
 using System.Text;
 
 namespace MyMoods.Services
@@ -31,11 +30,22 @@ namespace MyMoods.Services
             return new MimeMessage(mailFrom, mailTo, subject, mailBody);
         }
 
-        public void SendNewPassword(User user)
+        public void SendResetedPassword(User user, string password)
         {
             var builder = new StringBuilder();
             builder.Append($"<p>Olá {user.Name}</p>");
             builder.Append($"<br>");
+            builder.Append($"<p>Sua senha temporária para acesso: <b>{password}</b></p>");
+            builder.Append($"<br>");
+            builder.Append($"<p>Sugerimos que você altere essa senha por uma de sua preferência através do nosso painel.</p>");
+            builder.Append($"<br><br>");
+            builder.Append($"Att");
+            builder.Append($"<br>");
+            builder.Append($"<b>My Moods</b>");
+
+            var message = CreateMessage(user.Email, "Nova senha", builder.ToString());
+
+            Send(message);
         }
     }
 }

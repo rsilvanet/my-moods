@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
@@ -13,10 +14,12 @@ namespace MyMoods.Services
     public class UsersService : IUsersService
     {
         private readonly IStorage _storage;
+        private readonly IMailerService _mailer;
 
-        public UsersService(IStorage storage)
+        public UsersService(IStorage storage, IMailerService mailer)
         {
             _storage = storage;
+            _mailer = mailer;
         }
 
         private string CryptoPass(string password)
@@ -37,9 +40,27 @@ namespace MyMoods.Services
             return builder.ToString();
         }
 
+        private string GeneratePass()
+        {
+            return Guid.NewGuid().ToString().Substring(0, 10);
+        }
+
         public async Task<User> AuthenticateAsync(string email, string password)
         {
-            return await _storage.Users.Find(x => x.Email == email && x.Password == CryptoPass(password)).FirstOrDefaultAsync();
+            password = CryptoPass(password);
+
+            return await _storage.Users.Find(x => x.Email == email && (x.Password == password || x.ResetedPassword == password)).FirstOrDefaultAsync();
+        }
+
+        public async Task ResetPasswordAsync(User user)
+        {
+            var pass = GeneratePass();
+            var cryptoPass = CryptoPass(pass);
+            var builder = Builders<User>.Update.Set(x => x.ResetedPassword, cryptoPass);
+
+            await _storage.Users.UpdateOneAsync(x => x.Id.Equals(user.Id), builder);
+
+            _mailer.SendResetedPassword(user, pass);
         }
 
         public async Task InsertAsync(Company company, User user)

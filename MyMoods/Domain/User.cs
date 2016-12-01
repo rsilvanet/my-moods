@@ -16,6 +16,7 @@ namespace MyMoods.Domain
         public string Email { get; set; }
         public string Name { get; set; }
         public string Password { get; set; }
+        public string ResetedPassword { get; set; }
         public bool Admin { get; set; }
         public bool Active { get; set; }
         public IList<ObjectId> Companies { get; set; }
