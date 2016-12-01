@@ -48,6 +48,11 @@ namespace MyMoods.Services
             return pass.Replace("-", "");
         }
 
+        public async Task<User> GetByEmail(string email)
+        {
+            return await _storage.Users.Find(x => x.Email == email).FirstOrDefaultAsync();
+        }
+
         public async Task<User> AuthenticateAsync(string email, string password)
         {
             password = CryptoPass(password);

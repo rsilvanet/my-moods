@@ -10,6 +10,7 @@ using MyMoods.Contracts;
 using MyMoods.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyMoods
@@ -78,7 +79,13 @@ namespace MyMoods
             {
                 if (context.Request.Path.Value.ToLower().StartsWith("/api/analytics/"))
                 {
-                    if (context.Request.Path.Value.ToLower() != "/api/analytics/login")
+                    var noAuthRoutes = new string[]
+                    {
+                        "/api/analytics/login",
+                        "/api/analytics/reset"
+                    };
+
+                    if (!noAuthRoutes.Contains(context.Request.Path.Value.ToLower()))
                     {
                         if (!context.Request.Headers.Keys.Contains("X-Company"))
                         {

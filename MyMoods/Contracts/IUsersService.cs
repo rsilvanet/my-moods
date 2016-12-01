@@ -6,6 +6,7 @@ namespace MyMoods.Contracts
 {
     public interface IUsersService
     {
+        Task<User> GetByEmail(string email);
         Task<User> AuthenticateAsync(string email, string password);
         Task ResetPasswordAsync(User user);
         Task InsertAsync(Company company, User user);
