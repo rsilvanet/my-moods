@@ -19,7 +19,7 @@ namespace MyMoods.Services
             _moodsService = moodsService;
         }
 
-        public async Task<Form> GetFormAsync(string id)
+        public async Task<Form> GetByIdAsync(string id)
         {
             var oid = new ObjectId(id);
             var form = await _storage.Forms.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
@@ -27,7 +27,7 @@ namespace MyMoods.Services
             return form;
         }
 
-        public async Task<IList<Form>> GetFormsByCompanyAsync(string companyId)
+        public async Task<IList<Form>> GetByCompanyAsync(string companyId)
         {
             var companyOid = new ObjectId(companyId);
             var forms = await _storage.Forms.Find(x => x.Company.Equals(companyOid)).ToListAsync();
@@ -35,7 +35,7 @@ namespace MyMoods.Services
             return forms;
         }
 
-        public async Task<FormMetadataDTO> GetMetadataAsync(string id)
+        public async Task<FormMetadataDTO> GetMetadataByIdAsync(string id)
         {
             var oid = new ObjectId(id);
             var form = await _storage.Forms.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();

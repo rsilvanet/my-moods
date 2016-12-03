@@ -22,7 +22,7 @@ namespace MyMoods.Controllers.Analytics
         {
             try
             {
-                var forms = await _formsService.GetFormsByCompanyAsync(LoggedCompanyId);
+                var forms = await _formsService.GetByCompanyAsync(LoggedCompanyId);
 
                 if (!forms.Any())
                 {
@@ -77,7 +77,7 @@ namespace MyMoods.Controllers.Analytics
                     return BadRequest("O título não foi informado.");
                 }
 
-                var form = await _formsService.GetFormAsync(id);
+                var form = await _formsService.GetByIdAsync(id);
 
                 if (form == null)
                 {

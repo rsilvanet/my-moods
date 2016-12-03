@@ -17,11 +17,11 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpPost]
-        public async Task<IActionResult> Reset([FromBody]ResetDTO reset)
+        public async Task<IActionResult> Reset([FromBody]ResetDTO dto)
         {
             try
             {
-                var user = await _userService.GetByEmail(reset.Email);
+                var user = await _userService.GetByEmailAsync(dto.Email);
 
                 if (user == null)
                 {

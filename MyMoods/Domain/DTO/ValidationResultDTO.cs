@@ -3,19 +3,17 @@ using System.Linq;
 
 namespace MyMoods.Domain.DTO
 {
-    public class ValidationResultDTO<T> where T : new()
+    public class ValidationResultDTO
     {
         public ValidationResultDTO()
         {
             Errors = new Dictionary<string, string>();
             Alerts = new Dictionary<string, string>();
-            ParsedObject = new T();
         }
 
         public bool Success => !Errors.Any();
         public IDictionary<string, string> Errors { get; set; }
         public IDictionary<string, string> Alerts { get; set; }
-        public T ParsedObject { get; set; }
 
         public void Error(string key, string error)
         {
@@ -32,5 +30,15 @@ namespace MyMoods.Domain.DTO
                 Alerts.Add(key, alert);
             }
         }
+    }
+
+    public class ValidationResultDTO<T> : ValidationResultDTO where T : new()
+    {
+        public ValidationResultDTO() : base()
+        {
+            ParsedObject = new T();
+        }
+
+        public T ParsedObject { get; set; }
     }
 }

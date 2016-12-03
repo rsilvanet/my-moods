@@ -23,7 +23,7 @@ namespace MyMoods.Controllers
         {
             try
             {
-                return Ok(await _formsService.GetMetadataAsync(id));
+                return Ok(await _formsService.GetMetadataByIdAsync(id));
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@ namespace MyMoods.Controllers
         {
             try
             {
-                var form = await _formsService.GetFormAsync(id);
+                var form = await _formsService.GetByIdAsync(id);
 
                 if (form == null)
                 {

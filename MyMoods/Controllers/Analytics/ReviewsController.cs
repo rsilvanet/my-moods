@@ -23,7 +23,7 @@ namespace MyMoods.Controllers.Analytics
         {
             try
             {
-                var form = await _formsService.GetFormAsync(formId);
+                var form = await _formsService.GetByIdAsync(formId);
 
                 if (form == null)
                 {
@@ -50,7 +50,7 @@ namespace MyMoods.Controllers.Analytics
         {
             try
             {
-                var form = await _formsService.GetFormAsync(formId);
+                var form = await _formsService.GetByIdAsync(formId);
 
                 if (form == null)
                 {

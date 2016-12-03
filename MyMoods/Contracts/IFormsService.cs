@@ -7,9 +7,9 @@ namespace MyMoods.Contracts
 {
     public interface IFormsService
     {
-        Task<Form> GetFormAsync(string id);
-        Task<IList<Form>> GetFormsByCompanyAsync(string companyId);
-        Task<FormMetadataDTO> GetMetadataAsync(string id);
+        Task<Form> GetByIdAsync(string id);
+        Task<IList<Form>> GetByCompanyAsync(string companyId);
+        Task<FormMetadataDTO> GetMetadataByIdAsync(string id);
         Task<Form> GenerateFormAsync(string companyId, string title, bool useDefaultTags);
         Task UpdateFormAsync(Form form, string title, bool useDefaultTags);
     }

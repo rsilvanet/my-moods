@@ -48,16 +48,36 @@ namespace MyMoods.Services
             return pass.Replace("-", "");
         }
 
-        public async Task<User> GetByEmail(string email)
+        private bool CheckPass(User user, string password)
         {
-            return await _storage.Users.Find(x => x.Email == email).FirstOrDefaultAsync();
+            password = CryptoPass(password);
+
+            return user.Password == password || user.ResetedPassword == password;
+        }
+
+        public async Task<User> GetByIdAsync(string id)
+        {
+            var oid = new ObjectId(id);
+            var user = await _storage.Users.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
+
+            return user;
+        }
+
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await _storage.Users.Find(x => x.Email.ToLower() == email.ToLower()).FirstOrDefaultAsync();
         }
 
         public async Task<User> AuthenticateAsync(string email, string password)
         {
-            password = CryptoPass(password);
+            var user = await GetByEmailAsync(email);
 
-            return await _storage.Users.Find(x => x.Email == email && (x.Password == password || x.ResetedPassword == password)).FirstOrDefaultAsync();
+            if (user != null && CheckPass(user, password))
+            {
+                return user;
+            }
+
+            return null;
         }
 
         public async Task ResetPasswordAsync(User user)
@@ -71,6 +91,17 @@ namespace MyMoods.Services
             _mailer.SendResetedPassword(user, pass);
         }
 
+        public async Task ChangePasswordAsync(User user, string password)
+        {
+            var cryptoPass = CryptoPass(password);
+
+            var builder = Builders<User>.Update
+                .Set(x => x.Password, cryptoPass)
+                .Set(x => x.ResetedPassword, null);
+
+            await _storage.Users.UpdateOneAsync(x => x.Id.Equals(user.Id), builder);
+        }
+
         public async Task InsertAsync(Company company, User user)
         {
             user.Password = CryptoPass(user.Password);
@@ -79,26 +110,60 @@ namespace MyMoods.Services
             await _storage.Users.InsertOneAsync(user);
         }
 
-        public async Task<ValidationResultDTO<User>> ValidateToInsertAsync(RegisterDTO register)
+        public Task<ValidationResultDTO> ValidateToChangePasswordAsync(User user, ChagePasswordDTO dto)
+        {
+            var result = new ValidationResultDTO();
+
+            if (string.IsNullOrWhiteSpace(dto.Old))
+            {
+                result.Error("old", "A senha atual não foi informada.");
+            }
+            else if (!CheckPass(user, dto.Old))
+            {
+                result.Error("old", "A senha atual está incorreta.");
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.New))
+            {
+                result.Error("new", "A nova senha não foi informada.");
+            }
+            else if (dto.New.Length < 6)
+            {
+                result.Error("new", "A nova senha deve ter no mínimo 6 caracteres.");
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.Confirmation))
+            {
+                result.Error("confirmation", "A confirmação não foi informada");
+            }
+            else if (dto.New != dto.Confirmation)
+            {
+                result.Error("confirmation", "A confirmação não coincide com a senha.");
+            }
+
+            return Task.FromResult(result);
+        }
+
+        public async Task<ValidationResultDTO<User>> ValidateToInsertAsync(RegisterDTO dto)
         {
             var result = new ValidationResultDTO<User>();
 
-            if (string.IsNullOrWhiteSpace(register.Name))
+            if (string.IsNullOrWhiteSpace(dto.Name))
             {
                 result.Error("name", "O nome do usuário não foi informado.");
             }
             else
             {
-                result.ParsedObject.Name = register.Name;
+                result.ParsedObject.Name = dto.Name;
             }
 
-            if (string.IsNullOrWhiteSpace(register.Email))
+            if (string.IsNullOrWhiteSpace(dto.Email))
             {
                 result.Error("email", "O e-mail do usuário não foi informado.");
             }
             else
             {
-                var user = await _storage.Users.Find(x => x.Email.ToLower() == register.Email.ToLower()).FirstOrDefaultAsync();
+                var user = await GetByEmailAsync(dto.Email);
 
                 if (user != null)
                 {
@@ -106,17 +171,17 @@ namespace MyMoods.Services
                 }
                 else
                 {
-                    result.ParsedObject.Email = register.Email;
+                    result.ParsedObject.Email = dto.Email;
                 }
             }
 
-            if (string.IsNullOrWhiteSpace(register.Password))
+            if (string.IsNullOrWhiteSpace(dto.Password))
             {
                 result.Error("password", "A senha do usuário não foi informada.");
             }
             else
             {
-                result.ParsedObject.Password = register.Password;
+                result.ParsedObject.Password = dto.Password;
             }
 
             return result;

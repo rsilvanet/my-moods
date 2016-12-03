@@ -17,20 +17,20 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody]LoginDTO login)
+        public async Task<IActionResult> Login([FromBody]LoginDTO dto)
         {
             try
             {
-                var user = await _userService.AuthenticateAsync(login.Email, login.Password);
+                var user = await _userService.AuthenticateAsync(dto.Email, dto.Password);
 
                 if (user == null)
                 {
                     return Unauthorized();
                 }
 
-                var dto = new UserDTO(user);
+                var userDTO = new UserDTO(user);
 
-                return Ok(dto);
+                return Ok(userDTO);
             }
             catch (Exception ex)
             {
