@@ -21,6 +21,11 @@ namespace MyMoods.Controllers.Analytics
         {
             try
             {
+                if (dto == null)
+                {
+                    return BadRequest("O conteúdo da requisição está inválido.");
+                }
+
                 var user = await _userService.AuthenticateAsync(dto.Email, dto.Password);
 
                 if (user == null)

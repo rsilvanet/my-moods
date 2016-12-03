@@ -47,12 +47,14 @@ namespace MyMoods.Controllers.Analytics
                     return BadRequest("O conteúdo da requisição está inválido.");
                 }
 
-                if (string.IsNullOrWhiteSpace(dto.Title))
+                var validation = await _formsService.ValidateToCreateFormAsync(dto);
+
+                if (!validation.Success)
                 {
-                    return BadRequest("O título não foi informado.");
+                    return BadRequest(validation.Errors);
                 }
 
-                var form = await _formsService.GenerateFormAsync(LoggedCompanyId, dto.Title, dto.UseDefaultTags);
+                var form = await _formsService.CreateFormAsync(LoggedCompanyId, dto);
 
                 return Created(form.Id.ToString());
             }
@@ -72,9 +74,11 @@ namespace MyMoods.Controllers.Analytics
                     return BadRequest("O conteúdo da requisição está inválido.");
                 }
 
-                if (string.IsNullOrWhiteSpace(dto.Title))
+                var validation = await _formsService.ValidateToUpdateFormAsync(dto);
+
+                if (!validation.Success)
                 {
-                    return BadRequest("O título não foi informado.");
+                    return BadRequest(validation.Errors);
                 }
 
                 var form = await _formsService.GetByIdAsync(id);
@@ -84,7 +88,7 @@ namespace MyMoods.Controllers.Analytics
                     return NotFound();
                 }
 
-                await _formsService.UpdateFormAsync(form, dto.Title, dto.UseDefaultTags);
+                await _formsService.UpdateFormAsync(form, dto);
 
                 return Ok();
             }

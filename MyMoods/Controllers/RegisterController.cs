@@ -22,17 +22,17 @@ namespace MyMoods.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody]RegisterDTO register)
+        public async Task<IActionResult> Register([FromBody]RegisterDTO dto)
         {
             try
             {
-                if (register == null)
+                if (dto == null)
                 {
                     return BadRequest("O conteúdo da requisição está inválido.");
                 }
 
-                var companyValidation = await _companiesService.ValidateToInsertAsync(register);
-                var userValidation = await _usersService.ValidateToInsertAsync(register);
+                var companyValidation = await _companiesService.ValidateToInsertAsync(dto);
+                var userValidation = await _usersService.ValidateToInsertAsync(dto);
 
                 if (!companyValidation.Success || !userValidation.Success)
                 {
@@ -41,7 +41,7 @@ namespace MyMoods.Controllers
 
                 await _companiesService.InsertAsync(companyValidation.ParsedObject);
                 await _usersService.InsertAsync(companyValidation.ParsedObject, userValidation.ParsedObject);
-                await _formsService.GenerateFormAsync(companyValidation.ParsedObject.Id.ToString(), "Visão geral da empresa", true);
+                await _formsService.CreateFormAsync(companyValidation.ParsedObject.Id.ToString(), new FormOnPostDTO("Visão geral da empresa", true));
 
                 return Created(companyValidation.ParsedObject.Id.ToString());
             }

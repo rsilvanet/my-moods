@@ -11,8 +11,8 @@ namespace MyMoods.Contracts
         Task<User> AuthenticateAsync(string email, string password);
         Task ResetPasswordAsync(User user);
         Task ChangePasswordAsync(User user, string password);
-        Task InsertAsync(Company company, User user);
         Task<ValidationResultDTO> ValidateToChangePasswordAsync(User user, ChagePasswordDTO dto);
+        Task InsertAsync(Company company, User user);
         Task<ValidationResultDTO<User>> ValidateToInsertAsync(RegisterDTO register);
     }
 }

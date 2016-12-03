@@ -102,14 +102,6 @@ namespace MyMoods.Services
             await _storage.Users.UpdateOneAsync(x => x.Id.Equals(user.Id), builder);
         }
 
-        public async Task InsertAsync(Company company, User user)
-        {
-            user.Password = CryptoPass(user.Password);
-            user.Companies = new List<ObjectId> { company.Id };
-
-            await _storage.Users.InsertOneAsync(user);
-        }
-
         public Task<ValidationResultDTO> ValidateToChangePasswordAsync(User user, ChagePasswordDTO dto)
         {
             var result = new ValidationResultDTO();
@@ -142,6 +134,14 @@ namespace MyMoods.Services
             }
 
             return Task.FromResult(result);
+        }
+
+        public async Task InsertAsync(Company company, User user)
+        {
+            user.Password = CryptoPass(user.Password);
+            user.Companies = new List<ObjectId> { company.Id };
+
+            await _storage.Users.InsertOneAsync(user);
         }
 
         public async Task<ValidationResultDTO<User>> ValidateToInsertAsync(RegisterDTO dto)

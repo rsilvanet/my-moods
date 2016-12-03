@@ -5,6 +5,7 @@ using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace MyMoods.Services
 {
@@ -47,12 +48,12 @@ namespace MyMoods.Services
             return new FormMetadataDTO(form, company, questions, tags, moods);
         }
 
-        public async Task<Form> GenerateFormAsync(string companyId, string title, bool useDefaultTags)
+        public async Task<Form> CreateFormAsync(string companyId, FormOnPostDTO dto)
         {
             var form = new Form()
             {
-                Title = title,
-                UseDefaultTags = useDefaultTags,
+                Title = dto.Title,
+                UseDefaultTags = dto.UseDefaultTags,
                 Company = new ObjectId(companyId)
             };
 
@@ -71,13 +72,37 @@ namespace MyMoods.Services
             return form;
         }
 
-        public async Task UpdateFormAsync(Form form, string title, bool useDefaultTags)
+        public Task<ValidationResultDTO> ValidateToCreateFormAsync(FormOnPostDTO dto)
+        {
+            var result = new ValidationResultDTO();
+
+            if (string.IsNullOrWhiteSpace(dto.Title))
+            {
+                result.Error("title", "O título não foi informado.");
+            }
+
+            return Task.FromResult(result);
+        }
+
+        public async Task UpdateFormAsync(Form form, FormOnPostDTO dto)
         {
             var builder = Builders<Form>.Update
-                .Set(x => x.Title, title)
-                .Set(x => x.UseDefaultTags, useDefaultTags);
+                .Set(x => x.Title, dto.Title)
+                .Set(x => x.UseDefaultTags, dto.UseDefaultTags);
 
             await _storage.Forms.UpdateOneAsync(x => x.Id.Equals(form.Id), builder);
+        }
+
+        public Task<ValidationResultDTO> ValidateToUpdateFormAsync(FormOnPostDTO dto)
+        {
+            var result = new ValidationResultDTO();
+
+            if (string.IsNullOrWhiteSpace(dto.Title))
+            {
+                result.Error("title", "O título não foi informado.");
+            }
+
+            return Task.FromResult(result);
         }
     }
 }

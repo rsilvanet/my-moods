@@ -32,7 +32,7 @@ namespace MyMoods.Controllers
         }
 
         [HttpPost("{id}/reviews")]
-        public async Task<IActionResult> PostReview(string id, [FromBody]ReviewOnPostDTO review)
+        public async Task<IActionResult> PostReview(string id, [FromBody]ReviewOnPostDTO dto)
         {
             try
             {
@@ -40,15 +40,15 @@ namespace MyMoods.Controllers
 
                 if (form == null)
                 {
-                    return NotFound($"Formulário {id} não encontrado.");
+                    return NotFound();
                 }
 
-                if (review == null)
+                if (dto == null)
                 {
                     return BadRequest("O conteúdo da requisição está inválido.");
                 }
 
-                var validation = await _reviewsService.ValidateToInsertAsync(form, review);
+                var validation = await _reviewsService.ValidateToInsertAsync(form, dto);
 
                 if (!validation.Success)
                 {
