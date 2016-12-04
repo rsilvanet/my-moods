@@ -16,8 +16,15 @@
 
             config.headers = config.headers || {};
 
-            if ($rootScope.user && $rootScope.user.companyId) {
-                config.headers['X-Company'] = $rootScope.user.companyId;
+            if ($rootScope.user) {
+
+                if ($rootScope.user.companyId) {
+                    config.headers['X-Company'] = $rootScope.user.companyId;
+                }
+
+                if ($rootScope.user.id) {
+                    config.headers['X-User'] = $rootScope.user.id;
+                }
             }
 
             config.headers['X-Timezone'] = -(new Date().getTimezoneOffset() / 60);

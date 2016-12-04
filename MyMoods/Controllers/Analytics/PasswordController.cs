@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace MyMoods.Controllers.Analytics
 {
-    [Route("api/analytics/users")]
-    public class UserController : AnalyticsBaseController
+    [Route("api/analytics/password")]
+    public class PasswordController : AnalyticsBaseController
     {
         private readonly IUsersService _userService;
 
-        public UserController(IUsersService userService)
+        public PasswordController(IUsersService userService)
         {
             _userService = userService;
         }
 
-        [HttpPut("password")]
+        [HttpPut]
         public async Task<IActionResult> ChangePassword([FromBody]ChagePasswordDTO dto)
         {
             try

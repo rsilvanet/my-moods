@@ -4,13 +4,14 @@
     var app = angular.module('app', [
 
         'ui.router',
-        
+
         'app.charts',
         'app.daily',
         'app.forms',
         'app.home',
         'app.login',
         'app.logout',
+        'app.password',
         'app.reviews',
 
         'app.components.average-chart',
