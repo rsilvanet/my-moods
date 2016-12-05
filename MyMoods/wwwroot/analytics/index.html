@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="../assets/emojis/loving.png" />
     <link rel="stylesheet" href="../bower_components/c3/c3.min.css" />
     <link rel="stylesheet" href="../bower_components/locawebstyle/dist/stylesheets/locastyle.css" />
+    <link rel="stylesheet" href="../bower_components/toastr/toastr.min.css" />
     <link rel="stylesheet" href="app/home/home.css" />
     <link rel="stylesheet" href="app/login/login.css" />
     <link rel="stylesheet" href="app/password/password.css" />
@@ -16,6 +17,12 @@
     <link rel="stylesheet" href="app/components/daily-panel/daily-panel.css" />
     <link rel="stylesheet" href="app/components/form-selector/form-selector.css" />
     <link rel="stylesheet" href="app/components/sly-calendar/sly-calendar.css" />
+
+    <style>
+        .toast-top-right {
+            margin-top: 60px;
+        }
+    </style>
 </head>
 
 <body ng-app="app">
@@ -30,6 +37,7 @@
                     </a>
                     <nav class="ls-dropdown-nav ls-user-menu">
                         <ul>
+                            <li><a href="#/password">Alterar Senha</a></li>
                             <li><a href="#/logout">Sair</a></li>
                         </ul>
                     </nav>
@@ -57,6 +65,9 @@
                     <span class="ls-name">{{user.name}}</span>{{user.email}}
                 </a>
                 <nav class="ls-dropdown-nav ls-user-menu" aria-hidden="true">
+                    <ul>
+                        <li><a href="#/password" role="option">Alterar Senha</a></li>
+                    </ul>
                     <a href="#/logout" class="ls-btn-logout" role="combobox" aria-expanded="false">Sair</a>
                 </nav>
             </div>
@@ -79,7 +90,9 @@
     <script src="../bower_components/lodash/dist/lodash.min.js"></script>
     <script src="../bower_components/moment/min/moment.min.js"></script>
     <script src="../bower_components/sly/dist/sly.min.js"></script>
+    <script src="../bower_components/toastr/toastr.min.js"></script>
     <script src="app/app.js"></script>
+    <script src="app/error-handler.js"></script>
     <script src="app/http-interceptor.js"></script>
     <script src="app/charts/charts.config.js"></script>
     <script src="app/charts/charts.controller.js"></script>
@@ -105,6 +118,13 @@
     <script src="app/components/daily-panel/daily-panel.js"></script>
     <script src="app/components/form-selector/form-selector.js"></script>
     <script src="app/components/sly-calendar/sly-calendar.js"></script>
+
+    <script>
+        toastr.options.timeOut = 5000;
+        toastr.options.extendedTimeOut = 15000;
+        toastr.options.closeButton = true;
+        toastr.options.positionClass = 'toast-top-right';
+    </script>
 </body>
 
 </html>

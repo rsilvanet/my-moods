@@ -4,10 +4,10 @@
 
     password.controller('PasswordController', passwordController);
 
-    passwordController.$inject = ['PasswordService'];
+    passwordController.$inject = ['$state', 'PasswordService', 'ErrorHandlerService'];
 
     /* @ngInject */
-    function passwordController(PasswordService) {
+    function passwordController($state, PasswordService, ErrorHandlerService) {
 
         var vm = this;
 
@@ -17,11 +17,11 @@
 
             PasswordService.change(x.old, x.new, x.confirmation)
                 .then(function () {
-                    alert('Ok');
+                    toastr.success('Senha alterada.');
+                    $state.go('home');
                 }, function (response) {
-                    alert(response.data.old);
-                    console.log(response.data);
-                });
+                    ErrorHandlerService.normalizeAndShow(response);
+                });;
         };
     }
 })();
