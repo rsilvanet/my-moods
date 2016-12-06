@@ -3,7 +3,6 @@ using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -184,6 +183,16 @@ namespace MyMoods.Services
             return result;
         }
 
+        public async Task<IList<ReviewDTO>> GetByForm(Form form, DateTime date, short timezone)
+        {
+            var theDay = date.Date.AddHours(-timezone);
+            var theNextDay = theDay.AddDays(1);
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay).ToListAsync();
+            var tags = await _storage.Tags.Find(x => true).ToListAsync();
+
+            return reviews.Select(x => new ReviewDTO(x, tags)).ToList();
+        }
+
         public async Task<IList<DailySimpleDTO>> GetResumeAsync(Form form, short timezone)
         {
             var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
@@ -201,8 +210,8 @@ namespace MyMoods.Services
         public async Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date, short timezone)
         {
             var theDay = date.Date.AddHours(-timezone);
-            var theEndOfTheDay = theDay.AddDays(1).AddMilliseconds(-1);
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date <= theEndOfTheDay).ToListAsync();
+            var theNextDay = theDay.AddDays(1);
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay).ToListAsync();
 
             if (!reviews.Any())
             {

@@ -18,6 +18,31 @@ namespace MyMoods.Controllers.Analytics
             _reviewsService = reviewsService;
         }
 
+        [HttpGet("")]
+        public async Task<IActionResult> Get(string formId, DateTime date)
+        {
+            var form = await _formsService.GetByIdAsync(formId);
+
+            if (form == null)
+            {
+                return NotFound();
+            }
+
+            if (form.Company.ToString() != LoggedCompanyId)
+            {
+                return Forbid();
+            }
+
+            var reviews = await _reviewsService.GetByForm(form, date, ClientTimezone);
+
+            if (!reviews.Any())
+            {
+                return NoContent();
+            }
+
+            return Ok(reviews);
+        }
+
         [HttpGet("resume")]
         public async Task<IActionResult> GetResume(string formId)
         {
@@ -28,6 +53,11 @@ namespace MyMoods.Controllers.Analytics
                 if (form == null)
                 {
                     return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
                 }
 
                 var resume = await _reviewsService.GetResumeAsync(form, ClientTimezone);
@@ -55,6 +85,11 @@ namespace MyMoods.Controllers.Analytics
                 if (form == null)
                 {
                     return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
                 }
 
                 var daily = await _reviewsService.GetDailyAsync(form, date, ClientTimezone);

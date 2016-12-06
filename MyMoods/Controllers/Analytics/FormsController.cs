@@ -88,6 +88,11 @@ namespace MyMoods.Controllers.Analytics
                     return NotFound();
                 }
 
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
+                }
+
                 await _formsService.UpdateFormAsync(form, dto);
 
                 return Ok();
