@@ -21,26 +21,77 @@ namespace MyMoods.Controllers.Analytics
         [HttpGet("")]
         public async Task<IActionResult> Get(string formId, DateTime date)
         {
-            var form = await _formsService.GetByIdAsync(formId);
-
-            if (form == null)
+            try
             {
-                return NotFound();
-            }
+                var form = await _formsService.GetByIdAsync(formId);
 
-            if (form.Company.ToString() != LoggedCompanyId)
+                if (form == null)
+                {
+                    return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
+                }
+
+                var reviews = await _reviewsService.GetByFormAsync(form, date, ClientTimezone);
+
+                if (!reviews.Any())
+                {
+                    return NoContent();
+                }
+
+                return Ok(reviews);
+            }
+            catch (Exception ex)
             {
-                return Forbid();
+                return InternalServerError(ex);
             }
+        }
 
-            var reviews = await _reviewsService.GetByForm(form, date, ClientTimezone);
-
-            if (!reviews.Any())
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Enable(string id)
+        {
+            try
             {
-                return NoContent();
-            }
+                var review = await _reviewsService.GetByIdAsync(id);
 
-            return Ok(reviews);
+                if (review == null)
+                {
+                    return NotFound();
+                }
+
+                await _reviewsService.EnableAsync(review);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Disable(string id)
+        {
+            try
+            {
+                var review = await _reviewsService.GetByIdAsync(id);
+
+                if (review == null)
+                {
+                    return NotFound();
+                }
+
+                await _reviewsService.DisableAsync(review);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
         }
 
         [HttpGet("resume")]

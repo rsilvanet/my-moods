@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
@@ -183,7 +184,14 @@ namespace MyMoods.Services
             return result;
         }
 
-        public async Task<IList<ReviewDTO>> GetByForm(Form form, DateTime date, short timezone)
+        public async Task<Review> GetByIdAsync(string id)
+        {
+            var oid = new ObjectId(id);
+
+            return await _storage.Reviews.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
+        }
+
+        public async Task<IList<ReviewDTO>> GetByFormAsync(Form form, DateTime date, short timezone)
         {
             var theDay = date.Date.AddHours(-timezone);
             var theNextDay = theDay.AddDays(1);
@@ -239,6 +247,20 @@ namespace MyMoods.Services
             }
 
             return counters;
+        }
+
+        public async Task EnableAsync(Review review)
+        {
+            var builder = Builders<Review>.Update.Set(x => x.Active, true);
+
+            await _storage.Reviews.UpdateOneAsync(x => x.Id.Equals(review.Id), builder);
+        }
+
+        public async Task DisableAsync(Review review)
+        {
+            var builder = Builders<Review>.Update.Set(x => x.Active, false);
+
+            await _storage.Reviews.UpdateOneAsync(x => x.Id.Equals(review.Id), builder);
         }
     }
 }
