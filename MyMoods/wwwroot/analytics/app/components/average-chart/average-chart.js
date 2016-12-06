@@ -1,9 +1,9 @@
 (function () {
     'use strict';
-    var chart = angular.module('app.components.average-chart', []);
+    var components = angular.module('app.components');
 
     /* @ngInject */
-    chart.directive('averageChart', function ($q, $timeout, ReviewsService) {
+    components.directive('averageChart', function ($q, $timeout, ReviewsService) {
         return {
             restrict: 'E',
             templateUrl: 'app/components/average-chart/average-chart.html',

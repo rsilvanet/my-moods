@@ -2,9 +2,7 @@
     'use strict';
 
     var app = angular.module('app', [
-
         'ui.router',
-
         'app.charts',
         'app.daily',
         'app.forms',
@@ -13,12 +11,7 @@
         'app.logout',
         'app.password',
         'app.reviews',
-
-        'app.components.average-chart',
-        'app.components.daily-chart',
-        'app.components.daily-panel',
-        'app.components.form-selector',
-        'app.components.sly-calendar'
+        'app.components'
     ]);
 
     app.constant('APP_CONFIG', {

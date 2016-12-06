@@ -1,0 +1,19 @@
+<div style="text-align: center" ng-show="formId && !isLoaded">
+    Carregando...
+</div>
+<div style="text-align: center" ng-show="formId && isLoaded && dates && dates.length == 0">
+    Não há dados para este formulário.
+</div>
+<div class="ls-sm-margin-top" ng-show="formId && isLoaded && dates && dates.length > 0">
+    <div class="ls-md-margin-bottom">
+        <div class="ls-custom-select ls-sm-margin-bottom">
+            <select class="ls-select" ng-options="date.value as date.formatted for date in dates" ng-model="selectedDate" ng-change="loadChart()"></select>
+        </div>
+    </div>
+    <div style="text-align: center" ng-show="!listIsLoaded">
+        Carregando...
+    </div>
+    <div style="text-align: center" ng-show="listIsLoaded">
+        {{scope.reviews}}
+    </div>
+</div>

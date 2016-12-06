@@ -1,9 +1,9 @@
 (function () {
     'use strict';
-    var sly = angular.module('app.components.sly-calendar', []);
+    var components = angular.module('app.components');
 
     /* @ngInject */
-    sly.directive('slyCalendar', function ($window, $timeout, $log, ReviewsService) {
+    components.directive('slyCalendar', function ($window, $timeout, $log, ReviewsService) {
         return {
             restrict: 'E',
             templateUrl: 'app/components/sly-calendar/sly-calendar.html',

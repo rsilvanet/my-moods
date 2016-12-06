@@ -1,9 +1,9 @@
 (function () {
     'use strict';
-    var daily = angular.module('app.components.daily-panel', []);
+    var components = angular.module('app.components');
 
     /* @ngInject */
-    daily.directive('dailyPanel', function ($timeout, ReviewsService) {
+    components.directive('dailyPanel', function ($timeout, ReviewsService) {
         return {
             restrict: 'E',
             templateUrl: 'app/components/daily-panel/daily-panel.html',

@@ -1,9 +1,9 @@
 (function () {
     'use strict';
-    var selector = angular.module('app.components.form-selector', []);
+    var components = angular.module('app.components');
 
     /* @ngInject */
-    selector.directive('formSelector', function (FormsService) {
+    components.directive('formSelector', function (FormsService) {
         return {
             restrict: 'E',
             templateUrl: 'app/components/form-selector/form-selector.html',
