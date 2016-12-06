@@ -187,8 +187,9 @@ namespace MyMoods.Services
         public async Task<Review> GetByIdAsync(string id)
         {
             var oid = new ObjectId(id);
+            var review = await _storage.Reviews.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
 
-            return await _storage.Reviews.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
+            return review;
         }
 
         public async Task<IList<ReviewDTO>> GetByFormAsync(Form form, DateTime date, short timezone)

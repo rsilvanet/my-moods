@@ -51,7 +51,7 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Enable(string id)
+        public async Task<IActionResult> Enable(string formId, string id)
         {
             try
             {
@@ -60,6 +60,11 @@ namespace MyMoods.Controllers.Analytics
                 if (review == null)
                 {
                     return NotFound();
+                }
+
+                if (review.Form.ToString() != formId)
+                {
+                    return Forbid();
                 }
 
                 await _reviewsService.EnableAsync(review);
@@ -73,7 +78,7 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Disable(string id)
+        public async Task<IActionResult> Disable(string formId, string id)
         {
             try
             {
@@ -82,6 +87,11 @@ namespace MyMoods.Controllers.Analytics
                 if (review == null)
                 {
                     return NotFound();
+                }
+
+                if (review.Form.ToString() != formId)
+                {
+                    return Forbid();
                 }
 
                 await _reviewsService.DisableAsync(review);
