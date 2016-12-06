@@ -28,6 +28,14 @@ namespace MyMoods.Services
             return form;
         }
 
+        public async Task<FormWithQuestionsDTO> GetWithQuestionsAsync(Form form)
+        {
+            var questions = await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+            var dto = new FormWithQuestionsDTO(form, questions);
+
+            return dto;
+        }
+
         public async Task<IList<Form>> GetByCompanyAsync(string companyId)
         {
             var companyOid = new ObjectId(companyId);

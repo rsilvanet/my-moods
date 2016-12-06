@@ -11,11 +11,13 @@ namespace MyMoods.Domain
     {
         public Review()
         {
+            Active = true;
             Date = DateTime.UtcNow;
             Tags = new List<ObjectId>();
             Answers = new List<Answer>();
         }
 
+        public bool Active { get; set; }
         public DateTime Date { get; set; }
         public MoodType Mood { get; set; }
         public IList<ObjectId> Tags { get; set; }

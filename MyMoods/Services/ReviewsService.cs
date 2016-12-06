@@ -1,9 +1,9 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -184,6 +184,24 @@ namespace MyMoods.Services
             return result;
         }
 
+        public async Task<Review> GetByIdAsync(string id)
+        {
+            var oid = new ObjectId(id);
+            var review = await _storage.Reviews.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
+
+            return review;
+        }
+
+        public async Task<IList<ReviewDTO>> GetByFormAsync(Form form, DateTime date, short timezone)
+        {
+            var theDay = date.Date.AddHours(-timezone);
+            var theNextDay = theDay.AddDays(1);
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay).ToListAsync();
+            var tags = await _storage.Tags.Find(x => true).ToListAsync();
+
+            return reviews.Select(x => new ReviewDTO(x, tags)).ToList();
+        }
+
         public async Task<IList<DailySimpleDTO>> GetResumeAsync(Form form, short timezone)
         {
             var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
@@ -201,8 +219,8 @@ namespace MyMoods.Services
         public async Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date, short timezone)
         {
             var theDay = date.Date.AddHours(-timezone);
-            var theEndOfTheDay = theDay.AddDays(1).AddMilliseconds(-1);
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date <= theEndOfTheDay).ToListAsync();
+            var theNextDay = theDay.AddDays(1);
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay).ToListAsync();
 
             if (!reviews.Any())
             {
@@ -230,6 +248,20 @@ namespace MyMoods.Services
             }
 
             return counters;
+        }
+
+        public async Task EnableAsync(Review review)
+        {
+            var builder = Builders<Review>.Update.Set(x => x.Active, true);
+
+            await _storage.Reviews.UpdateOneAsync(x => x.Id.Equals(review.Id), builder);
+        }
+
+        public async Task DisableAsync(Review review)
+        {
+            var builder = Builders<Review>.Update.Set(x => x.Active, false);
+
+            await _storage.Reviews.UpdateOneAsync(x => x.Id.Equals(review.Id), builder);
         }
     }
 }

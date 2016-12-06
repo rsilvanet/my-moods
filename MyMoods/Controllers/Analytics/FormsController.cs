@@ -18,7 +18,7 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetForms()
+        public async Task<IActionResult> Get()
         {
             try
             {
@@ -37,8 +37,35 @@ namespace MyMoods.Controllers.Analytics
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            try
+            {
+                var form = await _formsService.GetByIdAsync(id);
+
+                if (form == null)
+                {
+                    return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
+                }
+
+                var dto = _formsService.GetWithQuestionsAsync(form);
+
+                return Ok(dto);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
         [HttpPost("")]
-        public async Task<IActionResult> PostForm([FromBody]FormOnPostDTO dto)
+        public async Task<IActionResult> Post([FromBody]FormOnPostDTO dto)
         {
             try
             {
@@ -65,7 +92,7 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutForm(string id, [FromBody]FormOnPostDTO dto)
+        public async Task<IActionResult> Put(string id, [FromBody]FormOnPostDTO dto)
         {
             try
             {
@@ -86,6 +113,11 @@ namespace MyMoods.Controllers.Analytics
                 if (form == null)
                 {
                     return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
                 }
 
                 await _formsService.UpdateFormAsync(form, dto);

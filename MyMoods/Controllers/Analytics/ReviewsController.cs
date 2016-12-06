@@ -18,6 +18,92 @@ namespace MyMoods.Controllers.Analytics
             _reviewsService = reviewsService;
         }
 
+        [HttpGet("")]
+        public async Task<IActionResult> Get(string formId, DateTime date)
+        {
+            try
+            {
+                var form = await _formsService.GetByIdAsync(formId);
+
+                if (form == null)
+                {
+                    return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
+                }
+
+                var reviews = await _reviewsService.GetByFormAsync(form, date, ClientTimezone);
+
+                if (!reviews.Any())
+                {
+                    return NoContent();
+                }
+
+                return Ok(reviews);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Enable(string formId, string id)
+        {
+            try
+            {
+                var review = await _reviewsService.GetByIdAsync(id);
+
+                if (review == null)
+                {
+                    return NotFound();
+                }
+
+                if (review.Form.ToString() != formId)
+                {
+                    return Forbid();
+                }
+
+                await _reviewsService.EnableAsync(review);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Disable(string formId, string id)
+        {
+            try
+            {
+                var review = await _reviewsService.GetByIdAsync(id);
+
+                if (review == null)
+                {
+                    return NotFound();
+                }
+
+                if (review.Form.ToString() != formId)
+                {
+                    return Forbid();
+                }
+
+                await _reviewsService.DisableAsync(review);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
         [HttpGet("resume")]
         public async Task<IActionResult> GetResume(string formId)
         {
@@ -28,6 +114,11 @@ namespace MyMoods.Controllers.Analytics
                 if (form == null)
                 {
                     return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
                 }
 
                 var resume = await _reviewsService.GetResumeAsync(form, ClientTimezone);
@@ -55,6 +146,11 @@ namespace MyMoods.Controllers.Analytics
                 if (form == null)
                 {
                     return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
                 }
 
                 var daily = await _reviewsService.GetDailyAsync(form, date, ClientTimezone);
