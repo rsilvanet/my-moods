@@ -6,7 +6,7 @@
     components.directive('reviewsViewer', function ($timeout, ReviewsService) {
         return {
             restrict: 'E',
-            templateUrl: 'app/components/daily-chart/daily-chart.html',
+            templateUrl: 'app/components/reviews-viewer/reviews-viewer.html',
             scope: {
                 formId: '='
             },
