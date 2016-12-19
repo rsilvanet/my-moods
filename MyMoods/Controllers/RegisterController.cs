@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyMoods.Contracts;
+using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System;
 using System.Linq;
@@ -41,7 +42,14 @@ namespace MyMoods.Controllers
 
                 await _companiesService.InsertAsync(companyValidation.ParsedObject);
                 await _usersService.InsertAsync(companyValidation.ParsedObject, userValidation.ParsedObject);
-                await _formsService.CreateFormAsync(companyValidation.ParsedObject.Id.ToString(), new FormOnPostDTO("Visão geral da empresa", true));
+
+                var form = new Form(companyValidation.ParsedObject.Id)
+                {
+                    Title = "Visão geral da empresa",
+                    UseDefaultTags = true
+                };
+
+                await _formsService.CreateAsync(form);
 
                 return Created(companyValidation.ParsedObject.Id.ToString());
             }

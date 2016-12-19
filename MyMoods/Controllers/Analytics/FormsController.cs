@@ -74,16 +74,16 @@ namespace MyMoods.Controllers.Analytics
                     return BadRequest("O conteúdo da requisição está inválido.");
                 }
 
-                var validation = await _formsService.ValidateToCreateFormAsync(dto);
+                var validation = await _formsService.ValidateToCreateAsync(LoggedCompanyId, dto);
 
                 if (!validation.Success)
                 {
                     return BadRequest(validation.Errors);
                 }
 
-                var form = await _formsService.CreateFormAsync(LoggedCompanyId, dto);
+                await _formsService.CreateAsync(validation.ParsedObject);
 
-                return Created(form.Id.ToString());
+                return Created(validation.ParsedObject.Id.ToString());
             }
             catch (Exception ex)
             {
@@ -92,20 +92,13 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]FormOnPostDTO dto)
+        public async Task<IActionResult> Put(string id, [FromBody]FormOnPutDTO dto)
         {
             try
             {
                 if (dto == null)
                 {
                     return BadRequest("O conteúdo da requisição está inválido.");
-                }
-
-                var validation = await _formsService.ValidateToUpdateFormAsync(dto);
-
-                if (!validation.Success)
-                {
-                    return BadRequest(validation.Errors);
                 }
 
                 var form = await _formsService.GetByIdAsync(id);
@@ -120,7 +113,14 @@ namespace MyMoods.Controllers.Analytics
                     return Forbid();
                 }
 
-                await _formsService.UpdateFormAsync(form, dto);
+                var validation = await _formsService.ValidateToUpdateAsync(form, dto);
+
+                if (!validation.Success)
+                {
+                    return BadRequest(validation.Errors);
+                }
+
+                await _formsService.UpdateAsync(form);
 
                 return Ok();
             }

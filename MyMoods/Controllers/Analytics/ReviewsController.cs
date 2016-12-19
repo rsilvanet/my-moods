@@ -137,7 +137,7 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpGet("daily")]
-        public async Task<IActionResult> GetDaily(string formId, DateTime date)
+        public async Task<IActionResult> GetDailyResume(string formId, DateTime date)
         {
             try
             {

@@ -12,6 +12,12 @@ namespace MyMoods.Domain
             Active = true;
         }
 
+        public Form(ObjectId company)
+        {
+            Active = true;
+            Company = company;
+        }
+
         public string Title { get; set; }
         public bool UseCustomTags { get; set; }
         public bool UseDefaultTags { get; set; }

@@ -56,16 +56,12 @@ namespace MyMoods.Services
             return new FormMetadataDTO(form, company, questions, tags, moods);
         }
 
-        public async Task<Form> CreateFormAsync(string companyId, FormOnPostDTO dto)
+        public async Task CreateAsync(Form form)
         {
-            var form = new Form()
+            if (!form.ValidateWasCalled())
             {
-                Title = dto.Title,
-                UseDefaultTags = dto.UseDefaultTags,
-                Company = new ObjectId(companyId)
-            };
-
-            await _storage.Forms.InsertOneAsync(form);
+                throw new InvalidOperationException("O objeto não foi previamente validado.");
+            }
 
             var question = new Question()
             {
@@ -75,40 +71,60 @@ namespace MyMoods.Services
                 Form = form.Id
             };
 
+            await _storage.Forms.InsertOneAsync(form);
             await _storage.Questions.InsertOneAsync(question);
-
-            return form;
         }
 
-        public Task<ValidationResultDTO> ValidateToCreateFormAsync(FormOnPostDTO dto)
+        public Task<ValidationResultDTO<Form>> ValidateToCreateAsync(string companyId, FormOnPostDTO dto)
         {
-            var result = new ValidationResultDTO();
+            var result = new ValidationResultDTO<Form>();
+
+            result.ParsedObject.Company = new ObjectId(companyId);
+            result.ParsedObject.UseDefaultTags = dto.UseDefaultTags;
 
             if (string.IsNullOrWhiteSpace(dto.Title))
             {
                 result.Error("title", "O título não foi informado.");
             }
+            else
+            {
+                result.ParsedObject.Title = dto.Title;
+            }
+
+            result.ParsedObject.Validate();
 
             return Task.FromResult(result);
         }
 
-        public async Task UpdateFormAsync(Form form, FormOnPostDTO dto)
+        public async Task UpdateAsync(Form form)
         {
+            if (!form.ValidateWasCalled())
+            {
+                throw new InvalidOperationException("O objeto não foi previamente validado.");
+            }
+
             var builder = Builders<Form>.Update
-                .Set(x => x.Title, dto.Title)
-                .Set(x => x.UseDefaultTags, dto.UseDefaultTags);
+                .Set(x => x.Title, form.Title)
+                .Set(x => x.UseDefaultTags, form.UseDefaultTags);
 
             await _storage.Forms.UpdateOneAsync(x => x.Id.Equals(form.Id), builder);
         }
 
-        public Task<ValidationResultDTO> ValidateToUpdateFormAsync(FormOnPostDTO dto)
+        public Task<ValidationResultDTO<Form>> ValidateToUpdateAsync(Form form, FormOnPutDTO dto)
         {
-            var result = new ValidationResultDTO();
+            var result = new ValidationResultDTO<Form>();
+            result.ParsedObject = form;
 
             if (string.IsNullOrWhiteSpace(dto.Title))
             {
                 result.Error("title", "O título não foi informado.");
             }
+            else
+            {
+                form.Title = dto.Title;
+            }
+
+            form.Validate();
 
             return Task.FromResult(result);
         }

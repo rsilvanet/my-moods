@@ -86,10 +86,15 @@ namespace MyMoods.Services
 
         public async Task InsertAsync(Review review)
         {
+            if (!review.ValidateWasCalled())
+            {
+                throw new InvalidOperationException("O objeto não foi previamente validado.");
+            }
+
             await _storage.Reviews.InsertOneAsync(review);
         }
 
-        public async Task<ValidationResultDTO<Review>> ValidateToInsertAsync(Form form, ReviewOnPostDTO review)
+        public async Task<ValidationResultDTO<Review>> ValidateToInsertAsync(Form form, ReviewOnPostDTO dto)
         {
             var result = new ValidationResultDTO<Review>();
 
@@ -98,7 +103,7 @@ namespace MyMoods.Services
 
             #region Mood
 
-            if (string.IsNullOrWhiteSpace(review.Mood))
+            if (string.IsNullOrWhiteSpace(dto.Mood))
             {
                 result.Error("mood", "Mood não selecionado.");
             }
@@ -106,22 +111,23 @@ namespace MyMoods.Services
             {
                 MoodType mood;
 
-                if (Enum.TryParse(review.Mood, out mood))
+                if (Enum.TryParse(dto.Mood, out mood))
                 {
                     result.ParsedObject.Mood = mood;
                 }
                 else
                 {
-                    result.Error("mood", $"Mood {review.Mood} inválido.");
+                    result.Error("mood", $"Mood {dto.Mood} inválido.");
                 }
             }
+
             #endregion
 
             #region Tags
 
             if (form.UseDefaultTags)
             {
-                if (review.Tags == null || !review.Tags.Any())
+                if (dto.Tags == null || !dto.Tags.Any())
                 {
                     result.Error("tags", "Nenhuma tag foi selecionada.");
                 }
@@ -129,7 +135,7 @@ namespace MyMoods.Services
                 {
                     var tags = await _storage.Tags.Find(x => true).ToListAsync();
 
-                    foreach (var id in review.Tags)
+                    foreach (var id in dto.Tags)
                     {
                         var tag = tags.FirstOrDefault(x => x.Id.ToString() == id);
 
@@ -155,7 +161,7 @@ namespace MyMoods.Services
             {
                 foreach (var question in questions)
                 {
-                    var answer = review.Answers?.Where(x => question.Id.ToString() == x.Question).FirstOrDefault();
+                    var answer = dto.Answers?.Where(x => question.Id.ToString() == x.Question).FirstOrDefault();
 
                     if (question.Required)
                     {
@@ -180,6 +186,8 @@ namespace MyMoods.Services
             }
 
             #endregion
+
+            result.ParsedObject.Validate();
 
             return result;
         }

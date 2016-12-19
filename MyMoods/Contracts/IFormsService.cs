@@ -11,9 +11,9 @@ namespace MyMoods.Contracts
         Task<FormWithQuestionsDTO> GetWithQuestionsAsync(Form form);
         Task<IList<Form>> GetByCompanyAsync(string companyId);
         Task<FormMetadataDTO> GetMetadataByIdAsync(string id);
-        Task<Form> CreateFormAsync(string companyId, FormOnPostDTO dto);
-        Task<ValidationResultDTO> ValidateToCreateFormAsync(FormOnPostDTO dto);
-        Task UpdateFormAsync(Form form, FormOnPostDTO dto);
-        Task<ValidationResultDTO> ValidateToUpdateFormAsync(FormOnPostDTO dto);
+        Task CreateAsync(Form form);
+        Task<ValidationResultDTO<Form>> ValidateToCreateAsync(string companyId, FormOnPostDTO dto);
+        Task UpdateAsync(Form form);
+        Task<ValidationResultDTO<Form>> ValidateToUpdateAsync(Form form, FormOnPutDTO dto);
     }
 }
