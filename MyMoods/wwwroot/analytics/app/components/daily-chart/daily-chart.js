@@ -123,15 +123,15 @@
                 function getColor(mood) {
                     switch (mood) {
                         case 'angry':
-                            return 'darkblue';
+                            return '#FF5733';
                         case 'unsatisfied':
-                            return 'gray';
+                            return '#5DADE2';
                         case 'normal':
-                            return 'black';
+                            return '#16A085';
                         case 'happy':
-                            return 'purple';
+                            return '#8E44AD';
                         case 'loving':
-                            return 'darkred';
+                            return '#85929E';
                         default:
                             return 'black';
                     }

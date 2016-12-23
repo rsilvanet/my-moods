@@ -15,17 +15,17 @@
     </div>
     <div style="text-align: center" ng-show="listIsLoaded">
         <div class="ls-box ls-box-gray" ng-repeat="review in reviews">
-            <div class="col-md-1 ls-txt-center reviews-viewer-hour">
+            <div class="col-md-2 ls-txt-center reviews-viewer-hour">
                 <p>{{review.date | date:'hh:mm:ss'}}</p>
             </div>
-            <div class="col-md-1 ls-txt-center">
+            <div class="col-md-2 ls-txt-center">
                 <img class="reviews-viewer-img" src="/assets/emojis/{{review.mood}}.png"></img>
             </div>
-            <div class="col-md-6 ls-txt-center reviews-viewer-tags-holder">
+            <div class="col-md-4 ls-txt-center reviews-viewer-tags-holder">
                 <a class="ls-tag reviews-viewer-tag" ng-repeat="tag in review.tags">{{tag.title}}</a>
             </div>
             <div class="col-md-4 ls-txt-center">
-                <p ng-repeat="answer in review.answers">{{answer.value}}</p>
+                <p ng-repeat="answer in review.answers">{{answer.value ? answer.value : '-'}}</p>
             </div>
         </div>
     </div>
