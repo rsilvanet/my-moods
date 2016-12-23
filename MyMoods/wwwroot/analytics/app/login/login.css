@@ -1,5 +1,6 @@
 .login-remove-bg {
     background-color: transparent;
+    margin-top: 100px;
 }
 
 .login-logo-holder {
@@ -19,3 +20,8 @@
 .login-pointer {
     cursor: pointer;
 }
+
+.login-custom-box {
+    width: 100% !important;
+    max-width: 300px;
+} 

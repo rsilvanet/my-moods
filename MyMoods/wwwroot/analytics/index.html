@@ -29,10 +29,10 @@
 <body ng-app="app">
 
     <div ng-cloak>
-        <div class="ls-topbar" ng-show="user">
+        <div class="ls-topbar">
 
             <div class="ls-notification-topbar">
-                <div data-ls-module="dropdown" class="ls-dropdown ls-user-account">
+                <div data-ls-module="dropdown" class="ls-dropdown ls-user-account" ng-show="user">
                     <a href="#" class="ls-ico-user">
                         <span class="ls-name">{{user.name}}</span>
                     </a>
@@ -54,14 +54,14 @@
             </h1>
         </div>
 
-        <main ng-class="{ 'ls-main': user }">
+        <main class="ls-main">
             <div class="ls-lg-margin-top ls-lg-margin-bottom ls-lg-margin-left ls-lg-margin-right">
                 <ui-view></ui-view>
             </div>
         </main>
 
-        <aside class="ls-sidebar" ng-show="user">
-            <div data-ls-module="dropdown" class="ls-dropdown ls-user-account">
+        <aside class="ls-sidebar">
+            <div data-ls-module="dropdown" class="ls-dropdown ls-user-account" ng-show="user">
                 <a href="#" class="ls-ico-user">
                     <span class="ls-name">{{user.name}}</span>{{user.email}}
                 </a>
