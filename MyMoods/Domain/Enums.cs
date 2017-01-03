@@ -43,10 +43,13 @@ namespace MyMoods.Domain
 
     public enum TagType
     {
-        [Description("Realização")]
-        realization = 1,
+        [Description("Indefinido")]
+        undefined = 0,
 
-        [Description("Auto-estima")]
+        [Description("Realização")]
+        realization,
+
+        [Description("Autoestima")]
         esteem,
 
         [Description("Social")]

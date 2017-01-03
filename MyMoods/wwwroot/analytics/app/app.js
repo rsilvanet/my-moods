@@ -3,6 +3,7 @@
 
     var app = angular.module('app', [
         'ui.router',
+        'app.components',
         'app.charts',
         'app.daily',
         'app.forms',
@@ -11,7 +12,7 @@
         'app.logout',
         'app.password',
         'app.reviews',
-        'app.components'
+        'app.tags'
     ]);
 
     app.constant('APP_CONFIG', {

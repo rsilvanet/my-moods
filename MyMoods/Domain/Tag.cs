@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MyMoods.Mongo;
 
 namespace MyMoods.Domain
@@ -18,8 +19,9 @@ namespace MyMoods.Domain
             Active = true;
         }
 
-        public TagType Type { get; set; }
-        public string Title { get; set; }
         public bool Active { get; set; }
+        public string Title { get; set; }
+        public TagType Type { get; set; }
+        public ObjectId? Company { get; set; }
     }
 }

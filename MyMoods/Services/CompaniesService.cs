@@ -20,7 +20,7 @@ namespace MyMoods.Services
             await _storage.Companies.InsertOneAsync(company);
         }
 
-        public async Task<ValidationResultDTO<Company>> ValidateToInsertAsync(RegisterDTO register)
+        public Task<ValidationResultDTO<Company>> ValidateToInsertAsync(RegisterDTO register)
         {
             var result = new ValidationResultDTO<Company>();
 
@@ -30,14 +30,10 @@ namespace MyMoods.Services
             }
             else
             {
-                var company = await _storage.Companies.Find(x => x.Name.ToLower() == register.Company.ToLower()).FirstOrDefaultAsync();
-
-                //TODO: Add some company unique validations
-
                 result.ParsedObject.Name = register.Company;
             }
 
-            return result;
+            return Task.FromResult(result);
         }
     }
 }

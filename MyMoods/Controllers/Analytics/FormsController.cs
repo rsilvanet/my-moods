@@ -12,7 +12,7 @@ namespace MyMoods.Controllers.Analytics
     {
         private readonly IFormsService _formsService;
 
-        public FormsController(IFormsService formsService, IReviewsService reviewsService)
+        public FormsController(IFormsService formsService)
         {
             _formsService = formsService;
         }

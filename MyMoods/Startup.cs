@@ -39,6 +39,7 @@ namespace MyMoods
             services.AddScoped<IMailerService, MailerService>();
             services.AddScoped<IMoodsService, MoodsService>();
             services.AddScoped<IReviewsService, ReviewsService>();
+            services.AddScoped<ITagsService, TagsService>();
             services.AddScoped<IUsersService, UsersService>();
 
             services.AddMvc();

@@ -1,0 +1,31 @@
+<h2>Suas Tags</h2>
+<br>
+<button type="button" class="ls-btn-primary" ng-click="vm.new()">Nova</button>
+<br>
+<div style="text-align: center" ng-show="vm.isLoading">
+    Carregando...
+</div>
+<div class="table-responsive" ng-hide="vm.isLoading">
+    <table class="table ls-table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Categoria</th>
+                <th>Ativa</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="tag in vm.tags">
+                <td>
+                    {{tag.title}}
+                </td>
+                <td>
+                    {{vm.normalizeType(tag.type)}}
+                </td>
+                <td>
+                    <input type="checkbox" class="ls-field-checkbox" ng-model="tag.active" ng-change="vm.changeStatus(tag)" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
