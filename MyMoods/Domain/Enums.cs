@@ -20,17 +20,42 @@ namespace MyMoods.Domain
         loving
     }
 
+    public enum FormType
+    {
+        [Description("Simples")]
+        simple = 1,
+
+        [Description("Geral (com tags padrão)")]
+        general,
+
+        [Description("Geral (com tags padrão + customizadas)")]
+        generalWithCustomTags,
+
+        [Description("Geral (apenas com tags customizadas)")]
+        generalOnlyCustomTags
+    }
+
     public enum QuestionType
     {
+        [Description("Texto")]
         text = 1
     }
 
     public enum TagType
     {
+        [Description("Realização")]
         realization = 1,
+
+        [Description("Auto-estima")]
         esteem,
+
+        [Description("Social")]
         social,
+
+        [Description("Segurança")]
         safety,
+
+        [Description("Fisiológico")]
         physiological
     }
 }

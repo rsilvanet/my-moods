@@ -45,8 +45,9 @@ namespace MyMoods.Controllers
 
                 var form = new Form(companyValidation.ParsedObject.Id)
                 {
+                    Type = FormType.general,
                     Title = "Visão geral da empresa",
-                    UseDefaultTags = true
+                    MainQuestion = "Qual é o seu mood?"
                 };
 
                 await _formsService.CreateAsync(form);

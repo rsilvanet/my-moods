@@ -80,7 +80,6 @@ namespace MyMoods.Services
             var result = new ValidationResultDTO<Form>();
 
             result.ParsedObject.Company = new ObjectId(companyId);
-            result.ParsedObject.UseDefaultTags = dto.UseDefaultTags;
 
             if (string.IsNullOrWhiteSpace(dto.Title))
             {
@@ -103,9 +102,7 @@ namespace MyMoods.Services
                 throw new InvalidOperationException("O objeto não foi previamente validado.");
             }
 
-            var builder = Builders<Form>.Update
-                .Set(x => x.Title, form.Title)
-                .Set(x => x.UseDefaultTags, form.UseDefaultTags);
+            var builder = Builders<Form>.Update.Set(x => x.Title, form.Title);
 
             await _storage.Forms.UpdateOneAsync(x => x.Id.Equals(form.Id), builder);
         }

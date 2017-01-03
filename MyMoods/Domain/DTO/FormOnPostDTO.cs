@@ -7,13 +7,11 @@
 
         }
 
-        public FormOnPostDTO(string title, bool useDefaultTags)
+        public FormOnPostDTO(string title)
         {
             Title = title;
-            UseDefaultTags = useDefaultTags;
         }
 
         public string Title { get; set; }
-        public bool UseDefaultTags { get; set; }
     }
 }

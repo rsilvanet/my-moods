@@ -125,7 +125,7 @@ namespace MyMoods.Services
 
             #region Tags
 
-            if (form.UseDefaultTags)
+            if (form.RequireTagsForReviews)
             {
                 if (dto.Tags == null || !dto.Tags.Any())
                 {
