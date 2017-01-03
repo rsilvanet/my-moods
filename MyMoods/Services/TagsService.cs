@@ -38,22 +38,13 @@ namespace MyMoods.Services
                 result.ParsedObject.Title = dto.Title;
             }
 
-            if (string.IsNullOrWhiteSpace(dto.Type))
+            if (!dto.Type.HasValue)
             {
-                result.Error("type", "Tipo não selecionado.");
+                result.Error("type", "Tipo não selecionado ou inválido.");
             }
             else
             {
-                TagType type;
-
-                if (Enum.TryParse(dto.Type, out type))
-                {
-                    result.ParsedObject.Type = type;
-                }
-                else
-                {
-                    result.Error("type", $"Tipo {dto.Type} inválido.");
-                }
+                result.ParsedObject.Type = dto.Type.Value;
             }
 
             result.ParsedObject.Validate();

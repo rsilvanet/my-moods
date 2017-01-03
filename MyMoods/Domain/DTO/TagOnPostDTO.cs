@@ -3,6 +3,6 @@
     public class TagOnPostDTO
     {
         public string Title { get; set; }
-        public string Type { get; set; }
+        public TagType? Type { get; set; }
     }
 }

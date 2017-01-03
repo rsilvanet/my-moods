@@ -103,22 +103,13 @@ namespace MyMoods.Services
 
             #region Mood
 
-            if (string.IsNullOrWhiteSpace(dto.Mood))
+            if (!dto.Mood.HasValue)
             {
-                result.Error("mood", "Mood não selecionado.");
+                result.Error("mood", "Mood não selecionado ou inválido.");
             }
             else
             {
-                MoodType mood;
-
-                if (Enum.TryParse(dto.Mood, out mood))
-                {
-                    result.ParsedObject.Mood = mood;
-                }
-                else
-                {
-                    result.Error("mood", $"Mood {dto.Mood} inválido.");
-                }
+                result.ParsedObject.Mood = dto.Mood.Value;
             }
 
             #endregion

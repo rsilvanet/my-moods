@@ -4,7 +4,7 @@ namespace MyMoods.Domain.DTO
 {
     public class ReviewOnPostDTO
     {
-        public string Mood { get; set; }
+        public MoodType? Mood { get; set; }
         public IList<string> Tags { get; set; }
         public IList<AnswerDTO> Answers { get; set; }
 
