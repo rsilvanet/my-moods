@@ -4,12 +4,12 @@
     <fieldset>
         <label class="ls-label col-sm-12 col-md-6">
       <b class="ls-label-text">Título</b>
-      <input type="text" name="nome" placeholder="Título" class="ls-field" ng-model="vm.model.title" required>
+      <input type="text" placeholder="Título" class="ls-field" ng-model="vm.model.title" required>
     </label>
         <label class="ls-label col-sm-12 col-md-6">
       <b class="ls-label-text">Categoria</b>
       <div class="ls-custom-select">
-        <select name="" class="ls-select" ng-model="vm.model.type" required>
+        <select class="ls-select" ng-model="vm.model.type" required>
           <option value="undefined">Nenhuma</option>
           <option value="realization">{{vm.normalizeType('realization')}}</option>
           <option value="esteem">{{vm.normalizeType('esteem')}}</option>

@@ -10,10 +10,18 @@
         return {
             all: all,
             post: post,
-            put: put
+            put: put,
+            enable: enable,
+            disable: disable,
+            normalizeType: normalizeType
         };
 
-        function all() {
+        function all(onlyActives) {
+
+            if (onlyActives) {
+                return $http.get(APP_CONFIG.API_BASE_URL + '/forms?onlyActives=true');
+            }
+
             return $http.get(APP_CONFIG.API_BASE_URL + '/forms');
         }
 
@@ -23,6 +31,29 @@
 
         function put(id, dto) {
             return $http.put(APP_CONFIG.API_BASE_URL + '/forms/' + id, dto);
+        }
+
+        function enable(id) {
+            return $http.put(APP_CONFIG.API_BASE_URL + '/forms/' + id + '/enable');
+        }
+
+        function disable(id) {
+            return $http.put(APP_CONFIG.API_BASE_URL + '/forms/' + id + '/disable');
+        }
+
+        function normalizeType(type) {
+            switch (type) {
+                case 'simple':
+                    return 'Simples';
+                case 'general':
+                    return 'Com tags padrão';
+                case 'generalWithCustomTags':
+                    return 'Com tags padrão e customizadas';
+                case 'generalOnlyCustomTags':
+                    return 'Apenas com tags customizadas';
+                default:
+                    return 'Indefinido';
+            }
         }
     }
 })();

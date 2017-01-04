@@ -6,18 +6,18 @@ namespace MyMoods.Mongo
     [BsonIgnoreExtraElements]
     public class Entity
     {
-        private bool _validatedWasCalled;
+        private bool _isValidated;
 
         public ObjectId Id { get; set; }
 
         public void Validate()
         {
-            _validatedWasCalled = true;
+            _isValidated = true;
         }
 
-        public bool ValidateWasCalled()
+        public bool IsValidated()
         {
-            return _validatedWasCalled;
+            return _isValidated;
         }
     }
 }

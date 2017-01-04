@@ -84,14 +84,94 @@ namespace MyMoods.Services
                 .ToList();
         }
 
+        public async Task<Review> GetByIdAsync(string id)
+        {
+            var oid = new ObjectId(id);
+            var review = await _storage.Reviews.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
+
+            return review;
+        }
+
+        public async Task<IList<ReviewDTO>> GetByFormAsync(Form form, DateTime date, short timezone)
+        {
+            var theDay = date.Date.AddHours(-timezone);
+            var theNextDay = theDay.AddDays(1);
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay).ToListAsync();
+            var tags = await _storage.Tags.Find(x => true).ToListAsync();
+
+            return reviews.Select(x => new ReviewDTO(x, tags)).ToList();
+        }
+
+        public async Task<IList<DailySimpleDTO>> GetResumeAsync(Form form, short timezone)
+        {
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+
+            if (!reviews.Any())
+            {
+                return new List<DailySimpleDTO>();
+            }
+
+            var groupByDay = reviews.GroupBy(x => x.Date.AddHours(timezone).Date);
+
+            return groupByDay.Select(x => ResumeReviews(x.Key.Date.AddHours(-timezone), x.ToList())).OrderBy(x => x.Date).ToList();
+        }
+
+        public async Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date, short timezone)
+        {
+            var theDay = date.Date.AddHours(-timezone);
+            var theNextDay = theDay.AddDays(1);
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay).ToListAsync();
+
+            if (!reviews.Any())
+            {
+                return new List<DailyDetailedDTO>();
+            }
+
+            var tags = await _storage.Tags.Find(x => true).ToListAsync();
+            var questions = await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+            var groupByMood = reviews.GroupBy(x => x.Mood);
+
+            return groupByMood.Select(x => DetailDailyMood(date.Date.AddHours(-timezone), x.Key, x.ToList(), questions, tags)).OrderBy(x => _moodsService.Evaluate(x.Mood)).ToList();
+        }
+
+        public async Task<IList<MoodCounterDTO>> GetCountersAsync(Form form)
+        {
+            var counters = new List<MoodCounterDTO>();
+
+            foreach (MoodType mood in Enum.GetValues(typeof(MoodType)))
+            {
+                var count = await _storage.Reviews
+                    .Find(x => x.Form.Equals(form.Id) && x.Mood == mood)
+                    .CountAsync();
+
+                counters.Add(new MoodCounterDTO(mood, count));
+            }
+
+            return counters;
+        }
+
         public async Task InsertAsync(Review review)
         {
-            if (!review.ValidateWasCalled())
+            if (!review.IsValidated())
             {
-                throw new InvalidOperationException("O objeto não foi previamente validado.");
+                throw new InvalidOperationException("Objeto inválido para gravação.");
             }
 
             await _storage.Reviews.InsertOneAsync(review);
+        }
+
+        public async Task EnableAsync(Review review)
+        {
+            var builder = Builders<Review>.Update.Set(x => x.Active, true);
+
+            await _storage.Reviews.UpdateOneAsync(x => x.Id.Equals(review.Id), builder);
+        }
+
+        public async Task DisableAsync(Review review)
+        {
+            var builder = Builders<Review>.Update.Set(x => x.Active, false);
+
+            await _storage.Reviews.UpdateOneAsync(x => x.Id.Equals(review.Id), builder);
         }
 
         public async Task<ValidationResultDTO<Review>> ValidateToInsertAsync(Form form, ReviewOnPostDTO dto)
@@ -178,89 +258,12 @@ namespace MyMoods.Services
 
             #endregion
 
-            result.ParsedObject.Validate();
+            if (result.Success)
+            {
+                result.ParsedObject.Validate();
+            }
 
             return result;
-        }
-
-        public async Task<Review> GetByIdAsync(string id)
-        {
-            var oid = new ObjectId(id);
-            var review = await _storage.Reviews.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
-
-            return review;
-        }
-
-        public async Task<IList<ReviewDTO>> GetByFormAsync(Form form, DateTime date, short timezone)
-        {
-            var theDay = date.Date.AddHours(-timezone);
-            var theNextDay = theDay.AddDays(1);
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay).ToListAsync();
-            var tags = await _storage.Tags.Find(x => true).ToListAsync();
-
-            return reviews.Select(x => new ReviewDTO(x, tags)).ToList();
-        }
-
-        public async Task<IList<DailySimpleDTO>> GetResumeAsync(Form form, short timezone)
-        {
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
-
-            if (!reviews.Any())
-            {
-                return new List<DailySimpleDTO>();
-            }
-
-            var groupByDay = reviews.GroupBy(x => x.Date.AddHours(timezone).Date);
-
-            return groupByDay.Select(x => ResumeReviews(x.Key.Date.AddHours(-timezone), x.ToList())).OrderBy(x => x.Date).ToList();
-        }
-
-        public async Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date, short timezone)
-        {
-            var theDay = date.Date.AddHours(-timezone);
-            var theNextDay = theDay.AddDays(1);
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay).ToListAsync();
-
-            if (!reviews.Any())
-            {
-                return new List<DailyDetailedDTO>();
-            }
-
-            var tags = await _storage.Tags.Find(x => true).ToListAsync();
-            var questions = await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
-            var groupByMood = reviews.GroupBy(x => x.Mood);
-
-            return groupByMood.Select(x => DetailDailyMood(date.Date.AddHours(-timezone), x.Key, x.ToList(), questions, tags)).OrderBy(x => _moodsService.Evaluate(x.Mood)).ToList();
-        }
-
-        public async Task<IList<MoodCounterDTO>> GetCountersAsync(Form form)
-        {
-            var counters = new List<MoodCounterDTO>();
-
-            foreach (MoodType mood in Enum.GetValues(typeof(MoodType)))
-            {
-                var count = await _storage.Reviews
-                    .Find(x => x.Form.Equals(form.Id) && x.Mood == mood)
-                    .CountAsync();
-
-                counters.Add(new MoodCounterDTO(mood, count));
-            }
-
-            return counters;
-        }
-
-        public async Task EnableAsync(Review review)
-        {
-            var builder = Builders<Review>.Update.Set(x => x.Active, true);
-
-            await _storage.Reviews.UpdateOneAsync(x => x.Id.Equals(review.Id), builder);
-        }
-
-        public async Task DisableAsync(Review review)
-        {
-            var builder = Builders<Review>.Update.Set(x => x.Active, false);
-
-            await _storage.Reviews.UpdateOneAsync(x => x.Id.Equals(review.Id), builder);
         }
     }
 }

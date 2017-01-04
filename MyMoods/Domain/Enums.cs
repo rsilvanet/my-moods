@@ -25,13 +25,13 @@ namespace MyMoods.Domain
         [Description("Simples")]
         simple = 1,
 
-        [Description("Geral (com tags padrão)")]
+        [Description("Com tags padrão)")]
         general,
 
-        [Description("Geral (com tags padrão + customizadas)")]
+        [Description("Com tags padrão e customizadas")]
         generalWithCustomTags,
 
-        [Description("Geral (apenas com tags customizadas)")]
+        [Description("Apenas com tags customizadas")]
         generalOnlyCustomTags
     }
 

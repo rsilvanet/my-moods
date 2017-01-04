@@ -15,7 +15,12 @@
             normalizeType: normalizeType
         };
 
-        function all() {
+        function all(onlyActives) {
+
+            if (onlyActives) {
+                return $http.get(APP_CONFIG.API_BASE_URL + '/tags?onlyActives=true');
+            }
+
             return $http.get(APP_CONFIG.API_BASE_URL + '/tags');
         }
 

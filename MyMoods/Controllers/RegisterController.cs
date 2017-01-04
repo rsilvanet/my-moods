@@ -50,7 +50,14 @@ namespace MyMoods.Controllers
                     MainQuestion = "Qual é o seu mood?"
                 };
 
-                await _formsService.CreateAsync(form);
+                form.AddQuestion(new Question()
+                {
+                    Type = QuestionType.text,
+                    Title = "Quer contar um pouco mais pra gente?",
+                    Required = false,
+                });
+
+                await _formsService.InsertAsync(form);
 
                 return Created(companyValidation.ParsedObject.Id.ToString());
             }

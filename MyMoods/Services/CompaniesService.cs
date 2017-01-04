@@ -1,5 +1,4 @@
-﻿using MongoDB.Driver;
-using MyMoods.Contracts;
+﻿using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System.Threading.Tasks;

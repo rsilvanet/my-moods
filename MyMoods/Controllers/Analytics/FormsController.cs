@@ -18,11 +18,11 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(bool onlyActives)
         {
             try
             {
-                var forms = await _formsService.GetByCompanyAsync(LoggedCompanyId);
+                var forms = await _formsService.GetByCompanyAsync(LoggedCompanyId, onlyActives);
 
                 if (!forms.Any())
                 {
@@ -30,6 +30,33 @@ namespace MyMoods.Controllers.Analytics
                 }
 
                 return Ok(forms.Select(x => new FormDTO(x)));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpPost("")]
+        public async Task<IActionResult> Post([FromBody]FormOnPostDTO dto)
+        {
+            try
+            {
+                if (dto == null)
+                {
+                    return BadRequest("O conteúdo da requisição está inválido.");
+                }
+
+                var validation = await _formsService.ValidateToInsertAsync(LoggedCompanyId, dto);
+
+                if (!validation.Success)
+                {
+                    return BadRequest(validation.Errors);
+                }
+
+                await _formsService.InsertAsync(validation.ParsedObject);
+
+                return Created(validation.ParsedObject.Id.ToString());
             }
             catch (Exception ex)
             {
@@ -64,43 +91,11 @@ namespace MyMoods.Controllers.Analytics
             }
         }
 
-        [HttpPost("")]
-        public async Task<IActionResult> Post([FromBody]FormOnPostDTO dto)
+        [HttpPut("{id}/enable")]
+        public async Task<IActionResult> Enable(string id)
         {
             try
             {
-                if (dto == null)
-                {
-                    return BadRequest("O conteúdo da requisição está inválido.");
-                }
-
-                var validation = await _formsService.ValidateToCreateAsync(LoggedCompanyId, dto);
-
-                if (!validation.Success)
-                {
-                    return BadRequest(validation.Errors);
-                }
-
-                await _formsService.CreateAsync(validation.ParsedObject);
-
-                return Created(validation.ParsedObject.Id.ToString());
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError(ex);
-            }
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]FormOnPutDTO dto)
-        {
-            try
-            {
-                if (dto == null)
-                {
-                    return BadRequest("O conteúdo da requisição está inválido.");
-                }
-
                 var form = await _formsService.GetByIdAsync(id);
 
                 if (form == null)
@@ -113,14 +108,34 @@ namespace MyMoods.Controllers.Analytics
                     return Forbid();
                 }
 
-                var validation = await _formsService.ValidateToUpdateAsync(form, dto);
+                await _formsService.EnableAsync(form);
 
-                if (!validation.Success)
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpPut("{id}/disable")]
+        public async Task<IActionResult> Disable(string id)
+        {
+            try
+            {
+                var form = await _formsService.GetByIdAsync(id);
+
+                if (form == null)
                 {
-                    return BadRequest(validation.Errors);
+                    return NotFound();
                 }
 
-                await _formsService.UpdateAsync(form);
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
+                }
+
+                await _formsService.DisableAsync(form);
 
                 return Ok();
             }

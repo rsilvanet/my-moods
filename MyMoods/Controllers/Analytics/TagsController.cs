@@ -18,11 +18,11 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(bool onlyActives)
         {
             try
             {
-                var forms = await _tagsService.GetByCompanyAsync(LoggedCompanyId);
+                var forms = await _tagsService.GetByCompanyAsync(LoggedCompanyId, onlyActives);
 
                 if (!forms.Any())
                 {

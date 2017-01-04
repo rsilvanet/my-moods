@@ -50,7 +50,7 @@ namespace MyMoods.Controllers.Analytics
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/enable")]
         public async Task<IActionResult> Enable(string formId, string id)
         {
             try
@@ -77,7 +77,7 @@ namespace MyMoods.Controllers.Analytics
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpPut("{id}/disable")]
         public async Task<IActionResult> Disable(string formId, string id)
         {
             try

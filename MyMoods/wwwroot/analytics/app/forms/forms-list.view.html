@@ -1,0 +1,34 @@
+<h2>Seus Formulários</h2>
+<br>
+<button type="button" class="ls-btn-primary" ng-click="vm.new()">Novo</button>
+<br>
+<div style="text-align: center" ng-show="vm.isLoading"> Carregando...
+</div>
+<div class="table-responsive" ng-hide="vm.isLoading">
+    <table class="table ls-table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Tipo</th>
+                <th>Link</th>
+                <th>Ativo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="form in vm.forms">
+                <td>
+                    {{form.title}}
+                </td>
+                <td>
+                    {{vm.normalizeType(form.type)}}
+                </td>
+                <td>
+                    <a href="../app/#/{{form.id}}" target="_blank">www.mymoods.co/app/#/{{form.id}}</a>
+                </td>
+                <td>
+                    <input type="checkbox" class="ls-field-checkbox" ng-model="form.active" ng-change="vm.changeStatus(form)" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

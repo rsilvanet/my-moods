@@ -80,6 +80,14 @@ namespace MyMoods.Services
             return null;
         }
 
+        public async Task InsertAsync(Company company, User user)
+        {
+            user.Password = CryptoPass(user.Password);
+            user.Companies = new List<ObjectId> { company.Id };
+
+            await _storage.Users.InsertOneAsync(user);
+        }
+
         public async Task ResetPasswordAsync(User user)
         {
             var pass = GeneratePass();
@@ -100,48 +108,6 @@ namespace MyMoods.Services
                 .Set(x => x.ResetedPassword, null);
 
             await _storage.Users.UpdateOneAsync(x => x.Id.Equals(user.Id), builder);
-        }
-
-        public Task<ValidationResultDTO> ValidateToChangePasswordAsync(User user, ChagePasswordDTO dto)
-        {
-            var result = new ValidationResultDTO();
-
-            if (string.IsNullOrWhiteSpace(dto.Old))
-            {
-                result.Error("old", "A senha atual não foi informada.");
-            }
-            else if (!CheckPass(user, dto.Old))
-            {
-                result.Error("old", "A senha atual está incorreta.");
-            }
-
-            if (string.IsNullOrWhiteSpace(dto.New))
-            {
-                result.Error("new", "A nova senha não foi informada.");
-            }
-            else if (dto.New.Length < 6)
-            {
-                result.Error("new", "A nova senha deve ter no mínimo 6 caracteres.");
-            }
-
-            if (string.IsNullOrWhiteSpace(dto.Confirmation))
-            {
-                result.Error("confirmation", "A confirmação não foi informada");
-            }
-            else if (dto.New != dto.Confirmation)
-            {
-                result.Error("confirmation", "A confirmação não coincide com a senha.");
-            }
-
-            return Task.FromResult(result);
-        }
-
-        public async Task InsertAsync(Company company, User user)
-        {
-            user.Password = CryptoPass(user.Password);
-            user.Companies = new List<ObjectId> { company.Id };
-
-            await _storage.Users.InsertOneAsync(user);
         }
 
         public async Task<ValidationResultDTO<User>> ValidateToInsertAsync(RegisterDTO dto)
@@ -185,6 +151,40 @@ namespace MyMoods.Services
             }
 
             return result;
+        }
+
+        public Task<ValidationResultDTO> ValidateToChangePasswordAsync(User user, ChagePasswordDTO dto)
+        {
+            var result = new ValidationResultDTO();
+
+            if (string.IsNullOrWhiteSpace(dto.Old))
+            {
+                result.Error("old", "A senha atual não foi informada.");
+            }
+            else if (!CheckPass(user, dto.Old))
+            {
+                result.Error("old", "A senha atual está incorreta.");
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.New))
+            {
+                result.Error("new", "A nova senha não foi informada.");
+            }
+            else if (dto.New.Length < 6)
+            {
+                result.Error("new", "A nova senha deve ter no mínimo 6 caracteres.");
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.Confirmation))
+            {
+                result.Error("confirmation", "A confirmação não foi informada");
+            }
+            else if (dto.New != dto.Confirmation)
+            {
+                result.Error("confirmation", "A confirmação não coincide com a senha.");
+            }
+
+            return Task.FromResult(result);
         }
     }
 }

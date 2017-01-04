@@ -8,11 +8,12 @@ namespace MyMoods.Contracts
     public interface ITagsService
     {
         Task<Tagg> GetByIdAsync(string id);
-        Task<IList<Tagg>> GetByCompanyAsync(string companyId);
-        Task<IList<Tagg>> GetByFormAsync(Form form);
+        Task<IList<Tagg>> GetByCompanyAsync(string companyId, bool onlyActives);
+        Task<IList<Tagg>> GetByFormAsync(Form form, bool onlyActives);
         Task InsertAsync(Tagg tag);
-        Task<ValidationResultDTO<Tagg>> ValidateToInsertAsync(string companyId, TagOnPostDTO dto);
         Task EnableAsync(Tagg tag);
         Task DisableAsync(Tagg tag);
+
+        Task<ValidationResultDTO<Tagg>> ValidateToInsertAsync(string companyId, TagOnPostDTO dto);
     }
 }
