@@ -13,7 +13,6 @@ namespace MyMoods.Contracts
         Task InsertAsync(Tagg tag);
         Task EnableAsync(Tagg tag);
         Task DisableAsync(Tagg tag);
-
         Task<ValidationResultDTO<Tagg>> ValidateToInsertAsync(string companyId, TagOnPostDTO dto);
     }
 }

@@ -69,7 +69,7 @@ namespace MyMoods.Controllers.Analytics
         {
             try
             {
-                var form = await _formsService.GetByIdAsync(id);
+                var form = await _formsService.GetByIdAsync(id, false, true);
 
                 if (form == null)
                 {
@@ -81,9 +81,43 @@ namespace MyMoods.Controllers.Analytics
                     return Forbid();
                 }
 
-                var dto = _formsService.GetWithQuestionsAsync(form);
+                var dto = new FormOnGetDTO(form);
 
                 return Ok(dto);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Put(string id, [FromBody]FormOnPutDTO dto)
+        {
+            try
+            {
+                if (dto == null)
+                {
+                    return BadRequest("O conteúdo da requisição está inválido.");
+                }
+
+                var form = await _formsService.GetByIdAsync(id);
+
+                if (form == null)
+                {
+                    return NotFound();
+                }
+
+                var validation = await _formsService.ValidateToUpdateAsync(form, dto);
+
+                if (!validation.Success)
+                {
+                    return BadRequest(validation.Errors);
+                }
+
+                await _formsService.UpdateAsync(form);
+
+                return Ok();
             }
             catch (Exception ex)
             {

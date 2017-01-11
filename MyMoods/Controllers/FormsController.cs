@@ -36,16 +36,16 @@ namespace MyMoods.Controllers
         {
             try
             {
+                if (dto == null)
+                {
+                    return BadRequest("O conteúdo da requisição está inválido.");
+                }
+
                 var form = await _formsService.GetByIdAsync(id);
 
                 if (form == null)
                 {
                     return NotFound();
-                }
-
-                if (dto == null)
-                {
-                    return BadRequest("O conteúdo da requisição está inválido.");
                 }
 
                 var validation = await _reviewsService.ValidateToInsertAsync(form, dto);

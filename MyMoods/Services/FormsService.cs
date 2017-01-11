@@ -23,20 +23,97 @@ namespace MyMoods.Services
             _tagsService = tagsService;
         }
 
-        public async Task<Form> GetByIdAsync(string id)
+        private async Task<IList<Question>> GetQuestions(Form form)
+        {
+            return await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+        }
+
+        private async Task DoCommonSaveValidation(FormOnPutDTO dto, ValidationResultDTO<Form> result)
+        {
+            var form = result.ParsedObject;
+
+            if (string.IsNullOrWhiteSpace(dto.MainQuestion))
+            {
+                result.Error("mainQuestion", "A pergunta inicial não foi informada.");
+            }
+            else
+            {
+                form.MainQuestion = dto.MainQuestion;
+            }
+
+            if (form.Type == FormType.generalWithCustomTags || form.Type == FormType.generalOnlyCustomTags)
+            {
+                if (dto.CustomTags == null)
+                {
+                    result.Error("customTags", "Nenhuma tag foi adicionada.");
+                }
+                else
+                {
+                    var companyTags = await _tagsService.GetByCompanyAsync(form.Company.ToString(), true);
+                    var selectedTags = companyTags.Where(x => dto.CustomTags.Contains(x.Id.ToString())).ToList();
+
+                    form.CustomTags = selectedTags.Select(x => x.Id).Distinct().ToList();
+                }
+            }
+
+            var questions = new List<Question>();
+
+            if (dto.FreeText != null && dto.FreeText.Allow)
+            {
+                var question = form.Questions.FirstOrDefault(x => x.Type == QuestionType.text);
+
+                if (question == null)
+                {
+                    question = new Question()
+                    {
+                        Type = QuestionType.text,
+                        Required = dto.FreeText.Require,
+                    };
+                }
+
+                if (string.IsNullOrWhiteSpace(dto.FreeText.Title))
+                {
+                    result.Error("freetext.title", "O título da questão livre não foi informado.");
+                }
+                else
+                {
+                    question.Title = dto.FreeText.Title;
+                }
+
+                questions.Add(question);
+            }
+
+            form.LoadQuestions(questions);
+
+            if (result.Success)
+            {
+                form.Validate();
+            }
+        }
+
+        public async Task<Form> GetByIdAsync(string id, bool loadTags = false, bool loadQuestions = false)
         {
             var oid = new ObjectId(id);
             var form = await _storage.Forms.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
 
+            if (form != null)
+            {
+                if (loadTags)
+                {
+                    var tags = await _tagsService.GetByFormAsync(form, true);
+
+                    form.LoadTags(tags);
+                }
+
+                if (loadQuestions)
+                {
+                    var questions = await GetQuestions(form);
+
+                    form.LoadQuestions(questions);
+                }
+            }
+
             return form;
-        }
-
-        public async Task<FormWithQuestionsDTO> GetWithQuestionsAsync(Form form)
-        {
-            var questions = await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
-            var dto = new FormWithQuestionsDTO(form, questions);
-
-            return dto;
         }
 
         public async Task<IList<Form>> GetByCompanyAsync(string companyId, bool onlyActives)
@@ -73,12 +150,16 @@ namespace MyMoods.Services
 
             await _storage.Forms.InsertOneAsync(form);
 
+            #region Questions
+
             foreach (var question in form.Questions)
             {
                 question.Form = form.Id;
             }
 
             await _storage.Questions.InsertManyAsync(form.Questions);
+
+            #endregion
         }
 
         public async Task UpdateAsync(Form form)
@@ -88,9 +169,41 @@ namespace MyMoods.Services
                 throw new InvalidOperationException("Objeto inválido para gravação.");
             }
 
-            var builder = Builders<Form>.Update.Set(x => x.Title, form.Title);
+            var builder = Builders<Form>.Update
+                .Set(x => x.MainQuestion, form.MainQuestion)
+                .Set(x => x.CustomTags, form.CustomTags);
 
             await _storage.Forms.UpdateOneAsync(x => x.Id.Equals(form.Id), builder);
+
+            #region Questions
+
+            var existentQuestions = await GetQuestions(form);
+            var questionsToInsert = form.Questions.Where(x => x.Id.Equals(ObjectId.Empty));
+            var questionsToUpdate = form.Questions.Where(x => !x.Id.Equals(ObjectId.Empty));
+            var questionsToDelete = existentQuestions.Where(e => !questionsToUpdate.Any(u => u.Id.ToString() == e.Id.ToString()));
+
+            foreach (var question in questionsToInsert)
+            {
+                question.Form = form.Id;
+
+                await _storage.Questions.InsertOneAsync(question);
+            }
+
+            foreach (var question in questionsToUpdate)
+            {
+                var builder2 = Builders<Question>.Update
+                    .Set(x => x.Title, question.Title)
+                    .Set(x => x.Required, question.Required);
+
+                await _storage.Questions.UpdateOneAsync(x => x.Id.Equals(question.Id), builder2);
+            }
+
+            foreach (var question in questionsToDelete)
+            {
+                await _storage.Questions.DeleteOneAsync(x => x.Id.Equals(question.Id));
+            }
+
+            #endregion
         }
 
         public async Task EnableAsync(Form form)
@@ -132,79 +245,19 @@ namespace MyMoods.Services
                 result.ParsedObject.Type = dto.Type.Value;
             }
 
-            if (string.IsNullOrWhiteSpace(dto.MainQuestion))
-            {
-                result.Error("mainQuestion", "A pergunta inicial não foi informada.");
-            }
-            else
-            {
-                result.ParsedObject.MainQuestion = dto.MainQuestion;
-            }
-
-            if (dto.Type == FormType.generalWithCustomTags || dto.Type == FormType.generalOnlyCustomTags)
-            {
-                if (dto.CustomTags == null)
-                {
-                    result.Error("customTags", "Nenhuma tag foi adicionada.");
-                }
-                else
-                {
-                    var companyTags = await _tagsService.GetByCompanyAsync(companyId, true);
-                    var selectedTags = companyTags.Where(x => dto.CustomTags.Contains(x.Id.ToString())).ToList();
-
-                    result.ParsedObject.CustomTags = selectedTags.Select(x => x.Id).Distinct().ToList();
-                }
-            }
-
-            var questions = new List<Question>();
-
-            if (dto.FreeText != null && dto.FreeText.Allow)
-            {
-                var question = new Question()
-                {
-                    Type = QuestionType.text,
-                    Required = dto.FreeText.Require,
-                };
-
-                if (string.IsNullOrWhiteSpace(dto.FreeText.Title))
-                {
-                    result.Error("freetext.title", "O título da questão livre não foi informado.");
-                }
-                else
-                {
-                    question.Title = dto.FreeText.Title;
-                }
-
-                questions.Add(question);
-            }
-
-            result.ParsedObject.LoadQuestions(questions);
-
-            if (result.Success)
-            {
-                result.ParsedObject.Validate();
-            }
+            await DoCommonSaveValidation(dto, result);
 
             return result;
         }
 
-        public Task<ValidationResultDTO<Form>> ValidateToUpdateAsync(Form form, FormOnPutDTO dto)
+        public async Task<ValidationResultDTO<Form>> ValidateToUpdateAsync(Form form, FormOnPutDTO dto)
         {
             var result = new ValidationResultDTO<Form>();
             result.ParsedObject = form;
 
-            if (string.IsNullOrWhiteSpace(dto.Title))
-            {
-                result.Error("title", "O título não foi informado.");
-            }
-            else
-            {
-                form.Title = dto.Title;
-            }
+            await DoCommonSaveValidation(dto, result);
 
-            form.Validate();
-
-            return Task.FromResult(result);
+            return result;
         }
     }
 }

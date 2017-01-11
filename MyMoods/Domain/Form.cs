@@ -9,6 +9,7 @@ namespace MyMoods.Domain
     [BsonIgnoreExtraElements]
     public class Form : Entity
     {
+        private IList<Tagg> _tags;
         private IList<Question> _questions;
 
         public Form()
@@ -31,6 +32,40 @@ namespace MyMoods.Domain
         public IList<ObjectId> CustomTags { get; set; }
         public ObjectId Company { get; set; }
         public bool RequireTagsForReviews => Type != FormType.simple;
+
+        #region Tags
+
+        public IEnumerable<Tagg> Tags
+        {
+            get
+            {
+                if (_tags == null)
+                {
+                    throw new Exception("As tags do formulário não foram carregadas.");
+                }
+
+                return _tags;
+            }
+        }
+
+        public void AddTag(Tagg tag)
+        {
+            if (_tags == null)
+            {
+                _tags = new List<Tagg>();
+            }
+
+            _tags.Add(tag);
+        }
+
+        public void LoadTags(IList<Tagg> tags = null)
+        {
+            _tags = _tags ?? new List<Tagg>();
+        }
+
+        #endregion
+
+        #region Questions
 
         public IEnumerable<Question> Questions
         {
@@ -59,5 +94,7 @@ namespace MyMoods.Domain
         {
             _questions = questions ?? new List<Question>();
         }
+
+        #endregion
     }
 }

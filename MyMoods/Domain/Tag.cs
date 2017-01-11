@@ -23,5 +23,6 @@ namespace MyMoods.Domain
         public string Title { get; set; }
         public TagType Type { get; set; }
         public ObjectId? Company { get; set; }
+        public bool IsCustom => Company != null;
     }
 }

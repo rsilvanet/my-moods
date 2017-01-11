@@ -5,9 +5,9 @@ namespace MyMoods.Domain.DTO
 {
     public class FormWithQuestionsDTO : FormDTO
     {
-        public FormWithQuestionsDTO(Form form, IList<Question> questions) : base(form)
+        public FormWithQuestionsDTO(Form form) : base(form)
         {
-            Questions = questions.Select(x => new QuestionDTO(x)).ToList();
+            Questions = form.Questions.Select(x => new QuestionDTO(x)).ToList();
         }
 
         public IList<QuestionDTO> Questions { get; set; }

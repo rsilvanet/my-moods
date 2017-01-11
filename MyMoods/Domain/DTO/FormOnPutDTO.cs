@@ -1,17 +1,11 @@
-﻿namespace MyMoods.Domain.DTO
+﻿using System.Collections.Generic;
+
+namespace MyMoods.Domain.DTO
 {
     public class FormOnPutDTO
     {
-        public FormOnPutDTO()
-        {
-
-        }
-
-        public FormOnPutDTO(string title)
-        {
-            Title = title;
-        }
-
-        public string Title { get; set; }
+        public string MainQuestion { get; set; }
+        public IList<string> CustomTags { get; set; }
+        public FreeTextDTO FreeText { get; set; }
     }
 }
