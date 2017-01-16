@@ -12,6 +12,7 @@
                 <th>Tipo</th>
                 <th>Link</th>
                 <th>Ativo</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,9 @@
                 </td>
                 <td>
                     <input type="checkbox" class="ls-field-checkbox" ng-model="form.active" ng-change="vm.changeStatus(form)" />
+                </td>
+                <td>
+                    <a href="#!/forms/{{form.id}}">Editar</a>
                 </td>
             </tr>
         </tbody>

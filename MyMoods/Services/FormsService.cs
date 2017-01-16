@@ -152,12 +152,15 @@ namespace MyMoods.Services
 
             #region Questions
 
-            foreach (var question in form.Questions)
+            if (form.Questions.Any())
             {
-                question.Form = form.Id;
-            }
+                foreach (var question in form.Questions)
+                {
+                    question.Form = form.Id;
+                }
 
-            await _storage.Questions.InsertManyAsync(form.Questions);
+                await _storage.Questions.InsertManyAsync(form.Questions);
+            }
 
             #endregion
         }

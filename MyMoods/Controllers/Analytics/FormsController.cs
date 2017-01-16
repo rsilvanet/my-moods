@@ -69,7 +69,7 @@ namespace MyMoods.Controllers.Analytics
         {
             try
             {
-                var form = await _formsService.GetByIdAsync(id, false, true);
+                var form = await _formsService.GetByIdAsync(id, true, true);
 
                 if (form == null)
                 {

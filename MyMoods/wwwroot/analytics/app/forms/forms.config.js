@@ -19,5 +19,13 @@
             controller: 'FormsNewController',
             controllerAs: 'vm'
         });
+
+        $stateProvider.state({
+            name: 'forms-edit',
+            url: '/forms/:id',
+            templateUrl: 'app/forms/forms-new.view.html',
+            controller: 'FormsEditController',
+            controllerAs: 'vm'
+        });
     });
 })();

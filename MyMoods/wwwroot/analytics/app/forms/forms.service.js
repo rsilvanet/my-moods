@@ -9,6 +9,7 @@
 
         return {
             all: all,
+            getById: getById,
             post: post,
             put: put,
             enable: enable,
@@ -23,6 +24,10 @@
             }
 
             return $http.get(APP_CONFIG.API_BASE_URL + '/forms');
+        }
+        
+        function getById(id) {
+            return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + id);
         }
 
         function post(dto) {
