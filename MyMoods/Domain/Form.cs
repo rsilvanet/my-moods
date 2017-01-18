@@ -60,7 +60,7 @@ namespace MyMoods.Domain
 
         public void LoadTags(IList<Tagg> tags = null)
         {
-            _tags = _tags ?? new List<Tagg>();
+            _tags = tags ?? new List<Tagg>();
         }
 
         #endregion

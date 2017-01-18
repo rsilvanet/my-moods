@@ -23,7 +23,7 @@
         $stateProvider.state({
             name: 'forms-edit',
             url: '/forms/:id',
-            templateUrl: 'app/forms/forms-new.view.html',
+            templateUrl: 'app/forms/forms-edit.view.html',
             controller: 'FormsEditController',
             controllerAs: 'vm'
         });

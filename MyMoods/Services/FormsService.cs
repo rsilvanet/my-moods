@@ -67,7 +67,6 @@ namespace MyMoods.Services
                     question = new Question()
                     {
                         Type = QuestionType.text,
-                        Required = dto.FreeText.Require,
                     };
                 }
 
@@ -79,6 +78,8 @@ namespace MyMoods.Services
                 {
                     question.Title = dto.FreeText.Title;
                 }
+
+                question.Required = dto.FreeText.Require;
 
                 questions.Add(question);
             }
@@ -100,7 +101,7 @@ namespace MyMoods.Services
             {
                 if (loadTags)
                 {
-                    var tags = await _tagsService.GetByFormAsync(form, true);
+                    var tags = await _tagsService.GetAllByFormAsync(form, true);
 
                     form.LoadTags(tags);
                 }

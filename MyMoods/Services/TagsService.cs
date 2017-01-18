@@ -27,10 +27,22 @@ namespace MyMoods.Services
             return tag;
         }
 
+        public async Task<IList<Tagg>> GetDefaultsAsync(bool onlyActives)
+        {
+            var tags = await _storage.Tags.Find(x => x.Company == null).ToListAsync();
+
+            if (onlyActives)
+            {
+                return tags.Where(x => x.Active).ToList();
+            }
+
+            return tags;
+        }
+
         public async Task<IList<Tagg>> GetByCompanyAsync(string companyId, bool onlyActives)
         {
-            var companyOid = new ObjectId(companyId);
-            var tags = await _storage.Tags.Find(x => x.Company.Equals(companyOid)).ToListAsync();
+            var oid = new ObjectId(companyId);
+            var tags = await _storage.Tags.Find(x => x.Company.Equals(oid)).ToListAsync();
 
             if (onlyActives)
             {
@@ -40,32 +52,38 @@ namespace MyMoods.Services
             return tags;
         }
 
-        public async Task<IList<Tagg>> GetByFormAsync(Form form, bool onlyActives)
+        public async Task<IList<Tagg>> GetCustomByFormAsync(Form form, bool onlyActives)
         {
-            IList<Tagg> tags;
+            var companyTags = await _storage.Tags.Find(x => x.Company.Equals(form.Company)).ToListAsync();
+            var customTags = companyTags.Where(x => form.CustomTags.Any(z => z.ToString() == x.Id.ToString())).ToList();
 
+            return customTags;
+        }
+
+        public async Task<IList<Tagg>> GetAllByFormAsync(Form form, bool onlyActives)
+        {
             switch (form.Type)
             {
                 case FormType.general:
-                    tags = await _storage.Tags.Find(x => x.Company == null).ToListAsync();
-                    break;
+                    {
+                        return await GetDefaultsAsync(onlyActives);
+                    }
                 case FormType.generalWithCustomTags:
-                    tags = await _storage.Tags.Find(x => x.Company == null || x.Company.Equals(form.Company)).ToListAsync();
-                    break;
+                    {
+                        var defaults = await GetDefaultsAsync(onlyActives);
+                        var customs = await GetCustomByFormAsync(form, onlyActives);
+
+                        return (defaults).Concat(customs).ToList();
+                    }
                 case FormType.generalOnlyCustomTags:
-                    tags = await _storage.Tags.Find(x => x.Company.Equals(form.Company)).ToListAsync();
-                    break;
+                    {
+                        return await GetCustomByFormAsync(form, onlyActives);
+                    }
                 default:
-                    tags = new List<Tagg>();
-                    break;
+                    {
+                        return new List<Tagg>();
+                    }
             }
-
-            if (onlyActives)
-            {
-                tags = tags.Where(x => x.Active).ToList();
-            }
-
-            return tags;
         }
 
         public async Task InsertAsync(Tagg tag)

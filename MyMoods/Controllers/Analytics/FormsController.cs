@@ -91,7 +91,7 @@ namespace MyMoods.Controllers.Analytics
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]FormOnPutDTO dto)
         {
             try
@@ -101,7 +101,7 @@ namespace MyMoods.Controllers.Analytics
                     return BadRequest("O conteúdo da requisição está inválido.");
                 }
 
-                var form = await _formsService.GetByIdAsync(id);
+                var form = await _formsService.GetByIdAsync(id, true, true);
 
                 if (form == null)
                 {
