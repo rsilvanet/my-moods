@@ -25,7 +25,7 @@
 
             return $http.get(APP_CONFIG.API_BASE_URL + '/forms');
         }
-        
+
         function getById(id) {
             return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + id);
         }

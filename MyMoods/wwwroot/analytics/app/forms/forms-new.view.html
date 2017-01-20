@@ -1,22 +1,22 @@
 <h2>Novo Formulário</h2>
 <br>
 <form class="ls-form row" ng-submit="vm.save()">
-  <fieldset>
-    <label class="ls-label col-sm-12 col-md-6">
-      <b class="ls-label-text">Título</b>
-      <input type="text" placeholder="Título" class="ls-field" ng-model="vm.model.title" required>
-    </label>
-    <label class="ls-label col-sm-12 col-md-6">
-      <b class="ls-label-text">Tipo</b>
-      <div class="ls-custom-select">
-        <select class="ls-select" ng-model="vm.model.type" required>
-          <option value="simple">{{vm.normalizeType('simple')}}</option>
-          <option value="general">{{vm.normalizeType('general')}}</option>
-          <option value="generalWithCustomTags">{{vm.normalizeType('generalWithCustomTags')}}</option>
-          <option value="generalOnlyCustomTags">{{vm.normalizeType('generalOnlyCustomTags')}}</option>
-        </select>
-      </div>
-    </label>
-  </fieldset>
-  <div ng-include="'app/forms/forms-editable.view.html'"></div>
+    <fieldset>
+        <label class="ls-label col-sm-12 col-md-6">
+            <b class="ls-label-text">Título</b>
+            <input type="text" placeholder="Título" class="ls-field" ng-model="vm.model.title" required>
+        </label>
+        <label class="ls-label col-sm-12 col-md-6">
+            <b class="ls-label-text">Tipo</b>
+            <div class="ls-custom-select">
+                <select class="ls-select" ng-model="vm.model.type" required>
+                    <option value="simple">{{vm.normalizeType('simple')}}</option>
+                    <option value="general">{{vm.normalizeType('general')}}</option>
+                    <option value="generalWithCustomTags">{{vm.normalizeType('generalWithCustomTags')}}</option>
+                    <option value="generalOnlyCustomTags">{{vm.normalizeType('generalOnlyCustomTags')}}</option>
+                </select>
+            </div>
+        </label>
+    </fieldset>
+    <div ng-include="'app/forms/forms-editable.view.html'"></div>
 </form>

@@ -3,7 +3,7 @@
     var forms = angular.module('app.forms', []);
 
     forms.config(function ($stateProvider) {
-        
+
         $stateProvider.state({
             name: 'forms-list',
             url: '/forms',

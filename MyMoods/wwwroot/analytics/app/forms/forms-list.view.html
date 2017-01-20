@@ -1,8 +1,14 @@
-<h2>Seus Formulários</h2>
+<h2>Formulários</h2>
 <br>
 <button type="button" class="ls-btn-primary" ng-click="vm.new()">Novo</button>
 <br>
-<div style="text-align: center" ng-show="vm.isLoading"> Carregando...
+<br>
+<label class="ls-label-text">
+    <input type="checkbox" ng-model="vm.filters.onlyActive">
+    Mostrar apenas os ativos
+</label>
+<div style="text-align: center" ng-show="vm.isLoading">
+    Carregando...
 </div>
 <div class="table-responsive" ng-hide="vm.isLoading">
     <table class="table ls-table">
@@ -16,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="form in vm.forms">
+            <tr ng-repeat="form in (vm.forms | filter:vm.filterList)">
                 <td>
                     {{form.title}}
                 </td>

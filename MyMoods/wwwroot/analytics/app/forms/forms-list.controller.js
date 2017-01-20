@@ -18,6 +18,10 @@
             vm.forms = [];
             vm.isLoading = true;
 
+            vm.filters = {
+                onlyActive: true
+            };
+
             FormsService.all()
                 .then(function (response) {
                     vm.isLoading = false;
@@ -34,6 +38,19 @@
 
         vm.normalizeType = function (type) {
             return FormsService.normalizeType(type);
+        };
+
+        vm.filterList = function (tag) {
+
+            var result = true;
+
+            if (vm.filters) {
+                if (vm.filters.onlyActive && !tag.active) {
+                    result = false;
+                }
+            }
+
+            return result;
         };
 
         vm.changeStatus = function (form) {
