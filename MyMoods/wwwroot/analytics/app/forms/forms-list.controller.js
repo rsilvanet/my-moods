@@ -15,11 +15,11 @@
 
         function activate() {
 
-            vm.forms = [];
+            vm.forms = [];""
             vm.isLoading = true;
 
             vm.filters = {
-                onlyActive: true
+                onlyActives: true
             };
 
             FormsService.all()
@@ -45,7 +45,7 @@
             var result = true;
 
             if (vm.filters) {
-                if (vm.filters.onlyActive && !tag.active) {
+                if (vm.filters.onlyActives && !tag.active) {
                     result = false;
                 }
             }

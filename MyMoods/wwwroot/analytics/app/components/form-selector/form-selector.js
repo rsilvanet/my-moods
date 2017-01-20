@@ -14,7 +14,7 @@
 
                 scope.isLoaded = false;
 
-                FormsService.all().then(function (response) {
+                FormsService.all(true).then(function (response) {
                     scope.forms = response.data;
                     scope.isLoaded = true;
                 });
