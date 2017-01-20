@@ -1,4 +1,12 @@
 <h2>Avaliações</h2>
 <br>
-<form-selector select-callback="vm.formSelectCallback(id)"></form-selector>
-<reviews-viewer form-id="vm.formId"></reviews-viewer>
+<form class="ls-form ls-form-horizontal">
+    <form-selector select-callback="vm.formSelectCallback(id)"></form-selector>
+    <div class="row">
+        <label class="ls-label col-sm-12 col-md-12 col-lg-12">
+            <b class="ls-label-text">Data</b>
+            <input type="text" class="datepicker" placeholder="dd/mm/aaaa" ng-model="vm.filters.date">
+        </label>
+    </div>
+</form>
+<reviews-viewer form-id="vm.filters.formId" date="vm.filters.date"></reviews-viewer>

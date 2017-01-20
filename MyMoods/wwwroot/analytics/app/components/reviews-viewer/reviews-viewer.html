@@ -1,25 +1,20 @@
-<div style="text-align: center" ng-show="formId && !isLoaded">
-    Carregando...
-</div>
-<div style="text-align: center" ng-show="formId && isLoaded && dates && dates.length == 0">
-    Não há dados para este formulário.
-</div>
-<div class="ls-sm-margin-top" ng-show="formId && isLoaded && dates && dates.length > 0">
-    <div class="ls-md-margin-bottom">
-        <div class="ls-custom-select ls-sm-margin-bottom">
-            <select class="ls-select" ng-options="date.value as date.formatted for date in dates" ng-model="selectedDate" ng-change="loadList()"></select>
-        </div>
-    </div>
-    <div style="text-align: center" ng-show="!listIsLoaded">
+<button type="button" class="ls-btn-primary" ng-click="search()">Carregar</button>
+<br>
+<br>
+<div class="ls-form ls-form-horizontal">
+    <div style="text-align: center" ng-show="!isLoaded">
         Carregando...
     </div>
-    <div style="text-align: center" ng-show="listIsLoaded">
+    <div style="text-align: center" ng-show="isLoaded && reviews && reviews.length == 0">
+        Nenhuma avaliação encontrada para os filtros.
+    </div>
+    <div style="text-align: center" ng-show="isLoaded && reviews && reviews.length > 0">
         <div class="ls-box ls-box-gray" ng-repeat="review in reviews">
             <div class="col-md-2 ls-txt-center reviews-viewer-hour">
                 <p>{{review.date | date:'hh:mm:ss'}}</p>
             </div>
             <div class="col-md-2 ls-txt-center">
-                <img class="reviews-viewer-img" src="/assets/emojis/{{review.mood}}.png"></img>
+                <img class="reviews-viewer-img" ng-src="/assets/emojis/{{review.mood}}.png" />
             </div>
             <div class="col-md-4 ls-txt-center reviews-viewer-tags-holder">
                 <a class="ls-tag reviews-viewer-tag" ng-repeat="tag in review.tags">{{tag.title}}</a>

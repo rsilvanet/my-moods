@@ -11,8 +11,18 @@
 
         var vm = this;
 
+        activate();
+
+        function activate() {
+
+            vm.filters = {
+                formId: null,
+                date: moment().format('DD/MM/YYYY')
+            };
+        }
+
         vm.formSelectCallback = function (id) {
-            vm.formId = id;
+            vm.filters.formId = id;
         };
     }
 })();

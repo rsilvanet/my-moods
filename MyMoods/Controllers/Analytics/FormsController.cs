@@ -24,11 +24,6 @@ namespace MyMoods.Controllers.Analytics
             {
                 var forms = await _formsService.GetByCompanyAsync(LoggedCompanyId, onlyActives);
 
-                if (!forms.Any())
-                {
-                    return NoContent();
-                }
-
                 return Ok(forms.Select(x => new FormDTO(x)));
             }
             catch (Exception ex)

@@ -3,62 +3,41 @@
     var components = angular.module('app.components');
 
     /* @ngInject */
-    components.directive('reviewsViewer', function ($timeout, ReviewsService) {
+    components.directive('reviewsViewer', function ($timeout, ReviewsService, ErrorHandlerService) {
         return {
             restrict: 'E',
             templateUrl: 'app/components/reviews-viewer/reviews-viewer.html',
             scope: {
-                formId: '='
+                formId: '=',
+                date: '='
             },
             link: function (scope) {
 
-                scope.dates = [];
-                scope.formId = null;
-                scope.isLoaded = false;
+                scope.reviews = null;
+                scope.isLoaded = true;
 
-                scope.$watch('formId', function (formId) {
-                    scope.dates = [];
-                    scope.formId = null;
-                    scope.isLoaded = false;
+                scope.search = function () {
 
-                    if (formId) {
-                        scope.formId = formId;
+                    if (scope.formId && scope.date) {
 
-                        ReviewsService.getResume(scope.formId)
-                            .then(function (response) {
-                                if (response.data) {
-                                    response.data.forEach(function (item) {
-                                        scope.dates.push({
-                                            value: item.date,
-                                            formatted: moment(item.date).format('DD/MM/YYYY')
-                                        });
-                                    });
+                        scope.isLoaded = false;
 
-                                    scope.dates = _.orderBy(scope.dates, 'value', 'desc');
-
-                                    if (scope.dates && scope.dates.length) {
-                                        scope.selectedDate = scope.dates[0].value;
-                                        scope.loadList();
-                                    }
-                                }
-
-                                scope.isLoaded = true;
-                            });
-                    }
-                });
-
-                scope.loadList = function () {
-
-                    scope.listIsLoaded = false;
-
-                    if (scope.selectedDate) {
                         $timeout(function () {
-                            ReviewsService.get(scope.formId, moment(scope.selectedDate).format('YYYY-MM-DD'))
+                            ReviewsService.get(scope.formId, moment(scope.date, 'DD/MM/YYYY').format('YYYY-MM-DD'))
                                 .then(function (response) {
                                     scope.reviews = response.data;
-                                    scope.listIsLoaded = true;
+                                    scope.isLoaded = true;
+                                }, function (response) {
+                                    scope.isLoaded = true;
+                                    ErrorHandlerService.normalizeAndShow(response);
                                 });
-                        }, 100);
+                        }, 10);
+                    }
+                    else if (!scope.formId) {
+                        toastr.info('Selecione um formulário.');
+                    }
+                    else if (!scope.date) {
+                        toastr.info('Informe uma data válida.');
                     }
                 };
             }

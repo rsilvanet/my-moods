@@ -37,11 +37,6 @@ namespace MyMoods.Controllers.Analytics
 
                 var reviews = await _reviewsService.GetByFormAsync(form, date, ClientTimezone);
 
-                if (!reviews.Any())
-                {
-                    return NoContent();
-                }
-
                 return Ok(reviews);
             }
             catch (Exception ex)
@@ -123,11 +118,6 @@ namespace MyMoods.Controllers.Analytics
 
                 var resume = await _reviewsService.GetResumeAsync(form, ClientTimezone);
 
-                if (resume == null || !resume.Any())
-                {
-                    return NoContent();
-                }
-
                 return Ok(resume);
             }
             catch (Exception ex)
@@ -154,11 +144,6 @@ namespace MyMoods.Controllers.Analytics
                 }
 
                 var daily = await _reviewsService.GetDailyAsync(form, date, ClientTimezone);
-
-                if (daily == null || !daily.Any())
-                {
-                    return NoContent();
-                }
 
                 return Ok(daily);
             }
