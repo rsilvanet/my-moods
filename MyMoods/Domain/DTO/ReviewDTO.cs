@@ -8,6 +8,7 @@ namespace MyMoods.Domain.DTO
     {
         public ReviewDTO(Review review, IList<Tagg> tags)
         {
+            Id = review.Id.ToString();
             Active = review.Active;
             Date = review.Date;
             Mood = review.Mood;
@@ -25,6 +26,7 @@ namespace MyMoods.Domain.DTO
             }
         }
 
+        public string Id { get; set; }
         public bool Active { get; set; }
         public DateTime Date { get; set; }
         public MoodType Mood { get; set; }

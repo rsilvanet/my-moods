@@ -62,7 +62,7 @@
                     }, function (response) {
                         form.active = false;
                         ErrorHandlerService.normalizeAndShow(response);
-                    })
+                    });
             }
             else {
                 FormsService.disable(form.id)
@@ -71,7 +71,7 @@
                     }, function (response) {
                         form.active = true;
                         ErrorHandlerService.normalizeAndShow(response);
-                    })
+                    });
             }
         };
     }

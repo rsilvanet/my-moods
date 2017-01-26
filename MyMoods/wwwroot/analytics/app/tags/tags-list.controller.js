@@ -29,7 +29,7 @@
                 }, function (response) {
                     vm.isLoading = false;
                     ErrorHandlerService.normalizeAndShow(response);
-                });;
+                });
         }
 
         vm.new = function () {
@@ -62,7 +62,7 @@
                     }, function (response) {
                         tag.active = false;
                         ErrorHandlerService.normalizeAndShow(response);
-                    })
+                    });
             }
             else {
                 TagsService.disable(tag.id)
@@ -71,7 +71,7 @@
                     }, function (response) {
                         tag.active = true;
                         ErrorHandlerService.normalizeAndShow(response);
-                    })
+                    });
             }
         };
     }

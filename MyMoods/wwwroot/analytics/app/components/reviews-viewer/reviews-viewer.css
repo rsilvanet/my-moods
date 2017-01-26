@@ -9,6 +9,11 @@
 .reviews-viewer-tag {
     margin: 2px;
 }
+
+.reviews-viewer-check {
+    padding-top: 15px;
+}
+
 .reviews-viewer-tags-holder {
     margin-top: 5px;
 }

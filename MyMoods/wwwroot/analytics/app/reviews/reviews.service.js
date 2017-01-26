@@ -10,7 +10,9 @@
         return {
             get: get,
             getResume: getResume,
-            getDaily: getDaily
+            getDaily: getDaily,
+            enable: enable,
+            disable: disable
         };
 
         function get(formId, date) {
@@ -23,6 +25,14 @@
 
         function getDaily(formId, date) {
             return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews/daily?date=' + date);
+        }
+
+        function enable(formId, id) {
+            return $http.put(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews/' + id + '/enable');
+        }
+
+        function disable(formId, id) {
+            return $http.put(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews/' + id + '/disable');
         }
     }
 })();

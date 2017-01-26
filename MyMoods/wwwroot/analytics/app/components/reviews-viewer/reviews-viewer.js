@@ -16,6 +16,10 @@
                 scope.reviews = null;
                 scope.isLoaded = true;
 
+                scope.filters = {
+                    onlyActives: true
+                };
+
                 scope.search = function () {
 
                     if (scope.formId && scope.date) {
@@ -38,6 +42,41 @@
                     }
                     else if (!scope.date) {
                         toastr.info('Informe uma data válida.');
+                    }
+                };
+
+                scope.filterList = function (review) {
+
+                    var result = true;
+
+                    if (scope.filters) {
+                        if (scope.filters.onlyActives && !review.active) {
+                            result = false;
+                        }
+                    }
+
+                    return result;
+                };
+
+                scope.changeStatus = function (review) {
+
+                    if (review.active) {
+                        ReviewsService.enable(scope.formId, review.id)
+                            .then(function () {
+                                review.active = true;
+                            }, function (response) {
+                                review.active = false;
+                                ErrorHandlerService.normalizeAndShow(response);
+                            });
+                    }
+                    else {
+                        ReviewsService.disable(scope.formId, review.id)
+                            .then(function () {
+                                review.active = false;
+                            }, function (response) {
+                                review.active = true;
+                                ErrorHandlerService.normalizeAndShow(response);
+                            });
                     }
                 };
             }
