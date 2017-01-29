@@ -17,7 +17,7 @@
     <div style="text-align: center" ng-show="isLoaded && reviews && reviews.length > 0">
         <div class="ls-box ls-box-gray" ng-repeat="review in (reviews | filter:filterList)">
             <div class="col-md-2 ls-txt-center reviews-viewer-hour">
-                <p>{{review.date | date:'hh:mm:ss'}}</p>
+                <p>{{review.date | date:'HH:mm:ss'}}</p>
             </div>
             <div class="col-md-2 ls-txt-center">
                 <img class="reviews-viewer-img" ng-src="/assets/emojis/{{review.mood}}.png" />

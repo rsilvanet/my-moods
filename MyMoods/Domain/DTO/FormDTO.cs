@@ -6,12 +6,14 @@
         {
             Id = form.Id.ToString();
             Title = form.Title;
+            MainQuestion = form.MainQuestion;
             Type = form.Type;
             Active = form.Active;
         }
 
         public string Id { get; set; }
         public string Title { get; set; }
+        public string MainQuestion { get; set; }
         public FormType Type { get; set; }
         public bool Active { get; set; }
     }

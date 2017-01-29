@@ -60,7 +60,12 @@ namespace MyMoods.Services
 
             if (dto.FreeText != null && dto.FreeText.Allow)
             {
-                var question = form.Questions.FirstOrDefault(x => x.Type == QuestionType.text);
+                Question question = null;
+
+                if (form.QuestionsAreLoaded)
+                {
+                    question = form.Questions.FirstOrDefault(x => x.Type == QuestionType.text);
+                }
 
                 if (question == null)
                 {
@@ -101,7 +106,7 @@ namespace MyMoods.Services
             {
                 if (loadTags)
                 {
-                    var tags = await _tagsService.GetAllByFormAsync(form, true);
+                    var tags = await _tagsService.GetByFormAsync(form, true);
 
                     form.LoadTags(tags);
                 }
@@ -133,13 +138,11 @@ namespace MyMoods.Services
         public async Task<FormMetadataDTO> GetMetadataByIdAsync(string id)
         {
             var oid = new ObjectId(id);
-            var form = await _storage.Forms.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
+            var form = await GetByIdAsync(id, true, true);
             var company = await _storage.Companies.Find(x => x.Id.Equals(form.Company)).FirstOrDefaultAsync();
-            var questions = await _storage.Questions.Find(x => x.Form.Equals(oid)).ToListAsync();
-            var tags = await _storage.Tags.Find(x => true).ToListAsync();
             var moods = _moodsService.Get();
 
-            return new FormMetadataDTO(form, company, questions, tags, moods);
+            return new FormMetadataDTO(form, company, moods);
         }
 
         public async Task InsertAsync(Form form)

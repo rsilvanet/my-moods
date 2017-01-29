@@ -52,7 +52,7 @@ namespace MyMoods.Services
             return tags;
         }
 
-        public async Task<IList<Tagg>> GetCustomByFormAsync(Form form, bool onlyActives)
+        public async Task<IList<Tagg>> GetOnlyCustomByFormAsync(Form form, bool onlyActives)
         {
             var companyTags = await _storage.Tags.Find(x => x.Company.Equals(form.Company)).ToListAsync();
             var customTags = companyTags.Where(x => form.CustomTags.Any(z => z.ToString() == x.Id.ToString())).ToList();
@@ -60,7 +60,7 @@ namespace MyMoods.Services
             return customTags;
         }
 
-        public async Task<IList<Tagg>> GetAllByFormAsync(Form form, bool onlyActives)
+        public async Task<IList<Tagg>> GetByFormAsync(Form form, bool onlyActives)
         {
             switch (form.Type)
             {
@@ -71,13 +71,13 @@ namespace MyMoods.Services
                 case FormType.generalWithCustomTags:
                     {
                         var defaults = await GetDefaultsAsync(onlyActives);
-                        var customs = await GetCustomByFormAsync(form, onlyActives);
+                        var customs = await GetOnlyCustomByFormAsync(form, onlyActives);
 
                         return (defaults).Concat(customs).ToList();
                     }
                 case FormType.generalOnlyCustomTags:
                     {
-                        return await GetCustomByFormAsync(form, onlyActives);
+                        return await GetOnlyCustomByFormAsync(form, onlyActives);
                     }
                 default:
                     {

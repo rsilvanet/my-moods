@@ -5,11 +5,11 @@ namespace MyMoods.Domain.DTO
 {
     public class FormMetadataDTO
     {
-        public FormMetadataDTO(Form form, Company company, IList<Question> questions, IList<Tagg> tags, IList<MoodDTO> moods)
+        public FormMetadataDTO(Form form, Company company, IList<MoodDTO> moods)
         {
             Form = new FormWithCompanyDTO(form, company);
-            Questions = questions.Select(x => new QuestionDTO(x)).ToList();
-            Tags = tags.Select(x => new TagDTO(x)).ToList();
+            Questions = form.Questions.Select(x => new QuestionDTO(x)).ToList();
+            Tags = form.Tags.Select(x => new TagDTO(x)).ToList();
             Moods = moods;
         }
 

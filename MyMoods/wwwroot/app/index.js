@@ -41,17 +41,17 @@ function loadForm(data) {
 
     model = data;
 
-    injectCompany(model.form);
-    injectMoods(model.moods);
+    injectCompany(model);
+    injectMoods(model);
 
-    if (model.form.useDefaultTags) {
-        injectTags(model.tags);
-    }
-    else {
+    if (model.form.type == 'simple') {
         hideTagsPanel();
     }
+    else {
+        injectTags(model);
+    }
 
-    injectQuestions(model.questions);
+    injectQuestions(model);
     disableTagsPanel();
     disableQuestionsPanel();
     disableSubmitPanel();
@@ -73,54 +73,51 @@ function hideTagsPanel() {
     $('#tags-master-holder').css('display', 'none');
 }
 
-function injectCompany(form) {
+function injectCompany(model) {
 
     var html = '';
-    var container = $('#company-injector');
-    var company = form.company;
 
-    if (company.logo) {
-        html += '<img class="company-logo" src="' + company.logo + '"></img>';
+    if (model.form.company.logo) {
+        html += '<img class="company-logo" src="' + model.form.company.logo + '"></img>';
     }
     else {
-        html += '<h3>' + company.name + '</h3>';
+        html += '<h3>' + model.form.company.name + '</h3>';
     }
 
-    html += form.title;
+    html += model.form.title;
 
-    container.html(html);
+    $('#company-injector').html(html);
 }
 
-function injectMoods(moods) {
+function injectMoods(model) {
 
     var html = '';
-    var container = $('#moods-injector');
 
-    moods.forEach(function (mood) {
+    $('#moods-main-question').html(model.form.mainQuestion);
+
+    model.moods.forEach(function (mood) {
         html += '<img id="mood-' + mood.value + '" src="' + mood.image + '" class="mood-image" onclick="selectMood(\'' + mood.value + '\')" />';
     });
 
-    container.html(html);
+    $('#moods-injector').html(html);
 }
 
-function injectTags(tags) {
+function injectTags(model) {
 
     var html = '';
-    var container = $('#tags-injector');
 
-    tags.forEach(function (tag) {
+    model.tags.forEach(function (tag) {
         html += '<div id="tag-' + tag.id + '" class="tag" onclick="selectTag(\'' + tag.id + '\')">' + tag.title + '</div>';
     });
 
-    container.html(html);
+    $('#tags-injector').html(html);
 }
 
-function injectQuestions(questions) {
+function injectQuestions(model) {
 
     var html = '';
-    var container = $('#questions-injector');
 
-    questions.forEach(function (question) {
+    model.questions.forEach(function (question) {
 
         html += '<div class="panel questions-panel">';
         html += '<div class="panel-header questions-panel-header">';
@@ -129,15 +126,14 @@ function injectQuestions(questions) {
 
         if (question.type == 'text') {
             html += '<div class="padded-holder">';
-            html += '<textarea id="question-' + question.id + '" class="free-text"></textarea>';
+            html += '<textarea id="question-' + question.id + '"s class="free-text"></textarea>';
             html += '</div>';
         }
 
         html += '</div>';
-
     });
 
-    container.html(html);
+    $('#questions-injector').html(html);
 }
 
 function disableTagsPanel() {
@@ -171,16 +167,16 @@ function selectMood(mood) {
     }
 
     postModel.mood = mood;
+
     $('#mood-' + postModel.mood).addClass('mood-image-selected');
-    $('#selected-mood-label').html(getMoodTitle(mood));
     $('#tag-title').html(getTagsHelpText(mood));
 
-    if (model.form.useDefaultTags) {
-        enableTagsPanel();
-    }
-    else {
+    if (model.form.type == 'simple') {
         enableQuestionsPanel();
         enableSubmitPanel();
+    }
+    else {
+        enableTagsPanel();
     }
 }
 
@@ -210,22 +206,6 @@ function selectTag(id) {
         disableQuestionsPanel();
         disableSubmitPanel();
     }
-}
-
-function getMoodTitle(mood) {
-
-    var title = '';
-
-    if (model) {
-        model.moods.forEach(function (item) {
-            if (item.value == mood) {
-                title = item.title;
-                return;
-            }
-        });
-    }
-
-    return title;
 }
 
 function getTagsHelpText(mood) {
@@ -276,17 +256,27 @@ function submit() {
         url: '/api/forms/' + formId + '/reviews',
         data: JSON.stringify(postModel),
         dataType: 'text',
-        contentType: "application/json",
-        success: function (response) {
-            //TODO: Save cache!
-            endSubmitLoading();
-            window.location.href = 'success';
-        },
-        error: function (response) {
-            //TODO: Treat errors!
-            endSubmitLoading();
-            alert('Desculpe, não foi possível enviar a sua avaliação.');
+        contentType: "application/json"
+    });
+
+    promise.then(function (response) {
+        endSubmitLoading();
+        window.location.href = 'success';
+    }, function (response) {
+
+        if (response.status == 400) {
+
+            var json = JSON.parse(response.responseText);
+
+            for (var key in json) {
+                toastr.error(json[key]);
+            }
         }
+        else {
+            toastr.error('Desculpe, não foi possível enviar a sua avaliação.');
+        }
+
+        endSubmitLoading();
     });
 }
 
