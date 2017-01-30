@@ -261,6 +261,7 @@ function submit() {
 
     promise.then(function (response) {
         endSubmitLoading();
+        updateResultCache();
         window.location.href = 'success';
     }, function (response) {
 
@@ -288,4 +289,8 @@ function startSubmitLoading() {
 function endSubmitLoading() {
     $('#submit-button').removeClass('disabled');
     $('#submit-button').html('Enviar');
+}
+
+function updateResultCache() {
+    localStorage.setItem('my_moods_app_result', postModel.mood);
 }
