@@ -1,22 +1,14 @@
-<div style="text-align: center" ng-show="formId && !isLoaded">
-    Carregando...
-</div>
-<div style="text-align: center" ng-show="formId && isLoaded && dates && dates.length == 0">
-    Não há dados suficientes para este formulário.
-</div>
-<div class="ls-sm-margin-top" ng-show="formId && isLoaded && dates && dates.length > 0">
-    <div class="ls-md-margin-bottom">
-        <div class="ls-custom-select ls-sm-margin-bottom">
-            <select class="ls-select" ng-options="date.value as date.formatted for date in dates" ng-model="selectedDate" ng-change="loadChart()"></select>
-        </div>
-    </div>
-    <div style="text-align: center" ng-show="!chartIsLoaded">
+<button type="button" class="ls-btn-primary" ng-click="search()">Carregar</button>
+<br>
+<br>
+<div class="ls-form ls-form-horizontal">
+    <div style="text-align: center" ng-show="!isLoaded"> 
         Carregando...
     </div>
-    <div style="text-align: center" ng-show="chartIsLoaded && moods && moods.length == 0">
-        Não há dados suficientes para este dia.
+    <div style="text-align: center" ng-show="isLoaded && moods && moods.length == 0"> 
+        Não há dados suficientes para montar o gráfico.
     </div>
-    <div class="daily-chart-holder" ng-show="chartIsLoaded && moods && moods.length > 0">
+    <div class="daily-chart-holder" ng-show="isLoaded && moods && moods.length > 0">
         <canvas id="myChart2" height="400"></canvas>
     </div>
 </div>

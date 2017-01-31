@@ -21,21 +21,18 @@
                 };
 
                 scope.search = function () {
-
                     if (scope.formId && scope.date) {
-
+                        
                         scope.isLoaded = false;
 
-                        $timeout(function () {
-                            ReviewsService.get(scope.formId, moment(scope.date, 'DD/MM/YYYY').format('YYYY-MM-DD'))
-                                .then(function (response) {
-                                    scope.reviews = response.data;
-                                    scope.isLoaded = true;
-                                }, function (response) {
-                                    scope.isLoaded = true;
-                                    ErrorHandlerService.normalizeAndShow(response);
-                                });
-                        }, 10);
+                        ReviewsService.get(scope.formId, moment(scope.date, 'DD/MM/YYYY').format('YYYY-MM-DD'))
+                            .then(function (response) {
+                                scope.reviews = response.data;
+                                scope.isLoaded = true;
+                            }, function (response) {
+                                scope.isLoaded = true;
+                                ErrorHandlerService.normalizeAndShow(response);
+                            });
                     }
                     else if (!scope.formId) {
                         toastr.info('Selecione um formulário.');
