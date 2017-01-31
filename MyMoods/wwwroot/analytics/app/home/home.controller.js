@@ -15,16 +15,8 @@
             title: ''
         };
 
-        FormsService.all().then(function (response) {
+        FormsService.all(true).then(function (response) {
             vm.forms = response.data;
         });
-
-        vm.createForm = function () {
-            FormsService.post(vm.newModel).then(function (response) {
-                vm.newModel.id = response.data;
-                vm.forms.push(vm.newModel);
-                vm.newModel = null;
-            });
-        };
     }
 })();

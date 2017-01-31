@@ -7,7 +7,6 @@
     <thead>
         <tr>
             <th>Título</th>
-            <th>Utiliza tags</th>
             <th>Link</th>
         </tr>
     </thead>
@@ -17,31 +16,10 @@
                 {{form.title}}
             </td>
             <td>
-                <input type="checkbox" class="ls-field-checkbox" ng-model="form.useDefaultTags" ng-disabled="true" />
-            </td>
-            <td>
                 <a href="../app/#/{{form.id}}" target="_blank">www.mymoods.co/app/#/{{form.id}}</a>
             </td>
         </tr>
     </tbody>
 </table>
 
-<br />
-<p class="home-text">Você também pode criar novos formulários para organizar as avaliações por departamentos ou eventos específicos.</p>
-
-<form ng-submit="vm.createForm()">
-    <label class="ls-label-text">
-        <input type="text" class="home-text-title" placeholder="Título para o novo formulário" ng-model="vm.newModel.title" required />
-    </label>
-    <br><br>
-    <p>
-        <label class="ls-label-text">
-            <input type="checkbox" class="ls-field-checkbox" ng-model="vm.newModel.useDefaultTags" />
-            Utilizar tags
-            <span class="ls-tooltip-bottom" aria-label="Adiciona uma seção com algumas tags pré-definidas para seleção no formulário (salário, horários, ambiente e afins)">
-                <span class="ls-ico-question"></span>
-            </span>
-        </label>
-    </p>
-    <button type="submit" class="ls-btn-primary home-create-btn">Criar</button>
-</form>
+<p class="home-text">Você também pode gerenciar seus formulários clicando <a href="#!/forms">aqui</a>.</p>
