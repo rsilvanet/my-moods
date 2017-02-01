@@ -104,7 +104,7 @@ namespace MyMoods.Services
 
         public async Task<IList<DailySimpleDTO>> GetResumeAsync(Form form, short timezone)
         {
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Active).ToListAsync();
 
             if (!reviews.Any())
             {
@@ -120,7 +120,7 @@ namespace MyMoods.Services
         {
             var theDay = date.Date.AddHours(-timezone);
             var theNextDay = theDay.AddDays(1);
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay).ToListAsync();
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay && x.Active).ToListAsync();
 
             if (!reviews.Any())
             {
@@ -141,7 +141,7 @@ namespace MyMoods.Services
             foreach (MoodType mood in Enum.GetValues(typeof(MoodType)))
             {
                 var count = await _storage.Reviews
-                    .Find(x => x.Form.Equals(form.Id) && x.Mood == mood)
+                    .Find(x => x.Form.Equals(form.Id) && x.Mood == mood && x.Active)
                     .CountAsync();
 
                 counters.Add(new MoodCounterDTO(mood, count));
