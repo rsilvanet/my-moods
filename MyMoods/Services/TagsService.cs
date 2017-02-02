@@ -57,6 +57,11 @@ namespace MyMoods.Services
             var companyTags = await _storage.Tags.Find(x => x.Company.Equals(form.Company)).ToListAsync();
             var customTags = companyTags.Where(x => form.CustomTags.Any(z => z.ToString() == x.Id.ToString())).ToList();
 
+            if (onlyActives)
+            {
+                customTags = customTags.Where(x => x.Active).ToList();
+            }
+
             return customTags;
         }
 
