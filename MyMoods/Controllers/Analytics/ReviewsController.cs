@@ -143,7 +143,7 @@ namespace MyMoods.Controllers.Analytics
                     return Forbid();
                 }
 
-                var daily = await _reviewsService.GetDailyAsync(form, date, ClientTimezone);
+                var daily = await _reviewsService.GetDetailedByMoodAsync(form, date, ClientTimezone);
 
                 return Ok(daily);
             }

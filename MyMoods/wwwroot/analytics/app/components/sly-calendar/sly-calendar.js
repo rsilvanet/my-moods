@@ -128,7 +128,7 @@
                         html += '<li>';
                         html += '<span>' + day.format('DD/MM/YYYY') + '</span>';
                         html += '<br><br><br>';
-                        html += '<img src="' + item.avg.image + '" style="height: 100px;">';
+                        html += '<img src="/assets/emojis/' + item.avg.mood + '.png" style="height: 100px;">';
                         html += '<br><br>';
                         html += '<span>' + item.avg.points.toFixed(2) + ' pontos</span>';
                         html += '</li>';

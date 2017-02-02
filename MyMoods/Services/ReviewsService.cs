@@ -21,26 +21,24 @@ namespace MyMoods.Services
             _moodsService = moodsService;
         }
 
-        private DailySimpleDTO ResumeReviews(DateTime day, IList<Review> reviews)
+        private ReviewsResumeDTO ResumeReviews(DateTime day, IList<Review> reviews)
         {
             var avg = reviews.Average(x => _moodsService.Evaluate(x.Mood));
             var avgMood = _moodsService.GetFromPoints(avg);
             var topMood = reviews.GroupBy(x => x.Mood).OrderByDescending(x => x.Count()).First().Key;
 
-            var resume = new DailySimpleDTO()
+            var resume = new ReviewsResumeDTO()
             {
                 Date = day,
                 Count = reviews.Count(),
-                Top = new DailySimpleDTO.TopDTO()
+                Top = new ReviewsResumeDTO.TopDTO()
                 {
                     Mood = topMood,
-                    Image = _moodsService.GetImage(topMood),
                     Count = reviews.Where(x => x.Mood == topMood).Count()
                 },
-                Avg = new DailySimpleDTO.AvgDTO()
+                Avg = new ReviewsResumeDTO.AvgDTO()
                 {
                     Mood = avgMood,
-                    Image = _moodsService.GetImage(avgMood),
                     Points = avg
                 }
             };
@@ -48,7 +46,7 @@ namespace MyMoods.Services
             return resume;
         }
 
-        private DailyDetailedDTO DetailDailyMood(DateTime date, MoodType mood, IList<Review> reviews, IList<Question> questions, IList<Tagg> tags)
+        private ReviewsDetailedByMoodDTO DetailDailyMood(DateTime date, MoodType mood, IList<Review> reviews, IList<Question> questions, IList<Tagg> tags)
         {
             var resume = ResumeReviews(date, reviews);
             var tagsCounters = new List<TagCounterDTO>();
@@ -64,10 +62,9 @@ namespace MyMoods.Services
                 }
             }
 
-            var detailed = new DailyDetailedDTO()
+            var detailed = new ReviewsDetailedByMoodDTO()
             {
                 Mood = mood,
-                Image = _moodsService.GetImage(mood),
                 Count = reviews.Count,
                 Tags = tagsCounters.OrderByDescending(x => x.Count).ToList(),
                 Questions = questions.Select(x => new QuestionWithAnswersDTO(x, ReadAnswers(x, reviews))).ToList()
@@ -102,13 +99,15 @@ namespace MyMoods.Services
             return reviews.Select(x => new ReviewDTO(x, tags)).ToList();
         }
 
-        public async Task<IList<DailySimpleDTO>> GetResumeAsync(Form form, short timezone)
+        public async Task<IList<ReviewsResumeDTO>> GetResumeAsync(Form form, short timezone)
         {
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Active).ToListAsync();
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+
+            reviews = reviews.Where(x => x.Active).ToList();
 
             if (!reviews.Any())
             {
-                return new List<DailySimpleDTO>();
+                return new List<ReviewsResumeDTO>();
             }
 
             var groupByDay = reviews.GroupBy(x => x.Date.AddHours(timezone).Date);
@@ -116,15 +115,17 @@ namespace MyMoods.Services
             return groupByDay.Select(x => ResumeReviews(x.Key.Date.AddHours(-timezone), x.ToList())).OrderBy(x => x.Date).ToList();
         }
 
-        public async Task<IList<DailyDetailedDTO>> GetDailyAsync(Form form, DateTime date, short timezone)
+        public async Task<IList<ReviewsDetailedByMoodDTO>> GetDetailedByMoodAsync(Form form, DateTime date, short timezone)
         {
             var theDay = date.Date.AddHours(-timezone);
             var theNextDay = theDay.AddDays(1);
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay && x.Active).ToListAsync();
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+
+            reviews = reviews.Where(x => x.Date >= theDay && x.Date < theNextDay && x.Active).ToList();
 
             if (!reviews.Any())
             {
-                return new List<DailyDetailedDTO>();
+                return new List<ReviewsDetailedByMoodDTO>();
             }
 
             var tags = await _storage.Tags.Find(x => true).ToListAsync();
@@ -134,20 +135,19 @@ namespace MyMoods.Services
             return groupByMood.Select(x => DetailDailyMood(date.Date.AddHours(-timezone), x.Key, x.ToList(), questions, tags)).OrderBy(x => _moodsService.Evaluate(x.Mood)).ToList();
         }
 
-        public async Task<IList<MoodCounterDTO>> GetCountersAsync(Form form)
+        public async Task<IList<MoodCounterDTO>> GetCountByMoodAsync(Form form)
         {
-            var counters = new List<MoodCounterDTO>();
+            var counts = new List<MoodCounterDTO>();
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+
+            reviews = reviews.Where(x => x.Active).ToList();
 
             foreach (MoodType mood in Enum.GetValues(typeof(MoodType)))
             {
-                var count = await _storage.Reviews
-                    .Find(x => x.Form.Equals(form.Id) && x.Mood == mood && x.Active)
-                    .CountAsync();
-
-                counters.Add(new MoodCounterDTO(mood, count));
+                counts.Add(new MoodCounterDTO(mood, reviews.Where(x => x.Mood == mood).Count()));
             }
 
-            return counters;
+            return counts;
         }
 
         public async Task InsertAsync(Review review)

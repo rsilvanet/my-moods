@@ -7,7 +7,7 @@
     <ul class="ls-tabs-nav">
         <li ng-repeat="item in items track by $index" ng-class="{ 'ls-active' : activeItem == item }">
             <a data-ls-module="tabs" href="" ng-click="activateItem(item)">
-                <img ng-src="{{item.image}}" style="height: 25px;"> x {{item.count}}
+                <img ng-src="/assets/emojis/{{item.mood}}.png" style="height: 25px;"> x {{item.count}}
             </a>
         </li>
     </ul>

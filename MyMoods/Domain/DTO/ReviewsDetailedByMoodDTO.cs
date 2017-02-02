@@ -2,10 +2,9 @@
 
 namespace MyMoods.Domain.DTO
 {
-    public class DailyDetailedDTO
+    public class ReviewsDetailedByMoodDTO
     {
         public MoodType Mood { get; set; }
-        public string Image { get; set; }
         public int Count { get; set; }
         public IList<TagCounterDTO> Tags { get; set; }
         public IList<QuestionWithAnswersDTO> Questions { get; set; }
