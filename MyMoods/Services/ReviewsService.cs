@@ -93,8 +93,10 @@ namespace MyMoods.Services
         {
             var theDay = date.Date.AddHours(-timezone);
             var theNextDay = theDay.AddDays(1);
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id) && x.Date >= theDay && x.Date < theNextDay).ToListAsync();
             var tags = await _storage.Tags.Find(x => true).ToListAsync();
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+
+            reviews = reviews.Where(x => x.Date >= theDay && x.Date < theNextDay).ToList();
 
             return reviews.Select(x => new ReviewDTO(x, tags)).ToList();
         }
@@ -115,7 +117,7 @@ namespace MyMoods.Services
             return groupByDay.Select(x => ResumeReviews(x.Key.Date.AddHours(-timezone), x.ToList())).OrderBy(x => x.Date).ToList();
         }
 
-        public async Task<IList<ReviewsDetailedByMoodDTO>> GetDetailedByMoodAsync(Form form, DateTime date, short timezone)
+        public async Task<IList<ReviewsDetailedByMoodDTO>> GetDayDetailedByMoodAsync(Form form, DateTime date, short timezone)
         {
             var theDay = date.Date.AddHours(-timezone);
             var theNextDay = theDay.AddDays(1);
