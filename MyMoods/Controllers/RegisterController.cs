@@ -43,21 +43,22 @@ namespace MyMoods.Controllers
                 await _companiesService.InsertAsync(companyValidation.ParsedObject);
                 await _usersService.InsertAsync(companyValidation.ParsedObject, userValidation.ParsedObject);
 
-                var form = new Form(companyValidation.ParsedObject.Id)
+                var form = new FormOnPostDTO()
                 {
                     Type = FormType.general,
                     Title = "Visão geral da empresa",
-                    MainQuestion = "Qual é o seu mood?"
+                    MainQuestion = "Qual é o seu mood?",
+                    FreeText = new FreeTextDTO()
+                    {
+                        Allow = true,
+                        Require = false,
+                        Title = "Quer contar um pouco mais pra gente?"
+                    }
                 };
 
-                form.AddQuestion(new Question()
-                {
-                    Type = QuestionType.text,
-                    Title = "Quer contar um pouco mais pra gente?",
-                    Required = false,
-                });
+                var formValidation = await _formsService.ValidateToInsertAsync(companyValidation.ParsedObject.Id.ToString(), form);
 
-                await _formsService.InsertAsync(form);
+                await _formsService.InsertAsync(formValidation.ParsedObject);
 
                 return Created(companyValidation.ParsedObject.Id.ToString());
             }
