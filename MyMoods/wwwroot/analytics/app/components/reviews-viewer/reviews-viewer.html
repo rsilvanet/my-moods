@@ -28,8 +28,11 @@
             <div class="col-md-3 ls-txt-center">
                 <p ng-repeat="answer in review.answers">{{answer.value ? answer.value : '-'}}</p>
             </div>
-            <div class="col-md-1 ls-txt-center reviews-viewer-check">
-                <input type="checkbox" class="ls-field-checkbox" ng-model="review.active" ng-change="changeStatus(review)" />
+            <div class="col-md-1 ls-txt-center ls-label reviews-viewer-check">
+                <label class="ls-label-text">
+                    <input type="checkbox" class="ls-field-checkbox" ng-model="review.active" ng-change="changeStatus(review)" />
+                    Ativa
+                </label>
             </div>
         </div>
     </div>

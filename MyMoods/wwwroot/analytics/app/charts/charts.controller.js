@@ -17,12 +17,9 @@
 
             vm.filters = {
                 formId: null,
-                date: moment().format('DD/MM/YYYY')
+                date1: moment().format('DD/MM/YYYY'),
+                date2: moment().format('DD/MM/YYYY')
             };
         }
-
-        vm.formSelectCallback = function (id) {
-            vm.filters.formId = id;
-        };
     }
 })();

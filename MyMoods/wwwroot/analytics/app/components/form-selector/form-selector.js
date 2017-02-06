@@ -8,22 +8,17 @@
             restrict: 'E',
             templateUrl: 'app/components/form-selector/form-selector.html',
             scope: {
-                selectCallback: '&'
+                formId: '='
             },
             link: function (scope) {
 
                 scope.isLoaded = false;
 
-                FormsService.all(true).then(function (response) {
-                    scope.forms = response.data;
-                    scope.isLoaded = true;
-                });
-
-                scope.doCallback = function () {
-                    if (scope.selected) {
-                        scope.selectCallback({ id: scope.selected });
-                    }
-                };
+                FormsService.all(true)
+                    .then(function (response) {
+                        scope.forms = response.data;
+                        scope.isLoaded = true;
+                    });
             }
         };
     });

@@ -11,11 +11,6 @@
 
         var vm = this;
 
-        vm.formSelectCallback = function (id) {
-            vm.formId = id;
-            vm.activeDay = null;
-        };
-
         vm.activeDayCallback = function (date) {
             vm.activeDay = date;
         };

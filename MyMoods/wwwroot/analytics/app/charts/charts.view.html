@@ -1,12 +1,4 @@
 <h2>Gráficos</h2>
 <br>
-<form class="ls-form ls-form-horizontal">
-    <form-selector select-callback="vm.formSelectCallback(id)"></form-selector>
-    <div class="row">
-        <label class="ls-label col-sm-12 col-md-12 col-lg-12">
-            <b class="ls-label-text">Data</b>
-            <input type="text" class="datepicker" placeholder="dd/mm/aaaa" ng-model="vm.filters.date">
-        </label>
-    </div>
-</form>
-<daily-chart form-id="vm.filters.formId" date="vm.filters.date"></daily-chart>
+<form-date-selector form-id="vm.filters.formId" date1="vm.filters.date1" date2="vm.filters.date2"></form-date-selector>
+<daily-chart form-id="vm.filters.formId" date="vm.filters.date1"></daily-chart>
