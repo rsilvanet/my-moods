@@ -17,7 +17,7 @@
     <div style="text-align: center" ng-show="isLoaded && reviews && reviews.length > 0">
         <div class="ls-box ls-box-gray" ng-repeat="review in (reviews | filter:filterList)">
             <div class="col-md-2 ls-txt-center reviews-viewer-hour">
-                <p>{{review.date | date:'HH:mm:ss'}}</p>
+                <p>{{review.date | date:'dd/MM/yyyy HH:mm:ss'}}</p>
             </div>
             <div class="col-md-2 ls-txt-center">
                 <img class="reviews-viewer-img" ng-src="/assets/emojis/{{review.mood}}.png" />
@@ -28,11 +28,8 @@
             <div class="col-md-3 ls-txt-center">
                 <p ng-repeat="answer in review.answers">{{answer.value ? answer.value : '-'}}</p>
             </div>
-            <div class="col-md-1 ls-txt-center ls-label reviews-viewer-check">
-                <label class="ls-label-text">
-                    <input type="checkbox" class="ls-field-checkbox" ng-model="review.active" ng-change="changeStatus(review)" />
-                    Ativa
-                </label>
+            <div class="col-md-1 ls-txt-center reviews-viewer-check">
+                <input type="checkbox" class="ls-field-checkbox" ng-model="review.active" ng-change="changeStatus(review)" />
             </div>
         </div>
     </div>

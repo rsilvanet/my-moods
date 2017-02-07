@@ -19,7 +19,7 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> Get(string formId, DateTime date)
+        public async Task<IActionResult> Get(string formId, DateTime startDate, DateTime endDate)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace MyMoods.Controllers.Analytics
                     return Forbid();
                 }
 
-                var reviews = await _reviewsService.GetByFormAsync(form, date, ClientTimezone);
+                var reviews = await _reviewsService.GetByFormAsync(form, startDate, endDate, ClientTimezone);
 
                 return Ok(reviews);
             }

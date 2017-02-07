@@ -9,7 +9,8 @@
             templateUrl: 'app/components/reviews-viewer/reviews-viewer.html',
             scope: {
                 formId: '=',
-                date: '='
+                startDate: '=',
+                endDate: '='
             },
             link: function (scope) {
 
@@ -21,11 +22,14 @@
                 };
 
                 scope.search = function () {
-                    if (scope.formId && scope.date) {
+                    if (scope.formId && scope.startDate && scope.endDate) {
                         
                         scope.isLoaded = false;
 
-                        ReviewsService.get(scope.formId, moment(scope.date, 'DD/MM/YYYY').format('YYYY-MM-DD'))
+                        var start = moment(scope.startDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                        var end = moment(scope.endDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
+                        ReviewsService.get(scope.formId, start, end)
                             .then(function (response) {
                                 scope.reviews = response.data;
                                 scope.isLoaded = true;

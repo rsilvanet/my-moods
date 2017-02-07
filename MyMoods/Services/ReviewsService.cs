@@ -14,11 +14,13 @@ namespace MyMoods.Services
     {
         private readonly IStorage _storage;
         private readonly IMoodsService _moodsService;
+        private readonly ITagsService _tagsService;
 
-        public ReviewsService(IStorage storage, IMoodsService moodsService)
+        public ReviewsService(IStorage storage, IMoodsService moodsService, ITagsService tagsService)
         {
             _storage = storage;
             _moodsService = moodsService;
+            _tagsService = tagsService;
         }
 
         private ReviewsResumeDTO ResumeReviews(DateTime day, IList<Review> reviews)
@@ -81,6 +83,17 @@ namespace MyMoods.Services
                 .ToList();
         }
 
+        private async Task<IList<Review>> GetWithBasicFiltersAsync(Form form, DateTime startDate, DateTime endDate, short timezone)
+        {
+            var start = startDate.Date.AddHours(-timezone);
+            var dayAfterEnd = endDate.Date.AddHours(-timezone).AddDays(1);
+            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+
+            reviews = reviews.Where(x => x.Date >= start && x.Date < dayAfterEnd).ToList();
+
+            return reviews;
+        }
+
         public async Task<Review> GetByIdAsync(string id)
         {
             var oid = new ObjectId(id);
@@ -89,14 +102,10 @@ namespace MyMoods.Services
             return review;
         }
 
-        public async Task<IList<ReviewDTO>> GetByFormAsync(Form form, DateTime date, short timezone)
+        public async Task<IList<ReviewDTO>> GetByFormAsync(Form form, DateTime startDate, DateTime endDate, short timezone)
         {
-            var theDay = date.Date.AddHours(-timezone);
-            var theNextDay = theDay.AddDays(1);
-            var tags = await _storage.Tags.Find(x => true).ToListAsync();
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
-
-            reviews = reviews.Where(x => x.Date >= theDay && x.Date < theNextDay).ToList();
+            var tags = await _tagsService.GetByFormAsync(form, false);
+            var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, timezone);
 
             return reviews.Select(x => new ReviewDTO(x, tags)).ToList();
         }
@@ -119,11 +128,7 @@ namespace MyMoods.Services
 
         public async Task<IList<ReviewsDetailedByMoodDTO>> GetDayDetailedByMoodAsync(Form form, DateTime date, short timezone)
         {
-            var theDay = date.Date.AddHours(-timezone);
-            var theNextDay = theDay.AddDays(1);
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
-
-            reviews = reviews.Where(x => x.Date >= theDay && x.Date < theNextDay && x.Active).ToList();
+            var reviews = await GetWithBasicFiltersAsync(form, date, date, timezone);
 
             if (!reviews.Any())
             {

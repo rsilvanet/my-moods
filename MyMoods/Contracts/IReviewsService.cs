@@ -10,7 +10,7 @@ namespace MyMoods.Contracts
     {
         Task InsertAsync(Review review);
         Task<Review> GetByIdAsync(string id);
-        Task<IList<ReviewDTO>> GetByFormAsync(Form form, DateTime date, short timezone);
+        Task<IList<ReviewDTO>> GetByFormAsync(Form form, DateTime startDate, DateTime endDate, short timezone);
         Task<IList<ReviewsResumeDTO>> GetResumeAsync(Form form, short timezone);
         Task<IList<ReviewsDetailedByMoodDTO>> GetDayDetailedByMoodAsync(Form form, DateTime date, short timezone);
         Task EnableAsync(Review review);

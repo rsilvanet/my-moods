@@ -15,8 +15,8 @@
             disable: disable
         };
 
-        function get(formId, date) {
-            return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews?date=' + date);
+        function get(formId, startDate, endDate) {
+            return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews?startdate=' + startDate + '&endDate=' + endDate);
         }
 
         function getResume(formId) {
