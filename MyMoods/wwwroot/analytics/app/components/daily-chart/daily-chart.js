@@ -66,6 +66,9 @@
                                 ErrorHandlerService.normalizeAndShow(response);
                             });
                     }
+                    else if (!scope.formId) {
+                        toastr.info('Selecione um formulário.');
+                    }
                 };
 
                 function draw() {

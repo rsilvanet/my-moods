@@ -41,9 +41,6 @@
                     else if (!scope.formId) {
                         toastr.info('Selecione um formulário.');
                     }
-                    else if (!scope.date) {
-                        toastr.info('Informe uma data válida.');
-                    }
                 };
 
                 scope.filterList = function (review) {
