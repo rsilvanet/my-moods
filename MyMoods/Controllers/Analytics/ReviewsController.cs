@@ -127,7 +127,7 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpGet("daily")]
-        public async Task<IActionResult> GetDailyResume(string formId, DateTime date)
+        public async Task<IActionResult> GetDaily(string formId, DateTime date)
         {
             try
             {
@@ -146,6 +146,33 @@ namespace MyMoods.Controllers.Analytics
                 var daily = await _reviewsService.GetDayDetailedByMoodAsync(form, date, ClientTimezone);
 
                 return Ok(daily);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
+        [HttpGet("counters/moods")]
+        public async Task<IActionResult> GetCountersMoods(string formId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var form = await _formsService.GetByIdAsync(formId);
+
+                if (form == null)
+                {
+                    return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
+                }
+
+                var counters = await _reviewsService.GetMoodsCounterAsync(form, startDate, endDate, ClientTimezone);
+
+                return Ok(counters);
             }
             catch (Exception ex)
             {

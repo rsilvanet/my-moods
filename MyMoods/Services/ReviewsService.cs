@@ -83,13 +83,24 @@ namespace MyMoods.Services
                 .ToList();
         }
 
-        private async Task<IList<Review>> GetWithBasicFiltersAsync(Form form, DateTime startDate, DateTime endDate, short timezone)
+        private async Task<IList<Review>> GetWithBasicFiltersAsync(Form form, DateTime? startDate, DateTime? endDate, bool onlyActives, short timezone)
         {
-            var start = startDate.Date.AddHours(-timezone);
-            var dayAfterEnd = endDate.Date.AddHours(-timezone).AddDays(1);
             var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
 
-            reviews = reviews.Where(x => x.Date >= start && x.Date < dayAfterEnd).ToList();
+            if (startDate.HasValue)
+            {
+                reviews = reviews.Where(x => x.Date >= startDate.Value.Date.AddHours(-timezone)).ToList();
+            }
+
+            if (endDate.HasValue)
+            {
+                reviews = reviews.Where(x => x.Date < endDate.Value.Date.AddHours(-timezone).AddDays(1)).ToList();
+            }
+
+            if (onlyActives)
+            {
+                reviews = reviews.Where(x => x.Active).ToList();
+            }
 
             return reviews;
         }
@@ -105,16 +116,14 @@ namespace MyMoods.Services
         public async Task<IList<ReviewDTO>> GetByFormAsync(Form form, DateTime startDate, DateTime endDate, short timezone)
         {
             var tags = await _tagsService.GetByFormAsync(form, false);
-            var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, timezone);
+            var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, false, timezone);
 
             return reviews.Select(x => new ReviewDTO(x, tags)).ToList();
         }
 
         public async Task<IList<ReviewsResumeDTO>> GetResumeAsync(Form form, short timezone)
         {
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
-
-            reviews = reviews.Where(x => x.Active).ToList();
+            var reviews = await GetWithBasicFiltersAsync(form, null, null, true, timezone);
 
             if (!reviews.Any())
             {
@@ -128,7 +137,7 @@ namespace MyMoods.Services
 
         public async Task<IList<ReviewsDetailedByMoodDTO>> GetDayDetailedByMoodAsync(Form form, DateTime date, short timezone)
         {
-            var reviews = await GetWithBasicFiltersAsync(form, date, date, timezone);
+            var reviews = await GetWithBasicFiltersAsync(form, date, date, true, timezone);
 
             if (!reviews.Any())
             {
@@ -142,12 +151,10 @@ namespace MyMoods.Services
             return groupByMood.Select(x => DetailDailyMood(date.Date.AddHours(-timezone), x.Key, x.ToList(), questions, tags)).OrderBy(x => _moodsService.Evaluate(x.Mood)).ToList();
         }
 
-        public async Task<IList<MoodCounterDTO>> GetCountByMoodAsync(Form form)
+        public async Task<IList<MoodCounterDTO>> GetMoodsCounterAsync(Form form, DateTime startDate, DateTime endDate, short timezone)
         {
             var counts = new List<MoodCounterDTO>();
-            var reviews = await _storage.Reviews.Find(x => x.Form.Equals(form.Id)).ToListAsync();
-
-            reviews = reviews.Where(x => x.Active).ToList();
+            var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, true, timezone);
 
             foreach (MoodType mood in Enum.GetValues(typeof(MoodType)))
             {
