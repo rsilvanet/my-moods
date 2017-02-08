@@ -5,12 +5,12 @@
         'ui.router',
         'app.components',
         'app.charts',
-        'app.daily',
         'app.forms',
         'app.home',
         'app.login',
         'app.logout',
         'app.password',
+        'app.resume',
         'app.reviews',
         'app.tags'
     ]);
