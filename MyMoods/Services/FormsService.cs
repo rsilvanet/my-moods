@@ -22,12 +22,7 @@ namespace MyMoods.Services
             _moodsService = moodsService;
             _tagsService = tagsService;
         }
-
-        private async Task<IList<Question>> GetQuestions(Form form)
-        {
-            return await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
-        }
-
+        
         private async Task DoCommonSaveValidation(FormOnPutDTO dto, ValidationResultDTO<Form> result)
         {
             var form = result.ParsedObject;
@@ -113,7 +108,7 @@ namespace MyMoods.Services
 
                 if (loadQuestions)
                 {
-                    var questions = await GetQuestions(form);
+                    var questions = await GetQuestionsAsync(form);
 
                     form.LoadQuestions(questions);
                 }
@@ -143,6 +138,11 @@ namespace MyMoods.Services
             var moods = _moodsService.Get();
 
             return new FormMetadataDTO(form, company, moods);
+        }
+
+        public async Task<IList<Question>> GetQuestionsAsync(Form form)
+        {
+            return await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
         }
 
         public async Task InsertAsync(Form form)
@@ -184,7 +184,7 @@ namespace MyMoods.Services
 
             #region Questions
 
-            var existentQuestions = await GetQuestions(form);
+            var existentQuestions = await GetQuestionsAsync(form);
             var questionsToInsert = form.Questions.Where(x => x.Id.Equals(ObjectId.Empty));
             var questionsToUpdate = form.Questions.Where(x => !x.Id.Equals(ObjectId.Empty));
             var questionsToDelete = existentQuestions.Where(e => !questionsToUpdate.Any(u => u.Id.ToString() == e.Id.ToString()));

@@ -10,6 +10,7 @@ namespace MyMoods.Contracts
         Task<Form> GetByIdAsync(string id, bool loadTags = false, bool loadQuestions = false);
         Task<IList<Form>> GetByCompanyAsync(string companyId, bool onlyActives);
         Task<FormMetadataDTO> GetMetadataByIdAsync(string id);
+        Task<IList<Question>> GetQuestionsAsync(Form form);
         Task InsertAsync(Form form);
         Task UpdateAsync(Form form);
         Task EnableAsync(Form form);

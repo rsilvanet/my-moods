@@ -15,12 +15,14 @@ namespace MyMoods.Services
         private readonly IStorage _storage;
         private readonly IMoodsService _moodsService;
         private readonly ITagsService _tagsService;
+        private readonly IFormsService _formsService;
 
-        public ReviewsService(IStorage storage, IMoodsService moodsService, ITagsService tagsService)
+        public ReviewsService(IStorage storage, IMoodsService moodsService, ITagsService tagsService, IFormsService formsService)
         {
             _storage = storage;
             _moodsService = moodsService;
             _tagsService = tagsService;
+            _formsService = formsService;
         }
 
         private ReviewsResumeDTO ResumeReviews(DateTime day, IList<Review> reviews)
@@ -105,6 +107,11 @@ namespace MyMoods.Services
             return reviews;
         }
 
+        private TagType GetTagType(IList<Tagg> tags, ObjectId tag)
+        {
+            return tags.FirstOrDefault(x => x.Id.ToString() == tag.ToString())?.Type ?? TagType.undefined;
+        }
+
         public async Task<Review> GetByIdAsync(string id)
         {
             var oid = new ObjectId(id);
@@ -144,8 +151,8 @@ namespace MyMoods.Services
                 return new List<ReviewsDetailedByMoodDTO>();
             }
 
-            var tags = await _storage.Tags.Find(x => true).ToListAsync();
-            var questions = await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+            var tags = await _tagsService.GetByFormAsync(form, false);
+            var questions = await _formsService.GetQuestionsAsync(form);
             var groupByMood = reviews.GroupBy(x => x.Mood);
 
             return groupByMood.Select(x => DetailDailyMood(date.Date.AddHours(-timezone), x.Key, x.ToList(), questions, tags)).OrderBy(x => _moodsService.Evaluate(x.Mood)).ToList();
@@ -155,13 +162,18 @@ namespace MyMoods.Services
         {
             var counts = new List<MoodCounterDTO>();
             var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, true, timezone);
+            var group = reviews.GroupBy(x => x.Mood);
+            
+            return group.Select(x => new MoodCounterDTO(x.Key, x.Count())).ToList();
+        }
 
-            foreach (MoodType mood in Enum.GetValues(typeof(MoodType)))
-            {
-                counts.Add(new MoodCounterDTO(mood, reviews.Where(x => x.Mood == mood).Count()));
-            }
+        public async Task<IList<MaslowCounterDTO>> GetMaslowCounterAsync(Form form, DateTime startDate, DateTime endDate, short timezone)
+        {
+            var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, true, timezone);
+            var tags = await _tagsService.GetByFormAsync(form, false);
+            var group = reviews.SelectMany(x => x.Tags).GroupBy(x => GetTagType(tags, x));
 
-            return counts;
+            return group.Select(x => new MaslowCounterDTO(x.Key, x.Count())).ToList();
         }
 
         public async Task InsertAsync(Review review)
@@ -240,7 +252,7 @@ namespace MyMoods.Services
 
             #region Question
 
-            var questions = await _storage.Questions.Find(x => x.Form.Equals(form.Id)).ToListAsync();
+            var questions = await _formsService.GetQuestionsAsync(form);
 
             if (questions.Any())
             {
