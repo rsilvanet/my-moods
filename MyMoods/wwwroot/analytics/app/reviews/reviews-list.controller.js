@@ -17,8 +17,8 @@
 
             vm.filters = {
                 formId: null,
-                date1: moment().format('DD/MM/YYYY'),
-                date2: moment().format('DD/MM/YYYY')
+                startDate: moment().format('DD/MM/YYYY'),
+                endDate: moment().format('DD/MM/YYYY')
             };
         }
     }

@@ -9,8 +9,8 @@
             templateUrl: 'app/components/form-date-selector/form-date-selector.html',
             scope: {
                 formId: '=',
-                date1: '=',
-                date2: '='
+                startDate: '=',
+                endDate: '='
             },
             link: function (scope) {
 
