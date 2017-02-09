@@ -154,7 +154,7 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpGet("counters/moods")]
-        public async Task<IActionResult> GetCountersMoods(string formId, DateTime startDate, DateTime endDate)
+        public async Task<IActionResult> GetMoodsCounter(string formId, DateTime startDate, DateTime endDate)
         {
             try
             {
