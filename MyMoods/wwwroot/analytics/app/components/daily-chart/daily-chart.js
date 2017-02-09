@@ -9,21 +9,25 @@
             templateUrl: 'app/components/daily-chart/daily-chart.html',
             scope: {
                 formId: '=',
-                date: '='
+                startDate: '=',
+                endDate: '='
             },
             link: function (scope) {
 
                 scope.isLoaded = true;
 
                 scope.search = function () {
-                    if (scope.formId && scope.date) {
+                    if (scope.formId && scope.startDate && scope.endDate) {
 
                         scope.moods = null;
                         scope.counters = null;
                         scope.colors = null;
                         scope.isLoaded = false;
 
-                        ReviewsService.getDaily(scope.formId, moment(scope.date, 'DD/MM/YYYY').format('YYYY-MM-DD'))
+                        var start = moment(scope.startDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
+                        var end = moment(scope.endDate, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
+                        ReviewsService.getMoodsCounter(scope.formId, start, end)
                             .then(function (response) {
                                 scope.moods = [];
                                 scope.counters = [];
@@ -32,26 +36,7 @@
                                 if (response.data && response.data.length) {
 
                                     response.data.forEach(function (item) {
-
-                                        var mood = '';
-
-                                        if (item.mood == 'angry') {
-                                            mood = 'Irritado';
-                                        }
-                                        else if (item.mood == 'unsatisfied') {
-                                            mood = 'Insatisfeito';
-                                        }
-                                        else if (item.mood == 'normal') {
-                                            mood = 'Normal';
-                                        }
-                                        else if (item.mood == 'happy') {
-                                            mood = 'Feliz';
-                                        }
-                                        else if (item.mood == 'loving') {
-                                            mood = 'Apaixonado';
-                                        }
-
-                                        scope.moods.push(mood);
+                                        scope.moods.push(getDescription(item.mood));
                                         scope.counters.push(item.count);
                                         scope.colors.push(getColor(item.mood));
                                     });
@@ -99,17 +84,34 @@
                 function getColor(mood) {
                     switch (mood) {
                         case 'angry':
-                            return '#FF5733';
+                            return '#E63434';
                         case 'unsatisfied':
-                            return '#5DADE2';
+                            return '#FF5733';
                         case 'normal':
-                            return '#16A085';
-                        case 'happy':
                             return '#8E44AD';
+                        case 'happy':
+                            return '#3470E6';
                         case 'loving':
-                            return '#85929E';
+                            return '#16A085';
                         default:
                             return 'black';
+                    }
+                }
+
+                function getDescription(mood) {
+                    switch (mood) {
+                        case 'angry':
+                            return 'Irritado';
+                        case 'unsatisfied':
+                            return 'Insatisfeito';
+                        case 'normal':
+                            return 'Normal';
+                        case 'happy':
+                            return 'Feliz';
+                        case 'loving':
+                            return 'Apaixonado';
+                        default:
+                            return 'Nenhum';
                     }
                 }
             }
