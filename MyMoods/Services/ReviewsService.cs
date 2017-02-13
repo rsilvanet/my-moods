@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
+using MyMoods.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -163,17 +164,36 @@ namespace MyMoods.Services
             var counts = new List<MoodCounterDTO>();
             var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, true, timezone);
             var group = reviews.GroupBy(x => x.Mood);
-            
+
             return group.Select(x => new MoodCounterDTO(x.Key, x.Count())).ToList();
         }
 
         public async Task<IList<MaslowCounterDTO>> GetMaslowCounterAsync(Form form, DateTime startDate, DateTime endDate, short timezone)
         {
-            var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, true, timezone);
             var tags = await _tagsService.GetByFormAsync(form, false);
-            var group = reviews.SelectMany(x => x.Tags).GroupBy(x => GetTagType(tags, x));
+            var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, true, timezone);
+            var dictionary = new Dictionary<string, ICollection<double>>();
 
-            return group.Select(x => new MaslowCounterDTO(x.Key, x.Count())).ToList();
+            foreach (var reviewsByMood in reviews.GroupBy(x => x.Mood))
+            {
+                var mood = reviewsByMood.Key;
+                var tagsFromReviews = reviewsByMood.Where(x => x.Tags != null).SelectMany(x => x.Tags);
+
+                foreach (var tag in tagsFromReviews)
+                {
+                    dictionary.AddOrAppend(tag.ToString(), _moodsService.Evaluate(mood));
+                }
+            }
+
+            return dictionary.ToDictionary(x => tags.First(z => z.Id.ToString() == x.Key), x => x.Value)
+                .GroupBy(x => x.Key.Type)
+                .Select(x => new
+                {
+                    Key = x.Key,
+                    Items = x.SelectMany(z => z.Value)
+                })
+                .Select(x => new MaslowCounterDTO(x.Key, x.Items.Count(), x.Items.Sum()))
+                .ToList();
         }
 
         public async Task InsertAsync(Review review)
