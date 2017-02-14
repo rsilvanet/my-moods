@@ -12,7 +12,7 @@ namespace MyMoods.Services
         public IList<MoodDTO> Get()
         {
             return Enum.GetValues(typeof(MoodType))
-                .Cast<MoodType>()
+                .OfType<MoodType>()
                 .Select(x => new MoodDTO(x, Evaluate(x), GetImage(x), GetTagsHelpText(x)))
                 .ToList();
         }

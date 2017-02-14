@@ -185,8 +185,11 @@ namespace MyMoods.Services
                 }
             }
 
-            return dictionary.ToDictionary(x => tags.First(z => z.Id.ToString() == x.Key), x => x.Value)
-                .GroupBy(x => x.Key.Type)
+            var newDictionary = dictionary.ToDictionary(
+                x => tags.First(z => z.Id.ToString() == x.Key),
+                x => x.Value);
+
+            var counters = newDictionary.GroupBy(x => x.Key.Type)
                 .Select(x => new
                 {
                     Key = x.Key,
@@ -194,6 +197,16 @@ namespace MyMoods.Services
                 })
                 .Select(x => new MaslowCounterDTO(x.Key, x.Items.Count(), x.Items.Sum()))
                 .ToList();
+
+            foreach (var area in Enum.GetValues(typeof(TagType)).OfType<TagType>().Where(x => x != TagType.undefined))
+            {
+                if (!counters.Any(x => x.Area == area))
+                {
+                    counters.Add(new MaslowCounterDTO(area, 0, 0));
+                }
+            }
+
+            return counters.OrderBy(x => (int)x.Area).ToList();
         }
 
         public async Task InsertAsync(Review review)

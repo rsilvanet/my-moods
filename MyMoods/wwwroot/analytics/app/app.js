@@ -3,6 +3,7 @@
 
     var app = angular.module('app', [
         'ui.router',
+        'app.areas',
         'app.components',
         'app.charts',
         'app.forms',

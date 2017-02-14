@@ -4,10 +4,10 @@
 
     reviews.controller('ReviewsListController', reviewsListController);
 
-    reviewsListController.$inject = ['ReviewsService', 'ErrorHandlerService'];
+    reviewsListController.$inject = [];
 
     /* @ngInject */
-    function reviewsListController(ReviewsService, ErrorHandlerService) {
+    function reviewsListController() {
 
         var vm = this;
 

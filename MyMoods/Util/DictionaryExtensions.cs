@@ -10,8 +10,10 @@ namespace MyMoods.Util
             {
                 dictionary[key].Add(value);
             }
-
-            dictionary.Add(key, new List<TValue>() { value });
+            else
+            {
+                dictionary.Add(key, new List<TValue>() { value });
+            }
         }
     }
 }

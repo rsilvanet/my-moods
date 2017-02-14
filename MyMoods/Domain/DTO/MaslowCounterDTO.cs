@@ -6,7 +6,7 @@
         {
             Area = type;
             Count = count;
-            Points = new PointsDTO(this);
+            Points = new PointsDTO(this, totalPoints);
         }
 
         public TagType Area { get; private set; }
@@ -15,16 +15,17 @@
 
         public class PointsDTO
         {
-            MaslowCounterDTO _counter;
-
-            public PointsDTO(MaslowCounterDTO counter)
+            public PointsDTO(MaslowCounterDTO counter, double total)
             {
-                _counter = counter;
+                Counter = counter;
+                Total = total;
             }
+
+            protected MaslowCounterDTO Counter { get; set; }
 
             public double Total { get; set; }
 
-            public double Avg => _counter.Count > 0 ? (Total / _counter.Count) : 0;
+            public double Avg => Counter.Count > 0 ? (Total / Counter.Count) : 5;
         }
     }
 }
