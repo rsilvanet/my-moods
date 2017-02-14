@@ -20,8 +20,6 @@
                 startDate: moment().format('DD/MM/YYYY'),
                 endDate: moment().format('DD/MM/YYYY')
             };
-
-
         }
 
         vm.go = function () {
@@ -58,9 +56,13 @@
                             ]
                         },
                         options: {
-                            responsive: false,
+                            responsive: true,
                             scale: {
-                                display: false
+                                display: true,
+                                ticks: {
+                                    beginAtZero: true,
+                                    max: 10
+                                }
                             },
                             legend: {
                                 display: false,
@@ -70,7 +72,6 @@
                             }
                         }
                     });
-
                 });
         };
     }
