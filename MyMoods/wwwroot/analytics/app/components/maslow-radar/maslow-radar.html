@@ -1,0 +1,11 @@
+<button type="button" class="ls-btn-primary" ng-click="search()">Carregar</button>
+<br>
+<br>
+<div class="ls-form ls-form-horizontal">
+    <div style="text-align: center" ng-show="!isLoaded"> 
+        Carregando...
+    </div>
+    <div class="maslow-radar-holder" ng-show="isLoaded">
+        <canvas id="myChart" class="maslow-radar-canvas"></canvas>
+    </div>
+</div>

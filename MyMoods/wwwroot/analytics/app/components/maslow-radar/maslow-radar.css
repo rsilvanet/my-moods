@@ -1,0 +1,8 @@
+.maslow-radar-holder > canvas {
+    margin: auto;
+}
+
+.maslow-radar-canvas {
+    max-height: 400px; 
+    max-width: 400px; 
+}

@@ -29,6 +29,7 @@
 
                         ReviewsService.getMoodsCounter(scope.formId, start, end)
                             .then(function (response) {
+                                
                                 scope.moods = [];
                                 scope.counters = [];
                                 scope.colors = [];
@@ -74,9 +75,9 @@
                         },
                         options: {
                             responsive: false,
-                            legend: {
-                                position: 'bottom'
-                            }
+                                    legend: {
+                                        position: 'bottom'
+                                    }
                         }
                     });
                 }

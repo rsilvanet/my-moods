@@ -3,7 +3,6 @@
 
     var app = angular.module('app', [
         'ui.router',
-        'app.areas',
         'app.components',
         'app.charts',
         'app.forms',
@@ -11,6 +10,7 @@
         'app.login',
         'app.logout',
         'app.password',
+        'app.radar',
         'app.resume',
         'app.reviews',
         'app.tags'
