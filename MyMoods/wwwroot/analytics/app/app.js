@@ -10,6 +10,7 @@
         'app.login',
         'app.logout',
         'app.password',
+        'app.progress',
         'app.radar',
         'app.resume',
         'app.reviews',
