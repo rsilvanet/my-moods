@@ -27,9 +27,8 @@ $('#form-register').submit(function (e) {
             window.location.href = 'analytics/#/login';
         },
         error: function (response) {
-            //TODO: Treat errors!
             endSubmitLoading();
-            alert('Desculpe, não foi possível realizar o seu cadastro.');
+            toastr.error('Desculpe, não foi possível realizar o seu cadastro.');
         }
     });
 });

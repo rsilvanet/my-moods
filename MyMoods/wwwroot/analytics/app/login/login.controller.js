@@ -19,7 +19,7 @@
                     LoginService.loadUserOnStorage(response.data);
                     $state.go('home');
                 }, function (response) {
-                    alert('Login inválido!');
+                    toastr.error('Login inválido!');
                 });
         };
 
@@ -32,7 +32,7 @@
                 .then(function (response) {
                     locastyle.modal.close("#forgot-pass-modal");
                 }, function (response) {
-                    alert('E-mail não encontrado!');
+                    toastr.error('E-mail não encontrado!');
                 });
         }
     }
