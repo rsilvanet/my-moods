@@ -26,7 +26,7 @@ button {
 
     .header .logo {
         width: 100%;
-        max-width: 300px;
+        max-width: 200px;
         text-align: center;
         margin-bottom: 30px;
     }
@@ -65,7 +65,7 @@ button {
         margin: auto;
     }
 
-    .for-who h4 {
+    .for-who h3 {
         text-align: center;
         color: black;
         margin-bottom: 30px;
@@ -93,7 +93,7 @@ button {
         margin-top: 10px;
     }
 
-    .advantages h4 {
+    .advantages h3 {
         text-align: center;
     }
 
@@ -117,7 +117,7 @@ button {
         margin-bottom: 20px;
     }
 
-    .devices h4 {
+    .devices h3 {
         text-align: center;
         color: black;
         margin-bottom: 30px;
