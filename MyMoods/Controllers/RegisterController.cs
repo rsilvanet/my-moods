@@ -47,7 +47,7 @@ namespace MyMoods.Controllers
                 {
                     Type = FormType.general,
                     Title = "Visão geral da empresa",
-                    MainQuestion = "Qual é o seu mood?",
+                    MainQuestion = "Como você está se sentindo sobre a empresa hoje?",
                     FreeText = new FreeTextDTO()
                     {
                         Allow = true,
