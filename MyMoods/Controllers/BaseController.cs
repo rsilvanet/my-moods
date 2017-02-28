@@ -12,6 +12,11 @@ namespace MyMoods.Controllers
             return StatusCode(201, id);
         }
 
+        public ActionResult Created(IEnumerable<string> ids)
+        {
+            return StatusCode(201, ids);
+        }
+
         public ActionResult BadRequest(IDictionary<string, string> errors)
         {
             if (errors != null && errors.Any())

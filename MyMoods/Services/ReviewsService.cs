@@ -219,6 +219,19 @@ namespace MyMoods.Services
             await _storage.Reviews.InsertOneAsync(review);
         }
 
+        public async Task InsertManyAsync(IList<Review> reviews)
+        {
+            foreach (var review in reviews)
+            {
+                if (!review.IsValidated())
+                {
+                    throw new InvalidOperationException("Objeto inválido para gravação.");
+                }
+            }
+
+            await _storage.Reviews.InsertManyAsync(reviews);
+        }
+
         public async Task EnableAsync(Review review)
         {
             var builder = Builders<Review>.Update.Set(x => x.Active, true);

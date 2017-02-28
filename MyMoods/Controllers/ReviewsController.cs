@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyMoods.Contracts;
+using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyMoods.Controllers
@@ -19,7 +22,7 @@ namespace MyMoods.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> PostReview(string formId, [FromBody]ReviewOnPostDTO dto)
+        public async Task<IActionResult> PostOne(string formId, [FromBody]ReviewOnPostDTO dto)
         {
             try
             {
@@ -51,5 +54,47 @@ namespace MyMoods.Controllers
                 return InternalServerError(ex);
             }
         }
+
+        [HttpPost("many")]
+        public async Task<IActionResult> PostMany(string formId, [FromBody]IList<ReviewOnPostDTO> dtoList)
+        {
+            try
+            {
+                if (dtoList == null)
+                {
+                    return BadRequest("O conteúdo da requisição está inválido.");
+                }
+
+                var form = await _formsService.GetByIdAsync(formId);
+
+                if (form == null)
+                {
+                    return NotFound();
+                }
+
+                var reviews = new List<Review>();
+
+                foreach (var dto in dtoList)
+                {
+                    var validation = await _reviewsService.ValidateToInsertAsync(form, dto);
+
+                    if (!validation.Success)
+                    {
+                        return BadRequest(validation.Errors);
+                    }
+
+                    reviews.Add(validation.ParsedObject);
+                }
+
+                await _reviewsService.InsertManyAsync(reviews);
+
+                return Created(reviews.Select(x => x.Id.ToString()));
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
     }
 }
