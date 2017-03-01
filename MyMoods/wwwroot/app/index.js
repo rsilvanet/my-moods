@@ -137,17 +137,31 @@ function injectTags() {
 function injectQuestions() {
 
     var html = '';
+    var cssClass = "panel questions-panel";
+    var hasTagSelectedForActualMood = selected && selected.tags && selected.tags.length > 0;
+
+    if (!hasTagSelectedForActualMood) {
+        cssClass += " disabled";
+    }
 
     model.questions.forEach(function (question) {
 
-        html += '<div class="panel questions-panel">';
+        html += '<div class="' + cssClass + '">';
         html += '<div class="panel-header questions-panel-header">';
         html += '<span>' + question.title + '</span>';
         html += '</div>';
 
+        var answer = null;
+
+        if (selected) {
+            answer = _.find(selected.answers, function (item) {
+                return item.question == question.id;
+            });
+        }
+
         if (question.type == 'text') {
             html += '<div class="padded-holder">';
-            html += '<textarea id="question-' + question.id + '"s class="free-text"></textarea>';
+            html += '<textarea id="question-' + question.id + '" class="free-text" onkeyup="updateAnswer(\'' + question.id + '\')" onchange="updateAnswer(\'' + question.id + '\')">' + (answer != null ? answer.value : '') + '</textarea>';
             html += '</div>';
         }
 
@@ -181,6 +195,16 @@ function enableSubmitPanel() {
     $('.submit-panel').removeClass('disabled');
 }
 
+function cleanAnswers() {
+
+    if (selected && selected.answers) {
+        selected.answers.forEach(function (item) {
+            item.value = '';
+            $('#question-' + item.question).val('');
+        });
+    }
+}
+
 function selectMood(mood) {
 
     if (selected && selected.mood) {
@@ -211,6 +235,7 @@ function selectMood(mood) {
     }
     else {
         injectTags();
+        injectQuestions();
         enableTagsPanel();
     }
 }
@@ -240,11 +265,59 @@ function selectTag(id) {
 
     if (_.some(selected.tags)) {
         enableQuestionsPanel();
-        enableSubmitPanel();
     }
     else {
         disableQuestionsPanel();
+        cleanAnswers();
+    }
+
+    var isAnyTagSelected = false;
+
+    if (postArray && postArray.length) {
+
+        postArray.forEach(function (item) {
+            if (!isAnyTagSelected) {
+                isAnyTagSelected = item.tags && item.tags.length > 0;
+            }
+        });
+    }
+
+    if (isAnyTagSelected) {
+        enableSubmitPanel();
+    }
+    else {
         disableSubmitPanel();
+    }
+}
+
+function updateAnswer(questionId) {
+
+    var question = _.find(model.questions, function (item) {
+        return item.id == questionId;
+    });
+
+    if (selected && question) {
+
+        if (!selected.answers) {
+            selected.answers = [];
+        }
+
+        var answer = _.find(selected.answers, function (item) {
+            return item.question == questionId;
+        });
+
+        if (answer == null) {
+
+            answer = {
+                question: questionId
+            };
+
+            selected.answers.push(answer);
+        }
+
+        if (question.type == 'text') {
+            answer.value = $('#question-' + questionId).val();
+        }
     }
 }
 
