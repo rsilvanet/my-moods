@@ -3,19 +3,17 @@
 });
 
 var model = null;
-var postModel = null;
 var formId = null;
+var selected = null;
+var postArray = [];
 
 function activate() {
-
-    postModel = {
-        mood: null,
-        tags: [],
-        answers: []
-    };
-
-    getIdFromUrl();
+    readIdFromUrl();
     getForm();
+}
+
+function readIdFromUrl() {
+    formId = location.href.split('#')[1].replace('/', '');
 }
 
 function getForm() {
@@ -30,28 +28,21 @@ function getForm() {
     });
 }
 
-function getIdFromUrl() {
-
-    var url = location.href.split('#')[1];
-
-    formId = url.replace('/', '');
-}
-
 function loadForm(data) {
 
     model = data;
 
-    injectCompany(model);
-    injectMoods(model);
+    injectCompany();
+    injectMoods();
 
     if (model.form.type == 'simple') {
         hideTagsPanel();
     }
     else {
-        injectTags(model);
+        injectTags();
     }
 
-    injectQuestions(model);
+    injectQuestions();
     disableTagsPanel();
     disableQuestionsPanel();
     disableSubmitPanel();
@@ -73,7 +64,7 @@ function hideTagsPanel() {
     $('#tags-master-holder').css('display', 'none');
 }
 
-function injectCompany(model) {
+function injectCompany() {
 
     var html = '';
 
@@ -89,7 +80,7 @@ function injectCompany(model) {
     $('#company-injector').html(html);
 }
 
-function injectMoods(model) {
+function injectMoods() {
 
     var html = '';
 
@@ -102,18 +93,48 @@ function injectMoods(model) {
     $('#moods-injector').html(html);
 }
 
-function injectTags(model) {
+function injectTags() {
 
     var html = '';
 
     model.tags.forEach(function (tag) {
-        html += '<div id="tag-' + tag.id + '" class="tag" onclick="selectTag(\'' + tag.id + '\')">' + tag.title + '</div>';
+
+        var isSelectedForActualMood = false;
+        var isSelectedForAnotherMood = false;
+
+        if (postArray && postArray.length) {
+
+            isSelectedForActualMood = _.some(selected.tags, function (item) {
+                return item == tag.id;
+            });
+
+            postArray.forEach(function (item) {
+                if (!isSelectedForAnotherMood) {
+                    if (item.mood != selected.mood) {
+                        isSelectedForAnotherMood = _.some(item.tags, function (item2) {
+                            return item2 == tag.id;
+                        });
+                    }
+                }
+            });
+        }
+
+        if (!isSelectedForAnotherMood) {
+
+            var cssClass = 'tag';
+
+            if (isSelectedForActualMood) {
+                cssClass += ' tag-selected';
+            }
+
+            html += '<div id="tag-' + tag.id + '" class="' + cssClass + '" onclick="selectTag(\'' + tag.id + '\')">' + tag.title + '</div>';
+        }
     });
 
     $('#tags-injector').html(html);
 }
 
-function injectQuestions(model) {
+function injectQuestions() {
 
     var html = '';
 
@@ -162,13 +183,26 @@ function enableSubmitPanel() {
 
 function selectMood(mood) {
 
-    if (postModel.mood) {
-        $('#mood-' + postModel.mood).removeClass('mood-image-selected');
+    if (selected && selected.mood) {
+        $('#mood-' + selected.mood).removeClass('mood-image-selected');
     }
 
-    postModel.mood = mood;
+    selected = _.find(postArray, function (item) {
+        return item.mood == mood;
+    });
 
-    $('#mood-' + postModel.mood).addClass('mood-image-selected');
+    if (selected == null) {
+
+        selected = {
+            mood: mood,
+            tags: [],
+            answers: []
+        };
+
+        postArray.push(selected);
+    }
+
+    $('#mood-' + mood).addClass('mood-image-selected');
     $('#tag-title').html(getTagsHelpText(mood));
 
     if (model.form.type == 'simple') {
@@ -176,6 +210,7 @@ function selectMood(mood) {
         enableSubmitPanel();
     }
     else {
+        injectTags();
         enableTagsPanel();
     }
 }
@@ -186,23 +221,28 @@ function selectTag(id) {
         return item.id == id;
     });
 
-    var isSelected = _.some(postModel.tags, function (item) {
+    var isSelected = _.some(selected.tags, function (item) {
         return item == id;
     });
 
     if (isSelected) {
-        postModel.tags = _.reject(postModel.tags, function (item) { return item == id; });
+
+        selected.tags = _.reject(selected.tags, function (item) {
+            return item == id;
+        });
+
         $('#tag-' + id).removeClass('tag-selected');
     }
     else {
-        postModel.tags.push(id);
+        selected.tags.push(id);
         $('#tag-' + id).addClass('tag-selected');
     }
 
-    enableQuestionsPanel();
-    enableSubmitPanel();
-
-    if (!_.some(postModel.tags)) {
+    if (_.some(selected.tags)) {
+        enableQuestionsPanel();
+        enableSubmitPanel();
+    }
+    else {
         disableQuestionsPanel();
         disableSubmitPanel();
     }
