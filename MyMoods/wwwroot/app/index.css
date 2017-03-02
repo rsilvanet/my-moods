@@ -27,6 +27,18 @@ h3 {
     padding: 20px;
 }
 
+.reload-button {
+    width: 200px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background-color: darkblue;
+    color: white;
+    font: 16px bold;
+    font-family: Arial;
+    cursor: pointer;
+}
+
 .initial-panel-img {
     width: 100%;
     max-width: 200px;
