@@ -2,6 +2,12 @@
     <b class="ls-label-text">Pergunta Inicial</b>
     <input type="text" placeholder="Pergunta Inicial" class="ls-field" ng-model="vm.model.mainQuestion" required>
 </label>
+<fieldset ng-show="vm.model.type != 'simple'">
+    <label class="ls-label col-sm-12 col-md-6">
+        <input type="checkbox" ng-model="vm.model.allowMultipleReviewsAtOnce">
+        <b class="ls-label-text" style="display: initial;">Permitir a seleção de múltiplos moods</b>
+    </label>
+</fieldset>
 <fieldset ng-show="vm.model.type == 'generalWithCustomTags' || vm.model.type =='generalOnlyCustomTags'">
     <label class="ls-label col-sm-12 col-md-6">
         <b class="ls-label-text">Tags Adicionais</b>

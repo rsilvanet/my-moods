@@ -22,10 +22,12 @@ namespace MyMoods.Services
             _moodsService = moodsService;
             _tagsService = tagsService;
         }
-        
+
         private async Task DoCommonSaveValidation(FormOnPutDTO dto, ValidationResultDTO<Form> result)
         {
             var form = result.ParsedObject;
+
+            form.AllowMultipleReviewsAtOnce = dto.AllowMultipleReviewsAtOnce;
 
             if (string.IsNullOrWhiteSpace(dto.MainQuestion))
             {
@@ -178,7 +180,8 @@ namespace MyMoods.Services
 
             var builder = Builders<Form>.Update
                 .Set(x => x.MainQuestion, form.MainQuestion)
-                .Set(x => x.CustomTags, form.CustomTags);
+                .Set(x => x.CustomTags, form.CustomTags)
+                .Set(x => x.AllowMultipleReviewsAtOnce, form.AllowMultipleReviewsAtOnce);
 
             await _storage.Forms.UpdateOneAsync(x => x.Id.Equals(form.Id), builder);
 

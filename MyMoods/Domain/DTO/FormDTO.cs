@@ -9,6 +9,7 @@
             MainQuestion = form.MainQuestion;
             Type = form.Type;
             Active = form.Active;
+            AllowMultipleReviewsAtOnce = form.AllowMultipleReviewsAtOnce;
         }
 
         public string Id { get; set; }
@@ -16,5 +17,6 @@
         public string MainQuestion { get; set; }
         public FormType Type { get; set; }
         public bool Active { get; set; }
+        public bool AllowMultipleReviewsAtOnce { get; set; }
     }
 }

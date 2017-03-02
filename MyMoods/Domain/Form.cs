@@ -15,17 +15,17 @@ namespace MyMoods.Domain
         public Form()
         {
             Active = true;
+            AllowMultipleReviewsAtOnce = false;
             CustomTags = new List<ObjectId>();
         }
 
-        public Form(ObjectId company)
+        public Form(ObjectId company) : this()
         {
-            Active = true;
             Company = company;
-            CustomTags = new List<ObjectId>();
         }
 
         public bool Active { get; set; }
+        public bool AllowMultipleReviewsAtOnce { get; set; }
         public string Title { get; set; }
         public string MainQuestion { get; set; }
         public FormType Type { get; set; }
