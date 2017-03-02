@@ -32,6 +32,11 @@ namespace MyMoods.Controllers
             return BadRequest();
         }
 
+        public ActionResult Forbid(string message)
+        {
+            return StatusCode(403, message);
+        }
+
         public ActionResult InternalServerError(Exception ex)
         {
             return StatusCode(500, "Não foi possível processar a requisição.");

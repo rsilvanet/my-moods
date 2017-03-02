@@ -20,7 +20,14 @@ namespace MyMoods.Controllers
         {
             try
             {
-                return Ok(await _formsService.GetMetadataByIdAsync(id));
+                var metadata = await _formsService.GetMetadataByIdAsync(id);
+
+                if (!metadata.Form.Active)
+                {
+                    return Forbid("O formulário requisitado está inativo.");
+                }
+
+                return Ok(metadata);
             }
             catch (Exception ex)
             {

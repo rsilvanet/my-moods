@@ -24,7 +24,12 @@ function getForm() {
         loadForm(response);
         showForm();
     }, function (response) {
-        showError();
+        if (response.status >= 400 && response.status < 500) {
+            showError(response.responseText, false);
+        }
+        else {
+            showError('Tente novamente em breve.', true);
+        }
     });
 }
 
@@ -48,10 +53,12 @@ function loadForm(data) {
     disableSubmitPanel();
 }
 
-function showError() {
+function showError(message, canReload) {
     $('.loading-panel').css('display', 'none');
     $('.error-panel').css('display', 'block');
     $('.main-container').css('display', 'none');
+    $('.reload-button').css('display', canReload ? 'inline-block' : 'none');
+    $('#error-message').text(message);
 }
 
 function showForm() {
