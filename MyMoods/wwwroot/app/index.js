@@ -360,14 +360,30 @@ function readAnswers() {
 
 function submit() {
 
-    postModel.answers = readAnswers();
-
     startSubmitLoading();
+
+    var postUrl = null;
+    var postContent = null;
+
+    if (model.form.type == 'simple') {
+        postUrl = '/api/forms/' + formId + '/reviews';
+        postContent = selected;
+    }
+    else {
+        postUrl = '/api/forms/' + formId + '/reviews/many';
+        postContent = [];
+
+        postArray.forEach(function (item) {
+            if (item.tags && item.tags.length > 0) {
+                postContent.push(item);
+            }
+        });
+    }
 
     var promise = $.ajax({
         type: 'POST',
-        url: '/api/forms/' + formId + '/reviews',
-        data: JSON.stringify(postModel),
+        url: postUrl,
+        data: JSON.stringify(postContent),
         dataType: 'text',
         contentType: "application/json"
     });
@@ -405,5 +421,5 @@ function endSubmitLoading() {
 }
 
 function updateResultCache() {
-    localStorage.setItem('my_moods_app_result', postModel.mood);
+    localStorage.setItem('my_moods_app_result', selected.mood);
 }
