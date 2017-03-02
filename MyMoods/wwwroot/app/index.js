@@ -241,8 +241,12 @@ function selectMood(mood) {
         enableSubmitPanel();
     }
     else {
-        injectTags();
-        injectQuestions();
+
+        if (model.form.allowMultipleReviewsAtOnce) {
+            injectTags();
+            injectQuestions();
+        }
+
         enableTagsPanel();
     }
 }
@@ -344,27 +348,6 @@ function getTagsHelpText(mood) {
     return text;
 }
 
-function readAnswers() {
-
-    var answers = [];
-
-    model.questions.forEach(function (question) {
-
-        var answer = {
-            value: null,
-            question: question.id
-        };
-
-        if (question.type == 'text') {
-            answer.value = $('#question-' + question.id).val();
-        }
-
-        answers.push(answer);
-    });
-
-    return answers;
-}
-
 function submit() {
 
     startSubmitLoading();
@@ -372,7 +355,7 @@ function submit() {
     var postUrl = null;
     var postContent = null;
 
-    if (model.form.type == 'simple') {
+    if (model.form.type == 'simple' || !model.form.allowMultipleReviewsAtOnce) {
         postUrl = '/api/forms/' + formId + '/reviews';
         postContent = selected;
     }
