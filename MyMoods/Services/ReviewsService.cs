@@ -168,6 +168,39 @@ namespace MyMoods.Services
             return group.Select(x => new MoodCounterDTO(x.Key, x.Count())).ToList();
         }
 
+        public async Task<IList<TagCounterWithMoodsDTO>> GetTagsCounterAsync(Form form, DateTime startDate, DateTime endDate, short timezone)
+        {
+            var counts = new List<TagCounterWithMoodsDTO>();
+            var tags = await _tagsService.GetByFormAsync(form, false);
+            var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, true, timezone);
+            var dictionary = new Dictionary<string, ICollection<MoodCounterDTO>>();
+
+            foreach (var reviewsByMood in reviews.GroupBy(x => x.Mood))
+            {
+                var mood = reviewsByMood.Key;
+
+                var tagsFromReviews = reviewsByMood
+                    .Where(x => x.Tags != null)
+                    .SelectMany(x => x.Tags)
+                    .GroupBy(x => x.ToString());
+
+                foreach (var tag in tagsFromReviews)
+                {
+                    dictionary.AddOrAppend(tag.Key, new MoodCounterDTO(mood, tag.Count()));
+                }
+            }
+
+            foreach (var item in dictionary)
+            {
+                var tag = tags.First(z => z.Id.ToString() == item.Key);
+                var count = item.Value.Select(x => x.Count).Sum();
+
+                counts.Add(new TagCounterWithMoodsDTO(tag, count, item.Value.ToList()));
+            }
+
+            return counts;
+        }
+
         public async Task<IList<MaslowCounterDTO>> GetMaslowCounterAsync(Form form, DateTime startDate, DateTime endDate, short timezone)
         {
             var tags = await _tagsService.GetByFormAsync(form, false);
@@ -177,7 +210,11 @@ namespace MyMoods.Services
             foreach (var reviewsByMood in reviews.GroupBy(x => x.Mood))
             {
                 var mood = reviewsByMood.Key;
-                var tagsFromReviews = reviewsByMood.Where(x => x.Tags != null).SelectMany(x => x.Tags);
+
+                var tagsFromReviews = reviewsByMood
+                    .Where(x => x.Tags != null)
+                    .SelectMany(x => x.Tags)
+                    .ToList();
 
                 foreach (var tag in tagsFromReviews)
                 {
