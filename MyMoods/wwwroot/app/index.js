@@ -218,9 +218,11 @@ function selectMood(mood) {
         $('#mood-' + selected.mood).removeClass('mood-image-selected');
     }
 
-    selected = _.find(postArray, function (item) {
-        return item.mood == mood;
-    });
+    if (model.form.allowMultipleReviewsAtOnce) {
+        selected = _.find(postArray, function (item) {
+            return item.mood == mood;
+        });
+    }
 
     if (selected == null) {
 
@@ -231,6 +233,10 @@ function selectMood(mood) {
         };
 
         postArray.push(selected);
+    }
+
+    if (!model.form.allowMultipleReviewsAtOnce) {
+        selected.mood = mood;
     }
 
     $('#mood-' + mood).addClass('mood-image-selected');
