@@ -1,0 +1,32 @@
+<h2>Resumo de Tags</h2>
+<br>
+<form-date-selector form-id="vm.filters.formId" start-date="vm.filters.startDate" end-date="vm.filters.endDate"></form-date-selector>
+<button type="button" class="ls-btn-primary" ng-click="vm.search()">Carregar</button>
+<br>
+<div style="text-align: center" ng-show="vm.isLoading">
+    Carregando...
+</div>
+<div class="table-responsive" ng-hide="vm.isLoading">
+    <table class="table ls-table">
+        <thead>
+            <tr>
+                <th>Tag</th>
+                <th>Moods</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="tag in (vm.tags | filter:vm.filterList)">
+                <td>
+                    <a class="ls-tag" style="cursor: pointer;">{{tag.title}}</a>
+                </td>
+                <td>
+                    <span ng-repeat="item in tag.moods">
+                        <a class="ls-tag" style="cursor: pointer;">
+                            <img ng-src="/assets/emojis/{{item.mood}}.png" style="height: 30px;" /> x{{item.count}}
+                        </a>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

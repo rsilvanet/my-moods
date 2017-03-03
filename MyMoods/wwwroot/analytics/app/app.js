@@ -13,6 +13,7 @@
         'app.progress',
         'app.radar',
         'app.resume',
+        'app.resumeByTags',
         'app.reviews',
         'app.tags'
     ]);

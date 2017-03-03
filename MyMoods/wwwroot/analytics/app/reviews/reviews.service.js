@@ -12,6 +12,7 @@
             getResume: getResume,
             getDaily: getDaily,
             getMoodsCounter: getMoodsCounter,
+            getTagsCounter: getTagsCounter,
             getMaslowCounter: getMaslowCounter,
             enable: enable,
             disable: disable
@@ -31,6 +32,10 @@
 
         function getMoodsCounter(formId, startDate, endDate) {
             return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews/counters/moods?startdate=' + startDate + '&endDate=' + endDate);
+        }
+
+        function getTagsCounter(formId, startDate, endDate) {
+            return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews/counters/tags?startdate=' + startDate + '&endDate=' + endDate);
         }
 
         function getMaslowCounter(formId, startDate, endDate) {

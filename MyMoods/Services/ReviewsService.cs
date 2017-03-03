@@ -195,7 +195,7 @@ namespace MyMoods.Services
                 var tag = tags.First(z => z.Id.ToString() == item.Key);
                 var count = item.Value.Select(x => x.Count).Sum();
 
-                counts.Add(new TagCounterWithMoodsDTO(tag, count, item.Value.ToList()));
+                counts.Add(new TagCounterWithMoodsDTO(tag, count, item.Value.OrderBy(x => x.Mood).ToList()));
             }
 
             return counts;
