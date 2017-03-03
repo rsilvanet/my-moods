@@ -180,6 +180,33 @@ namespace MyMoods.Controllers.Analytics
             }
         }
 
+        [HttpGet("counters/tags")]
+        public async Task<IActionResult> GetTagsCounter(string formId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var form = await _formsService.GetByIdAsync(formId);
+
+                if (form == null)
+                {
+                    return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
+                }
+
+                var counters = await _reviewsService.GetTagsCounterAsync(form, startDate, endDate, ClientTimezone);
+
+                return Ok(counters);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
+
         [HttpGet("counters/maslow")]
         public async Task<IActionResult> GetMaslowCounter(string formId, DateTime startDate, DateTime endDate)
         {
