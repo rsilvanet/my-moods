@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Hangfire;
+using Hangfire.Mongo;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +46,7 @@ namespace MyMoods
 
             services.AddMvc();
             services.AddMvcCore().AddJsonFormatters(x => ConfigureJson(x));
+            services.AddHangfire(x => x.UseMongoStorage(Configuration.GetConnectionString("HangfireConnection"), Configuration.GetConnectionString("HangfireConnection").Split('/').Last()));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -56,6 +59,9 @@ namespace MyMoods
             app.UseMvc();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+
+            app.UseHangfireServer();
+            app.UseHangfireDashboard();
         }
 
         public void ConfigureJson(JsonSerializerSettings settings)
