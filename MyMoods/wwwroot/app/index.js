@@ -77,12 +77,13 @@ function injectCompany() {
 
     if (model.form.company.logo) {
         html += '<img class="company-logo" src="' + model.form.company.logo + '"></img>';
+        html += "<br>"
     }
     else {
         html += '<h3>' + model.form.company.name + '</h3>';
     }
-
-    html += model.form.title;
+    
+    html += '<b>' + model.form.title + '</b>';
 
     $('#company-injector').html(html);
 }
