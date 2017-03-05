@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using Hangfire.Dashboard;
 using Hangfire.Mongo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,6 +15,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire.Annotations;
+using System;
 
 namespace MyMoods
 {
@@ -44,6 +47,8 @@ namespace MyMoods
             services.AddScoped<ITagsService, TagsService>();
             services.AddScoped<IUsersService, UsersService>();
 
+            services.AddSingleton(Configuration);
+
             services.AddMvc();
             services.AddMvcCore().AddJsonFormatters(x => ConfigureJson(x));
             services.AddHangfire(x => x.UseMongoStorage(Configuration.GetConnectionString("HangfireConnection"), Configuration.GetConnectionString("HangfireConnection").Split('/').Last()));
@@ -60,8 +65,14 @@ namespace MyMoods
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
+            var dashboardPath = Configuration.GetSection("Hangfire").GetValue<string>("DashboardPath");
+            var dashboardOptions = new DashboardOptions()
+            {
+                Authorization = new[] { new HangfireAuthorizationFilter() }
+            };
+
             app.UseHangfireServer();
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard(dashboardPath, dashboardOptions);
         }
 
         public void ConfigureJson(JsonSerializerSettings settings)
@@ -114,6 +125,14 @@ namespace MyMoods
                 }
 
                 await _next.Invoke(context);
+            }
+        }
+
+        public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
+        {
+            public bool Authorize(DashboardContext context)
+            {
+                return true;
             }
         }
     }
