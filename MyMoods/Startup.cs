@@ -17,6 +17,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Hangfire.Annotations;
 using System;
+using Serilog;
+using System.IO;
 
 namespace MyMoods
 {
@@ -56,8 +58,12 @@ namespace MyMoods
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            var logger = new LoggerConfiguration()
+               .MinimumLevel.Information()
+               .WriteTo.RollingFile(Path.Combine(env.ContentRootPath, @"logs\{Date}.log"))
+               .CreateLogger();
+
+            loggerFactory.AddSerilog(logger);
 
             app.UseMiddleware<AnalyticsAuthorizationMiddleware>();
 

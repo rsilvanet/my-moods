@@ -1,6 +1,7 @@
 .vs/**
 MyMoods/bin/**
 MyMoods/obj/**
+MyMoods/logs/**
 MyMoods/project.lock.json
 MyMoods/MyMoods.xproj.user
 MyMoods/wwwroot/node_modules/**
