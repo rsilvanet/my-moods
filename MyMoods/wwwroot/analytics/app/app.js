@@ -12,7 +12,7 @@
         'app.password',
         'app.progress',
         'app.radar',
-        'app.resume',
+        'app.resumeByDay',
         'app.resumeByTags',
         'app.reviews',
         'app.tags'
