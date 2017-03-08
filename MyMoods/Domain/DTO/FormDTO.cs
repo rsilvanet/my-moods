@@ -10,6 +10,7 @@
             Type = form.Type;
             Active = form.Active;
             AllowMultipleReviewsAtOnce = form.AllowMultipleReviewsAtOnce;
+            UseTags = form.RequireTagsForReviews;
         }
 
         public string Id { get; set; }
@@ -18,5 +19,6 @@
         public FormType Type { get; set; }
         public bool Active { get; set; }
         public bool AllowMultipleReviewsAtOnce { get; set; }
+        public bool UseTags { get; set; }
     }
 }

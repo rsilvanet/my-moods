@@ -10,10 +10,12 @@
             scope: {
                 formId: '=',
                 startDate: '=',
-                endDate: '='
+                endDate: '=',
+                showWithTags: '=?',
+                showWithoutTags: '=?'
             },
             link: function (scope) {
-
+                
             }
         };
     });
