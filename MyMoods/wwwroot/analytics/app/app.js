@@ -3,8 +3,9 @@
 
     var app = angular.module('app', [
         'ui.router',
-        'app.components',
+        'app.answers',
         'app.charts',
+        'app.components',
         'app.forms',
         'app.home',
         'app.login',

@@ -233,5 +233,32 @@ namespace MyMoods.Controllers.Analytics
                 return InternalServerError(ex);
             }
         }
+
+        [HttpGet("answers")]
+        public async Task<IActionResult> GetTextAnswers(string formId, DateTime startDate, DateTime endDate)
+        {
+            try
+            {
+                var form = await _formsService.GetByIdAsync(formId);
+
+                if (form == null)
+                {
+                    return NotFound();
+                }
+
+                if (form.Company.ToString() != LoggedCompanyId)
+                {
+                    return Forbid();
+                }
+
+                var answers = await _reviewsService.GetAnswersByMoodAsync(form, startDate, endDate, ClientTimezone);
+
+                return Ok(answers);
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError(ex);
+            }
+        }
     }
 }

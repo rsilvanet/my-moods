@@ -53,6 +53,8 @@ namespace MyMoods.Services
 
         private ReviewsDetailedByMoodDTO DetailDailyMood(DateTime date, MoodType mood, IList<Review> reviews, IList<Question> questions, IList<Tagg> tags)
         {
+            reviews = reviews.Where(x => x.Mood == mood).ToList();
+
             var resume = ResumeReviews(date, reviews);
             var tagsCounters = new List<TagCounterDTO>();
             var tagsOnReviews = reviews.SelectMany(z => z.Tags).GroupBy(x => x);
@@ -72,16 +74,22 @@ namespace MyMoods.Services
                 Mood = mood,
                 Count = reviews.Count,
                 Tags = tagsCounters.OrderByDescending(x => x.Count).ToList(),
-                Questions = questions.Select(x => new QuestionWithAnswersDTO(x, ReadAnswers(x, reviews))).ToList()
+                Questions = questions.Select(x => new QuestionWithAnswersDTO(x, ReadAnswers(x, reviews, mood))).ToList()
             };
 
             return detailed;
         }
 
-        private IList<string> ReadAnswers(Question question, IList<Review> reviews)
+        private IList<string> ReadAnswers(Question question, IList<Review> reviews, MoodType? mood = null)
         {
+            if (mood.HasValue)
+            {
+                reviews = reviews.Where(x => x.Mood == mood).ToList();
+            }
+
             return reviews.SelectMany(x => x.Answers)
                 .Where(x => x.Question.Equals(question.Id))
+                .Where(x => !string.IsNullOrWhiteSpace(x.Value))
                 .Select(x => x.Value)
                 .ToList();
         }
@@ -244,6 +252,30 @@ namespace MyMoods.Services
             }
 
             return counters.OrderBy(x => (int)x.Area).ToList();
+        }
+
+        public async Task<IList<AnswerByMoodDTO>> GetAnswersByMoodAsync(Form form, DateTime startDate, DateTime endDate, short timezone)
+        {
+            var reviews = await GetWithBasicFiltersAsync(form, startDate, endDate, true, timezone);
+            var questions = await _formsService.GetQuestionsAsync(form);
+
+            var items = new List<AnswerByMoodDTO>();
+
+            foreach (var group in reviews.GroupBy(x => x.Mood))
+            {
+                var mood = group.Key;
+                var reviewsByMood = group.ToList();
+                var questionsWithAnswers = new List<QuestionWithAnswersDTO>();
+
+                foreach (var question in questions)
+                {
+                    questionsWithAnswers.Add(new QuestionWithAnswersDTO(question, ReadAnswers(question, reviewsByMood, mood)));
+                }
+
+                items.Add(new AnswerByMoodDTO(mood, questionsWithAnswers));
+            }
+
+            return items.OrderByDescending(x => x.Mood).ToList();
         }
 
         public async Task InsertAsync(Review review)

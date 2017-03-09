@@ -1,0 +1,29 @@
+<h2>Relatório de Respostas</h2>
+<br>
+<p>O relatório mostra as respostas e sugestões escritas pelos colaboradores.</p>
+<form-date-selector form-id="vm.filters.formId" start-date="vm.filters.startDate" end-date="vm.filters.endDate"></form-date-selector>
+<button type="button" class="ls-btn-primary" ng-click="vm.search()">Carregar</button>
+<br>
+<div style="text-align: center" ng-hide="vm.isLoaded">
+    Carregando...
+</div>
+<br>
+<div ng-show="vm.isLoaded">
+    <div class="ls-box" ng-repeat="item in vm.moods">
+        <h5 class="ls-title-3">
+            <img ng-src="/assets/emojis/{{item.mood}}.png" style="height: 30px;" />
+        </h5>
+        <div ng-repeat="question in item.questions">
+            <br>
+            <div class="ls-list-title ">
+                <h5 class="ls-title-5">{{question.title}}</h5>
+            </div>
+            <br>
+            <div class="ls-list-description">
+                <ul>
+                    <li ng-repeat="answer in question.answers track by $index">{{answer}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

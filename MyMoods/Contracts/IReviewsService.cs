@@ -15,6 +15,7 @@ namespace MyMoods.Contracts
         Task<IList<MoodCounterDTO>> GetMoodsCounterAsync(Form form, DateTime startDate, DateTime endDate, short timezone);
         Task<IList<TagCounterWithMoodsDTO>> GetTagsCounterAsync(Form form, DateTime startDate, DateTime endDate, short timezone);
         Task<IList<MaslowCounterDTO>> GetMaslowCounterAsync(Form form, DateTime startDate, DateTime endDate, short timezone);
+        Task<IList<AnswerByMoodDTO>> GetAnswersByMoodAsync(Form form, DateTime startDate, DateTime endDate, short timezone);
         Task InsertAsync(Review review);
         Task InsertManyAsync(IList<Review> reviews);
         Task EnableAsync(Review review);

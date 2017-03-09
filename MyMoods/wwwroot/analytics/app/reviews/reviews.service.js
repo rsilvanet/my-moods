@@ -14,6 +14,7 @@
             getMoodsCounter: getMoodsCounter,
             getTagsCounter: getTagsCounter,
             getMaslowCounter: getMaslowCounter,
+            getAnswersByMood: getAnswersByMood,
             enable: enable,
             disable: disable
         };
@@ -40,6 +41,10 @@
 
         function getMaslowCounter(formId, startDate, endDate) {
             return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews/counters/maslow?startdate=' + startDate + '&endDate=' + endDate);
+        }
+
+        function getAnswersByMood(formId, startDate, endDate) {
+            return $http.get(APP_CONFIG.API_BASE_URL + '/forms/' + formId + '/reviews/answers?startdate=' + startDate + '&endDate=' + endDate);
         }
 
         function enable(formId, id) {

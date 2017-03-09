@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace MyMoods.Domain.DTO
+﻿namespace MyMoods.Domain.DTO
 {
     public class FormOnPostDTO : FormOnPutDTO
     {
