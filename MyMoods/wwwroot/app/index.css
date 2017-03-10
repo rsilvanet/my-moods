@@ -79,6 +79,7 @@ h3 {
 
 .company-logo {
     max-width: 100%;
+    max-height: 75px;
 }
 
 .submit-panel {
