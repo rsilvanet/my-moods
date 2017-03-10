@@ -60,7 +60,7 @@ namespace MyMoods
         {
             var logger = new LoggerConfiguration()
                .MinimumLevel.Information()
-               .WriteTo.RollingFile(Path.Combine(env.ContentRootPath, @"logs\{Date}.log"))
+               .WriteTo.RollingFile(Path.Combine(env.ContentRootPath, @"logs/{Date}.log"))
                .CreateLogger();
 
             loggerFactory.AddSerilog(logger);
