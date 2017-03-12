@@ -8,5 +8,6 @@ namespace MyMoods.Domain.DTO
         public IList<string> CustomTags { get; set; }
         public FreeTextDTO FreeText { get; set; }
         public bool AllowMultipleReviewsAtOnce { get; set; }
+        public NotificationDTO Notification { get; set; }
     }
 }

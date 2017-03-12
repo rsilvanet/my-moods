@@ -13,12 +13,10 @@ using MyMoods.Contracts;
 using MyMoods.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Linq;
-using System.Threading.Tasks;
-using Hangfire.Annotations;
-using System;
 using Serilog;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyMoods
 {

@@ -38,6 +38,40 @@ namespace MyMoods.Services
                 form.MainQuestion = dto.MainQuestion;
             }
 
+            if (dto.Notification != null)
+            {
+                if (form.Notification == null)
+                {
+                    form.Notification = new Notification(NotificationType.email);
+                }
+
+                form.Notification.Active = dto.Notification.Active;
+
+                if (!dto.Notification.Recurrence.HasValue)
+                {
+                    result.Error("notification.recurrence", "A recorrência das notificações não foi informada.");
+                }
+                else
+                {
+                    form.Notification.Recurrence = dto.Notification.Recurrence.Value;
+                }
+
+                if (string.IsNullOrWhiteSpace(dto.Notification.Email))
+                {
+                    result.Error("notification.email", "O e-mail das notificações não foi informado.");
+                }
+                else
+                {
+                    form.Notification.To = new List<Contact>()
+                    {
+                        new Contact()
+                        {
+                            Email = dto.Notification.Email
+                        }
+                    };
+                }
+            }
+
             if (form.Type == FormType.generalWithCustomTags || form.Type == FormType.generalOnlyCustomTags)
             {
                 if (dto.CustomTags == null)
@@ -181,7 +215,8 @@ namespace MyMoods.Services
             var builder = Builders<Form>.Update
                 .Set(x => x.MainQuestion, form.MainQuestion)
                 .Set(x => x.CustomTags, form.CustomTags)
-                .Set(x => x.AllowMultipleReviewsAtOnce, form.AllowMultipleReviewsAtOnce);
+                .Set(x => x.AllowMultipleReviewsAtOnce, form.AllowMultipleReviewsAtOnce)
+                .Set(x => x.Notification, form.Notification);
 
             await _storage.Forms.UpdateOneAsync(x => x.Id.Equals(form.Id), builder);
 

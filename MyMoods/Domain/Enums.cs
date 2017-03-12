@@ -61,4 +61,22 @@ namespace MyMoods.Domain
         [Description("Fisiológico")]
         physiological
     }
+
+    public enum NotificationType
+    {
+        [Description("E-mail")]
+        email = 1
+    }
+
+    public enum NotificationRecurrence
+    {
+        [Description("Diário")]
+        daily = 1,
+
+        [Description("Semanal")]
+        weekly,
+
+        [Description("Mensal")]
+        monthly
+    }
 }

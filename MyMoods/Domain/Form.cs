@@ -31,6 +31,8 @@ namespace MyMoods.Domain
         public FormType Type { get; set; }
         public IList<ObjectId> CustomTags { get; set; }
         public ObjectId Company { get; set; }
+        public Notification Notification { get; set;
+        }
         public bool RequireTagsForReviews => Type != FormType.simple;
         public bool TagsAreLoaded => _tags != null;
         public bool QuestionsAreLoaded => _questions != null;
