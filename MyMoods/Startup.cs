@@ -10,10 +10,12 @@ using Microsoft.Extensions.Logging;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MyMoods.Contracts;
+using MyMoods.Domain;
 using MyMoods.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Serilog;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -70,6 +72,7 @@ namespace MyMoods
             app.UseStaticFiles();
 
             var dashboardPath = Configuration.GetSection("Hangfire").GetValue<string>("DashboardPath");
+
             var dashboardOptions = new DashboardOptions()
             {
                 Authorization = new[] { new HangfireAuthorizationFilter() }
@@ -77,6 +80,14 @@ namespace MyMoods
 
             app.UseHangfireServer();
             app.UseHangfireDashboard(dashboardPath, dashboardOptions);
+            
+            RecurringJob.RemoveIfExists("reminder-daily");
+            RecurringJob.RemoveIfExists("reminder-weekly");
+            RecurringJob.RemoveIfExists("reminder-monthly");
+
+            RecurringJob.AddOrUpdate<IFormsService>("reminder-daily", x => x.EnqueueReminderAsync(NotificationRecurrence.daily), "0 10 * * MON-FRI", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate<IFormsService>("reminder-weekly", x => x.EnqueueReminderAsync(NotificationRecurrence.weekly), "0 10 * * WED", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate<IFormsService>("reminder-monthly", x => x.EnqueueReminderAsync(NotificationRecurrence.monthly), "0 10 10 * *", TimeZoneInfo.Local);
         }
 
         public void ConfigureJson(JsonSerializerSettings settings)

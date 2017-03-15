@@ -1,4 +1,6 @@
-﻿using MyMoods.Contracts;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
+using MyMoods.Contracts;
 using MyMoods.Domain;
 using MyMoods.Domain.DTO;
 using System.Threading.Tasks;
@@ -12,6 +14,14 @@ namespace MyMoods.Services
         public CompaniesService(IStorage storage)
         {
             _storage = storage;
+        }
+
+        public async Task<Company> GetByIdAsync(string id)
+        {
+            var oid = new ObjectId(id);
+            var company = await _storage.Companies.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
+
+            return company;
         }
 
         public async Task InsertAsync(Company company)

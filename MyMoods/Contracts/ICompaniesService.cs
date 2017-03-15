@@ -6,6 +6,7 @@ namespace MyMoods.Contracts
 {
     public interface ICompaniesService
     {
+        Task<Company> GetByIdAsync(string id);
         Task InsertAsync(Company company);
         Task<ValidationResultDTO<Company>> ValidateToInsertAsync(RegisterDTO register);
     }

@@ -7,20 +7,31 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using System.Text;
+using MyMoods.Util;
+using Microsoft.Extensions.Configuration;
+using System.IO;
+using Hangfire;
 
 namespace MyMoods.Services
 {
     public class FormsService : IFormsService
     {
+        private readonly IConfigurationRoot _settings;
         private readonly IStorage _storage;
         private readonly IMoodsService _moodsService;
         private readonly ITagsService _tagsService;
+        private readonly ICompaniesService _companiesService;
+        private readonly IMailerService _mailer;
 
-        public FormsService(IStorage storage, IMoodsService moodsService, ITagsService tagsService)
+        public FormsService(IConfigurationRoot settings, IStorage storage, IMoodsService moodsService, ITagsService tagsService, ICompaniesService companiesService, IMailerService mailer)
         {
+            _settings = settings;
             _storage = storage;
             _moodsService = moodsService;
             _tagsService = tagsService;
+            _companiesService = companiesService;
+            _mailer = mailer;
         }
 
         private async Task DoCommonSaveValidation(FormOnPutDTO dto, ValidationResultDTO<Form> result)
@@ -303,6 +314,74 @@ namespace MyMoods.Services
             await DoCommonSaveValidation(dto, result);
 
             return result;
+        }
+
+        public async Task SendReminderAsync(string id)
+        {
+            var form = await GetByIdAsync(id);
+
+            if (form?.Notification != null && form.Notification.Active)
+            {
+                if (form.Notification.Type != NotificationType.email)
+                {
+                    throw new NotImplementedException($"Tipo de notificação '{form.Notification.Type.GetDescription()}' não implementado.");
+                }
+
+                var recurrence = string.Empty;
+
+                switch (form.Notification.Recurrence)
+                {
+                    case NotificationRecurrence.daily:
+                        recurrence = "hoje";
+                        break;
+                    case NotificationRecurrence.weekly:
+                        recurrence = "essa semana";
+                        break;
+                    case NotificationRecurrence.monthly:
+                        recurrence = "esse mês";
+                        break;
+                    default:
+                        throw new NotImplementedException($"Recorrência de notificação '{form.Notification.Recurrence.GetDescription()}' não implementada.");
+                }
+
+                var company = await _companiesService.GetByIdAsync(form.Id.ToString());
+                var section = _settings.GetSection("Host");
+                var baseUrl = section.GetValue<string>("BaseUrl");
+                var appPath = Path.Combine(baseUrl, section.GetValue<string>("AppPath"));
+
+                var builder = new StringBuilder();
+                builder.Append($"Olá.");
+                builder.Append($"<br><br>");
+                builder.Append($"Já respondeu o formulário <a href='{appPath}/#/{form.Id.ToString()}'>{form.Title}</a> {recurrence}?");
+                builder.Append($"<br><br>");
+
+                if (company != null)
+                {
+                    builder.Append($"Ao responder você está ajudando a {company.Name} a entender e melhorar a qualidade do seu ambiente de trabalho.");
+                    builder.Append($"<br><br>");
+                }
+
+                builder.Append($"Att");
+                builder.Append($"<br>");
+                builder.Append($"<b>My Moods</b>");
+
+                foreach (var to in form.Notification.To)
+                {
+                    _mailer.Enqueue(to.Email, $"Lembrete My Moods", builder.ToString());
+                }
+            }
+        }
+
+        public async Task EnqueueReminderAsync(NotificationRecurrence recurrence)
+        {
+            var forms = await _storage.Forms
+                .Find(x => x.Notification.Recurrence == recurrence)
+                .ToListAsync();
+
+            foreach (var form in forms)
+            {
+                BackgroundJob.Enqueue<IFormsService>(x => x.SendReminderAsync(form.Id.ToString()));
+            }
         }
     }
 }

@@ -6,6 +6,11 @@ namespace MyMoods.Domain
     [BsonIgnoreExtraElements]
     public class Notification
     {
+        public Notification()
+        {
+
+        }
+
         public Notification(NotificationType type)
         {
             Type = type;

@@ -17,5 +17,7 @@ namespace MyMoods.Contracts
         Task DisableAsync(Form form);
         Task<ValidationResultDTO<Form>> ValidateToInsertAsync(string companyId, FormOnPostDTO dto);
         Task<ValidationResultDTO<Form>> ValidateToUpdateAsync(Form form, FormOnPutDTO dto);
+        Task SendReminderAsync(string id);
+        Task EnqueueReminderAsync(NotificationRecurrence recurrence);
     }
 }

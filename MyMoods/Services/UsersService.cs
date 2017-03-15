@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Hangfire;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MyMoods.Contracts;
 using MyMoods.Domain;
@@ -55,6 +56,26 @@ namespace MyMoods.Services
             return user.Password == password || user.ResetedPassword == password;
         }
 
+        private void SendResetedPassword(User user, string password)
+        {
+            var builder = new StringBuilder();
+            builder.Append($"Olá {user.Name}.");
+            builder.Append($"<br><br>");
+            builder.Append($"Conforme solicitado, geramos uma senha temporária de acesso para você.");
+            builder.Append($"<br>");
+            builder.Append($"Sugerimos que você altere essa senha por uma de sua preferência através do nosso painel.");
+            builder.Append($"<br><br>");
+            builder.Append($"Senha temporária: <b>{password}</b>");
+            builder.Append($"<br><br>");
+            builder.Append($"Clique <a href='mymoods.co/analytics/#/login' target='_blank'>aqui</a> para acessar.");
+            builder.Append($"<br><br>");
+            builder.Append($"Att");
+            builder.Append($"<br>");
+            builder.Append($"<b>My Moods</b>");
+
+            _mailer.Enqueue(user.Email, "Nova senha", builder.ToString());
+        }
+
         public async Task<User> GetByIdAsync(string id)
         {
             var oid = new ObjectId(id);
@@ -96,7 +117,7 @@ namespace MyMoods.Services
 
             await _storage.Users.UpdateOneAsync(x => x.Id.Equals(user.Id), builder);
 
-            _mailer.SendResetedPassword(user, pass);
+            SendResetedPassword(user, pass);
         }
 
         public async Task ChangePasswordAsync(User user, string password)

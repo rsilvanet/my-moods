@@ -4,9 +4,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 using MyMoods.Contracts;
-using MyMoods.Domain;
 using System.Collections.Generic;
-using System.Text;
 
 namespace MyMoods.Services
 {
@@ -47,24 +45,9 @@ namespace MyMoods.Services
             }
         }
 
-        public void SendResetedPassword(User user, string password)
+        public void Enqueue(string to, string subject, string body)
         {
-            var builder = new StringBuilder();
-            builder.Append($"Olá {user.Name}.");
-            builder.Append($"<br><br>");
-            builder.Append($"Conforme solicitado, geramos uma senha temporária de acesso para você.");
-            builder.Append($"<br>");
-            builder.Append($"Sugerimos que você altere essa senha por uma de sua preferência através do nosso painel.");
-            builder.Append($"<br><br>");
-            builder.Append($"Senha temporária: <b>{password}</b>");
-            builder.Append($"<br><br>");
-            builder.Append($"Clique <a href='mymoods.co/analytics/#/login' target='_blank'>aqui</a> para acessar.");
-            builder.Append($"<br><br>");
-            builder.Append($"Att");
-            builder.Append($"<br>");
-            builder.Append($"<b>My Moods</b>");
-
-            BackgroundJob.Enqueue<IMailerService>(x => x.Send(user.Email, "Nova senha", builder.ToString()));
+            BackgroundJob.Enqueue<IMailerService>(x => x.Send(to, subject, body));
         }
     }
 }
