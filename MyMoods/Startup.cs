@@ -71,7 +71,7 @@ namespace MyMoods
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
-            var dashboardPath = Configuration.GetSection("Hangfire").GetValue<string>("DashboardPath");
+            var dashboardPath = Configuration.GetSection("Host").GetValue<string>("HangfirePath");
 
             var dashboardOptions = new DashboardOptions()
             {
@@ -80,7 +80,7 @@ namespace MyMoods
 
             app.UseHangfireServer();
             app.UseHangfireDashboard(dashboardPath, dashboardOptions);
-            
+
             RecurringJob.RemoveIfExists("reminder-daily");
             RecurringJob.RemoveIfExists("reminder-weekly");
             RecurringJob.RemoveIfExists("reminder-monthly");
