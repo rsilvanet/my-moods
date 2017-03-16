@@ -15,9 +15,15 @@ namespace MyMoods.Domain.DTO
             {
                 FreeText = new FreeTextDTO(question);
             }
+
+            if (form.Notification != null)
+            {
+                Notification = new NotificationDTO(form.Notification);
+            }
         }
 
         public IList<TagDTO> CustomTags { get; set; }
         public FreeTextDTO FreeText { get; set; }
+        public NotificationDTO Notification { get; set; }
     }
 }

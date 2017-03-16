@@ -23,6 +23,18 @@
             var formPromise = FormsService.getById($stateParams.id)
                 .then(function (response) {
                     vm.model = response.data;
+
+                    if (!vm.model.notification) {
+                        vm.model.notification = {
+                            active: false,
+                            email: ''
+                        };
+                    }
+
+                    if (!vm.model.notification.recurrence) {
+                        vm.model.notification.recurrence = 'weekly';
+                    }
+
                 }, function (response) {
                     ErrorHandlerService.normalizeAndShow(response);
                 });
@@ -55,6 +67,10 @@
 
         vm.normalizeType = function (type) {
             return FormsService.normalizeType(type);
+        };
+
+        vm.normalizeRecurrence = function (recurrence) {
+            return FormsService.normalizeRecurrence(recurrence);
         };
     }
 })();

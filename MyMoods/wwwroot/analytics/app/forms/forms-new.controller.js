@@ -24,6 +24,11 @@
                     allow: false,
                     require: false,
                     title: ''
+                },
+                notification: {
+                    active: false,
+                    email: '',
+                    recurrence: 'weekly'
                 }
             };
 
@@ -47,6 +52,10 @@
 
         vm.normalizeType = function (type) {
             return FormsService.normalizeType(type);
+        };
+
+        vm.normalizeRecurrence = function(recurrence) {
+            return FormsService.normalizeRecurrence(recurrence);
         };
     }
 })();

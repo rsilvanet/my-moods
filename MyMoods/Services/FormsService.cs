@@ -344,10 +344,10 @@ namespace MyMoods.Services
                         throw new NotImplementedException($"Recorrência de notificação '{form.Notification.Recurrence.GetDescription()}' não implementada.");
                 }
 
-                var company = await _companiesService.GetByIdAsync(form.Id.ToString());
+                var company = await _companiesService.GetByIdAsync(form.Company.ToString());
                 var section = _settings.GetSection("Host");
                 var baseUrl = section.GetValue<string>("BaseUrl");
-                var appPath = Path.Combine(baseUrl, section.GetValue<string>("AppPath"));
+                var appPath = baseUrl + section.GetValue<string>("AppPath");
 
                 var builder = new StringBuilder();
                 builder.Append($"Olá.");

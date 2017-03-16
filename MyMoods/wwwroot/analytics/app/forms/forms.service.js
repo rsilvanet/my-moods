@@ -14,7 +14,8 @@
             put: put,
             enable: enable,
             disable: disable,
-            normalizeType: normalizeType
+            normalizeType: normalizeType,
+            normalizeRecurrence: normalizeRecurrence
         };
 
         function all(onlyActives) {
@@ -58,6 +59,19 @@
                     return 'Apenas com tags customizadas';
                 default:
                     return 'Indefinido';
+            }
+        }
+
+        function normalizeRecurrence(recurrence) {
+            switch (recurrence) {
+                case 'daily':
+                    return 'Diário';
+                case 'weekly':
+                    return 'Semanal';
+                case 'monthly':
+                    return 'Mensal';
+                default:
+                    return 'Nenhum';
             }
         }
     }
