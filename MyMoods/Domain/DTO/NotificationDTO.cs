@@ -4,6 +4,11 @@ namespace MyMoods.Domain.DTO
 {
     public class NotificationDTO
     {
+        public NotificationDTO()
+        {
+            Active = false;
+        }
+
         public NotificationDTO(Notification notification)
         {
             Active = notification.Active;
