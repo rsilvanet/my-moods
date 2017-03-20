@@ -114,9 +114,9 @@ namespace MyMoods
             RecurringJob.RemoveIfExists("reminder-weekly");
             RecurringJob.RemoveIfExists("reminder-monthly");
 
-            RecurringJob.AddOrUpdate<IFormsService>("reminder-daily", x => x.EnqueueReminderAsync(NotificationRecurrence.daily), "0 10 * * MON-FRI", TimeZoneInfo.Local);
-            RecurringJob.AddOrUpdate<IFormsService>("reminder-weekly", x => x.EnqueueReminderAsync(NotificationRecurrence.weekly), "0 10 * * WED", TimeZoneInfo.Local);
-            RecurringJob.AddOrUpdate<IFormsService>("reminder-monthly", x => x.EnqueueReminderAsync(NotificationRecurrence.monthly), "0 10 10 * *", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate<IFormsService>("reminder-daily", x => x.EnqueueReminderAsync(NotificationRecurrence.daily), "0 13 * * MON-FRI", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate<IFormsService>("reminder-weekly", x => x.EnqueueReminderAsync(NotificationRecurrence.weekly), "0 13 * * WED", TimeZoneInfo.Local);
+            RecurringJob.AddOrUpdate<IFormsService>("reminder-monthly", x => x.EnqueueReminderAsync(NotificationRecurrence.monthly), "0 13 10 * *", TimeZoneInfo.Local);
         }
 
         public class AnalyticsAuthorizationMiddleware
