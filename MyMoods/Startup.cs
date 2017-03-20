@@ -1,6 +1,9 @@
 ﻿using Hangfire;
+using Hangfire.Common;
 using Hangfire.Dashboard;
 using Hangfire.Mongo;
+using Hangfire.States;
+using Hangfire.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -39,7 +42,19 @@ namespace MyMoods
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped(x => Mongo.Database.Get(Configuration.GetConnectionString("DefaultConnection")));
+            var appStorage = new
+            {
+                Connection = Configuration.GetConnectionString("DefaultConnection"),
+                DatabaseName = Configuration.GetConnectionString("DefaultConnection").Split('/').Last()
+            };
+
+            var hangfireStorage = new
+            {
+                Connection = Configuration.GetConnectionString("HangfireConnection"),
+                DatabaseName = Configuration.GetConnectionString("HangfireConnection").Split('/').Last()
+            };
+
+            services.AddScoped(x => Mongo.Database.Get(appStorage.Connection));
             services.AddScoped<IStorage, Mongo.Storage>();
             services.AddScoped<ICompaniesService, CompaniesService>();
             services.AddScoped<IFormsService, FormsService>();
@@ -53,7 +68,7 @@ namespace MyMoods
 
             services.AddMvc();
             services.AddMvcCore().AddJsonFormatters(x => ConfigureJson(x));
-            services.AddHangfire(x => x.UseMongoStorage(Configuration.GetConnectionString("HangfireConnection"), Configuration.GetConnectionString("HangfireConnection").Split('/').Last()));
+            services.AddHangfire(x => x.UseMongoStorage(hangfireStorage.Connection, hangfireStorage.DatabaseName));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -71,6 +86,18 @@ namespace MyMoods
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
+            ConfigureHangfire(app);
+        }
+
+        public void ConfigureJson(JsonSerializerSettings settings)
+        {
+            settings.Converters.Add(new StringEnumConverter());
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
+        }
+
+        public void ConfigureHangfire(IApplicationBuilder app)
+        {
             var dashboardPath = Configuration.GetSection("Host").GetValue<string>("HangfirePath");
 
             var dashboardOptions = new DashboardOptions()
@@ -81,6 +108,8 @@ namespace MyMoods
             app.UseHangfireServer();
             app.UseHangfireDashboard(dashboardPath, dashboardOptions);
 
+            GlobalJobFilters.Filters.Add(new ProlongExpirationTimeAttribute());
+
             RecurringJob.RemoveIfExists("reminder-daily");
             RecurringJob.RemoveIfExists("reminder-weekly");
             RecurringJob.RemoveIfExists("reminder-monthly");
@@ -88,13 +117,6 @@ namespace MyMoods
             RecurringJob.AddOrUpdate<IFormsService>("reminder-daily", x => x.EnqueueReminderAsync(NotificationRecurrence.daily), "0 10 * * MON-FRI", TimeZoneInfo.Local);
             RecurringJob.AddOrUpdate<IFormsService>("reminder-weekly", x => x.EnqueueReminderAsync(NotificationRecurrence.weekly), "0 10 * * WED", TimeZoneInfo.Local);
             RecurringJob.AddOrUpdate<IFormsService>("reminder-monthly", x => x.EnqueueReminderAsync(NotificationRecurrence.monthly), "0 10 10 * *", TimeZoneInfo.Local);
-        }
-
-        public void ConfigureJson(JsonSerializerSettings settings)
-        {
-            settings.Converters.Add(new StringEnumConverter());
-            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
         }
 
         public class AnalyticsAuthorizationMiddleware
@@ -148,6 +170,19 @@ namespace MyMoods
             public bool Authorize(DashboardContext context)
             {
                 return true;
+            }
+        }
+
+        public class ProlongExpirationTimeAttribute : JobFilterAttribute, IApplyStateFilter
+        {
+            public void OnStateApplied(ApplyStateContext context, IWriteOnlyTransaction transaction)
+            {
+                context.JobExpirationTimeout = TimeSpan.FromDays(90);
+            }
+
+            public void OnStateUnapplied(ApplyStateContext context, IWriteOnlyTransaction transaction)
+            {
+                context.JobExpirationTimeout = TimeSpan.FromDays(90);
             }
         }
     }
