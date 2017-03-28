@@ -2,8 +2,10 @@
 MyMoods/bin/**
 MyMoods/obj/**
 MyMoods/logs/**
+MyMoods/dist/**
 MyMoods/project.lock.json
 MyMoods/MyMoods.xproj.user
+MyMoods/dist/**
 MyMoods/wwwroot/node_modules/**
 MyMoods/wwwroot/bower_components/**
 MyMoods/wwwroot/app/node_modules/**
