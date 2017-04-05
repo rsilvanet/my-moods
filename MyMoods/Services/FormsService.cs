@@ -150,6 +150,8 @@ namespace MyMoods.Services
                 {
                     var tags = await _tagsService.GetByFormAsync(form, true);
 
+                    tags = tags.OrderBy(x => x.Type).ToList();
+
                     form.LoadTags(tags);
                 }
 
