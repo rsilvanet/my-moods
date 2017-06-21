@@ -322,54 +322,57 @@ namespace MyMoods.Services
         {
             var form = await GetByIdAsync(id);
 
-            if (form?.Notification != null && form.Notification.Active)
+            if (form != null && form.Active)
             {
-                if (form.Notification.Type != NotificationType.email)
+                if (form.Notification != null && form.Notification.Active)
                 {
-                    throw new NotImplementedException($"Tipo de notificação '{form.Notification.Type.GetDescription()}' não implementado.");
-                }
+                    if (form.Notification.Type != NotificationType.email)
+                    {
+                        throw new NotImplementedException($"Tipo de notificação '{form.Notification.Type.GetDescription()}' não implementado.");
+                    }
 
-                var recurrence = string.Empty;
+                    var recurrence = string.Empty;
 
-                switch (form.Notification.Recurrence)
-                {
-                    case NotificationRecurrence.daily:
-                        recurrence = "hoje";
-                        break;
-                    case NotificationRecurrence.weekly:
-                        recurrence = "essa semana";
-                        break;
-                    case NotificationRecurrence.monthly:
-                        recurrence = "esse mês";
-                        break;
-                    default:
-                        throw new NotImplementedException($"Recorrência de notificação '{form.Notification.Recurrence.GetDescription()}' não implementada.");
-                }
+                    switch (form.Notification.Recurrence)
+                    {
+                        case NotificationRecurrence.daily:
+                            recurrence = "hoje";
+                            break;
+                        case NotificationRecurrence.weekly:
+                            recurrence = "essa semana";
+                            break;
+                        case NotificationRecurrence.monthly:
+                            recurrence = "esse mês";
+                            break;
+                        default:
+                            throw new NotImplementedException($"Recorrência de notificação '{form.Notification.Recurrence.GetDescription()}' não implementada.");
+                    }
 
-                var company = await _companiesService.GetByIdAsync(form.Company.ToString());
-                var section = _settings.GetSection("Host");
-                var baseUrl = section.GetValue<string>("BaseUrl");
-                var appPath = baseUrl + section.GetValue<string>("AppPath");
+                    var company = await _companiesService.GetByIdAsync(form.Company.ToString());
+                    var section = _settings.GetSection("Host");
+                    var baseUrl = section.GetValue<string>("BaseUrl");
+                    var appPath = baseUrl + section.GetValue<string>("AppPath");
 
-                var builder = new StringBuilder();
-                builder.Append($"Olá.");
-                builder.Append($"<br><br>");
-                builder.Append($"Já respondeu o formulário <a href='{appPath}/#/{form.Id.ToString()}'>{form.Title}</a> {recurrence}?");
-                builder.Append($"<br><br>");
-
-                if (company != null)
-                {
-                    builder.Append($"Ao responder você está ajudando a {company.Name} a entender e melhorar a qualidade do seu ambiente de trabalho.");
+                    var builder = new StringBuilder();
+                    builder.Append($"Olá.");
                     builder.Append($"<br><br>");
-                }
+                    builder.Append($"Já respondeu o formulário <a href='{appPath}/#/{form.Id.ToString()}'>{form.Title}</a> {recurrence}?");
+                    builder.Append($"<br><br>");
 
-                builder.Append($"Att");
-                builder.Append($"<br>");
-                builder.Append($"<b>My Moods</b>");
+                    if (company != null)
+                    {
+                        builder.Append($"Ao responder você está ajudando a {company.Name} a entender e melhorar a qualidade do seu ambiente de trabalho.");
+                        builder.Append($"<br><br>");
+                    }
 
-                foreach (var to in form.Notification.To)
-                {
-                    _mailer.Enqueue(to.Email, $"Lembrete My Moods", builder.ToString());
+                    builder.Append($"Att");
+                    builder.Append($"<br>");
+                    builder.Append($"<b>My Moods</b>");
+
+                    foreach (var to in form.Notification.To)
+                    {
+                        _mailer.Enqueue(to.Email, $"Lembrete My Moods", builder.ToString());
+                    }
                 }
             }
         }
@@ -377,7 +380,7 @@ namespace MyMoods.Services
         public async Task EnqueueReminderAsync(NotificationRecurrence recurrence)
         {
             var forms = await _storage.Forms
-                .Find(x => x.Notification.Recurrence == recurrence)
+                .Find(x => x.Notification.Recurrence == recurrence && x.Active)
                 .ToListAsync();
 
             foreach (var form in forms)
