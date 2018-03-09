@@ -20,7 +20,7 @@ namespace MyMoods.Services
         private MimeMessage CreateMessage(string to, string subject, string body)
         {
             var mailTo = new List<MailboxAddress>() { new MailboxAddress(to) };
-            var mailFrom = new List<MailboxAddress>() { new MailboxAddress("My Moods", "contato@mymoods.co") };
+            var mailFrom = new List<MailboxAddress>() { new MailboxAddress("My Moods", "contato@mymoods.com.br") };
             var mailBody = new TextPart("html") { Text = body };
 
             return new MimeMessage(mailFrom, mailTo, subject, mailBody);
@@ -38,7 +38,9 @@ namespace MyMoods.Services
                 var user = section.GetValue<string>("Username");
                 var pass = section.GetValue<string>("Password");
 
-                client.Connect(host, port, SecureSocketOptions.SslOnConnect);
+                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                client.Connect(host, port, false);
+                client.AuthenticationMechanisms.Remove ("XOAUTH2");
                 client.Authenticate(user, pass);
                 client.Send(message);
                 client.Disconnect(true);
