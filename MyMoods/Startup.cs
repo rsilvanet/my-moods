@@ -72,11 +72,11 @@ namespace MyMoods
             services.AddHangfire(x => x.UseMongoStorage(
                 hangfireStorage.Connection, 
                 hangfireStorage.DatabaseName,
-                new MongoStorageOptions() 
+                new MongoStorageOptions()
                 {
-                    MigrationOptions = new MongoMigrationOptions() 
+                    MigrationOptions = new MongoMigrationOptions()
                     {
-                        Strategy = MongoMigrationStrategy.Drop
+                        Strategy = MongoMigrationStrategy.Migrate
                     }
                 })
             );
