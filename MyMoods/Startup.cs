@@ -48,12 +48,6 @@ namespace MyMoods
                 DatabaseName = Configuration.GetConnectionString("DefaultConnection").Split('/').Last()
             };
 
-            var hangfireStorage = new
-            {
-                Connection = Configuration.GetConnectionString("HangfireConnection"),
-                DatabaseName = Configuration.GetConnectionString("HangfireConnection").Split('/').Last()
-            };
-
             services.AddScoped(x => Mongo.Database.Get(appStorage.Connection));
             services.AddScoped<IStorage, Mongo.Storage>();
             services.AddScoped<ICompaniesService, CompaniesService>();
@@ -63,12 +57,29 @@ namespace MyMoods
             services.AddScoped<IReviewsService, ReviewsService>();
             services.AddScoped<ITagsService, TagsService>();
             services.AddScoped<IUsersService, UsersService>();
-
+            
             services.AddSingleton(Configuration);
 
             services.AddMvc();
             services.AddMvcCore().AddJsonFormatters(x => ConfigureJson(x));
-            services.AddHangfire(x => x.UseMongoStorage(hangfireStorage.Connection, hangfireStorage.DatabaseName));
+
+            var hangfireStorage = new
+            {
+                Connection = Configuration.GetConnectionString("HangfireConnection"),
+                DatabaseName = Configuration.GetConnectionString("HangfireConnection").Split('/').Last()
+            };
+
+            services.AddHangfire(x => x.UseMongoStorage(
+                hangfireStorage.Connection, 
+                hangfireStorage.DatabaseName,
+                new MongoStorageOptions() 
+                {
+                    MigrationOptions = new MongoMigrationOptions() 
+                    {
+                        Strategy = MongoMigrationStrategy.Drop
+                    }
+                })
+            );
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
@@ -114,9 +125,26 @@ namespace MyMoods
             RecurringJob.RemoveIfExists("reminder-weekly");
             RecurringJob.RemoveIfExists("reminder-monthly");
 
-            RecurringJob.AddOrUpdate<IFormsService>("reminder-daily", x => x.EnqueueReminderAsync(NotificationRecurrence.daily), "30 14 * * MON-FRI", TimeZoneInfo.Utc);
-            RecurringJob.AddOrUpdate<IFormsService>("reminder-weekly", x => x.EnqueueReminderAsync(NotificationRecurrence.weekly), "30 14 * * WED", TimeZoneInfo.Utc);
-            RecurringJob.AddOrUpdate<IFormsService>("reminder-monthly", x => x.EnqueueReminderAsync(NotificationRecurrence.monthly), "30 14 10 * *", TimeZoneInfo.Utc);
+            RecurringJob.AddOrUpdate<IFormsService>(
+                "reminder-daily", 
+                x => x.EnqueueReminderAsync(NotificationRecurrence.daily), 
+                "30 14 * * MON-FRI", 
+                TimeZoneInfo.Utc
+            );
+
+            RecurringJob.AddOrUpdate<IFormsService>(
+                "reminder-weekly", 
+                x => x.EnqueueReminderAsync(NotificationRecurrence.weekly), 
+                "30 14 * * WED", 
+                TimeZoneInfo.Utc
+            );
+
+            RecurringJob.AddOrUpdate<IFormsService>(
+                "reminder-monthly", 
+                x => x.EnqueueReminderAsync(NotificationRecurrence.monthly), 
+                "30 14 10 * *", 
+                TimeZoneInfo.Utc
+            );
         }
 
         public class AnalyticsAuthorizationMiddleware
@@ -151,7 +179,9 @@ namespace MyMoods
                         ObjectId oid;
                         ObjectId.TryParse(context.Request.Headers["X-Company"], out oid);
 
-                        var company = await _storage.Companies.Find(x => x.Id.Equals(oid)).FirstOrDefaultAsync();
+                        var company = await _storage.Companies
+                            .Find(x => x.Id.Equals(oid))
+                            .FirstOrDefaultAsync();
 
                         if (company == null)
                         {
