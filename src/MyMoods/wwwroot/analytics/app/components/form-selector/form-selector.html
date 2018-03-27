@@ -1,0 +1,14 @@
+<div style="text-align: center" ng-hide="isLoaded">
+    Carregando...
+    <br><br>
+</div>
+<div class="row" ng-show="isLoaded">
+    <label class="ls-label col-md-12">
+        <b class="ls-label-text">Formulário</b>
+        <div class="ls-custom-select">
+            <select class="ls-select" placehoder="Selecione" ng-options="form.id as form.title for form in forms" ng-model="formId">
+                <option value="" disabled selected>Selecione um formulário</option>
+            </select>
+        </div>
+    </label>
+</div>
