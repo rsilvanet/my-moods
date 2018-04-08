@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Builder;
+using System.Reflection;
 
 namespace MyMoods
 {
@@ -10,7 +11,7 @@ namespace MyMoods
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseContentRoot(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
                 .UseUrls("http://*:5000")
                 .UseStartup<Startup>()
                 .Build();

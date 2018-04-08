@@ -21,6 +21,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace MyMoods
@@ -31,8 +32,10 @@ namespace MyMoods
 
         public Startup(IHostingEnvironment env)
         {
+            Console.WriteLine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location));
+
             var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
+                .SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json".ToLower(), optional: true)
                 .AddEnvironmentVariables();
