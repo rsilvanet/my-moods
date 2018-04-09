@@ -63,9 +63,6 @@ namespace MyMoods
             
             services.AddSingleton(Configuration);
 
-            services.AddMvc();
-            services.AddMvcCore().AddJsonFormatters(x => ConfigureJson(x));
-
             var hangfireStorage = new
             {
                 Connection = Configuration.GetConnectionString("HangfireConnection"),
@@ -94,65 +91,67 @@ namespace MyMoods
 
             loggerFactory.AddSerilog(logger);
 
-            app.UseMiddleware<AnalyticsAuthorizationMiddleware>();
-
-            app.UseMvc();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
+            ConfigureHangfire(app);
         }
 
-        public void ConfigureJson(JsonSerializerSettings settings)
+        public void ConfigureHangfire(IApplicationBuilder app)
         {
-            settings.Converters.Add(new StringEnumConverter());
-            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
-        }
+            var dashboardPath = Configuration.GetSection("Host").GetValue<string>("HangfirePath");
 
-        public class AnalyticsAuthorizationMiddleware
-        {
-            private readonly IStorage _storage;
-            private readonly RequestDelegate _next;
-
-            public AnalyticsAuthorizationMiddleware(RequestDelegate next, IStorage storage)
+            var dashboardOptions = new DashboardOptions()
             {
-                _next = next;
-                _storage = storage;
+                Authorization = new[] { new HangfireAuthorizationFilter() }
+            };
+
+            app.UseHangfireServer();
+            app.UseHangfireDashboard(dashboardPath, dashboardOptions);
+
+            GlobalJobFilters.Filters.Add(new ProlongExpirationTimeAttribute());
+
+            RecurringJob.RemoveIfExists("reminder-daily");
+            RecurringJob.RemoveIfExists("reminder-weekly");
+            RecurringJob.RemoveIfExists("reminder-monthly");
+
+            RecurringJob.AddOrUpdate<IFormsService>(
+                "reminder-daily", 
+                x => x.EnqueueReminderAsync(NotificationRecurrence.daily), 
+                "30 14 * * MON-FRI", 
+                TimeZoneInfo.Utc
+            );
+
+            RecurringJob.AddOrUpdate<IFormsService>(
+                "reminder-weekly", 
+                x => x.EnqueueReminderAsync(NotificationRecurrence.weekly), 
+                "30 14 * * WED", 
+                TimeZoneInfo.Utc
+            );
+
+            RecurringJob.AddOrUpdate<IFormsService>(
+                "reminder-monthly", 
+                x => x.EnqueueReminderAsync(NotificationRecurrence.monthly), 
+                "30 14 10 * *", 
+                TimeZoneInfo.Utc
+            );
+        }
+
+        public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
+        {
+            public bool Authorize(DashboardContext context)
+            {
+                return true;
+            }
+        }
+
+        public class ProlongExpirationTimeAttribute : JobFilterAttribute, IApplyStateFilter
+        {
+            public void OnStateApplied(ApplyStateContext context, IWriteOnlyTransaction transaction)
+            {
+                context.JobExpirationTimeout = TimeSpan.FromDays(90);
             }
 
-            public async Task Invoke(HttpContext context)
+            public void OnStateUnapplied(ApplyStateContext context, IWriteOnlyTransaction transaction)
             {
-                if (context.Request.Path.Value.ToLower().StartsWith("/api/analytics/"))
-                {
-                    var noAuthRoutes = new string[]
-                    {
-                        "/api/analytics/login",
-                        "/api/analytics/reset"
-                    };
-
-                    if (!noAuthRoutes.Contains(context.Request.Path.Value.ToLower()))
-                    {
-                        if (!context.Request.Headers.Keys.Contains("X-Company"))
-                        {
-                            context.Response.StatusCode = 401;
-                            return;
-                        }
-
-                        ObjectId oid;
-                        ObjectId.TryParse(context.Request.Headers["X-Company"], out oid);
-
-                        var company = await _storage.Companies
-                            .Find(x => x.Id.Equals(oid))
-                            .FirstOrDefaultAsync();
-
-                        if (company == null)
-                        {
-                            context.Response.StatusCode = 401;
-                            return;
-                        }
-                    }
-                }
-
-                await _next.Invoke(context);
+                context.JobExpirationTimeout = TimeSpan.FromDays(90);
             }
         }
     }
