@@ -30,6 +30,9 @@ namespace MyMoods
         public void ConfigureServices(IServiceCollection services)
         {
             DefaultInjection.Inject(services, _configuration);
+
+            services.AddMvc();
+            services.AddMvcCore().AddJsonFormatters(x => ConfigureJson(x));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
