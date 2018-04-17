@@ -8,8 +8,5 @@ src/MyMoods/dist/**
 src/MyMoods/project.lock.json
 src/MyMoods/MyMoods.csproj.user
 src/MyMoods/wwwroot/node_modules/**
-src/MyMoods/wwwroot/bower_components/**
 src/MyMoods/wwwroot/app/node_modules/**
-src/MyMoods/wwwroot/app/bower_components/**
 src/MyMoods/wwwroot/analytics/node_modules/**
-src/MyMoods/wwwroot/analytics/bower_components/**

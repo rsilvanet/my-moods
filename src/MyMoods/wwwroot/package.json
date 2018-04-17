@@ -17,6 +17,15 @@
   },
   "homepage": "https://github.com/rsilva93/my-moods#readme",
   "dependencies": {
-    "bower": "^1.7.9"
+    "@uirouter/angularjs": "^1.0.15",
+    "angular": "^1.6.9",
+    "bootstrap": "^4.1.0",
+    "c3": "^0.5.3",
+    "chart.js": "^2.7.2",
+    "locawebstyle": "^3.10.0",
+    "lodash": "^4.17.5",
+    "moment": "^2.22.1",
+    "sly": "0.0.1",
+    "toastr": "^2.1.4"
   }
 }
