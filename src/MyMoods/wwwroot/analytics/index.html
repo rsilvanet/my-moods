@@ -89,6 +89,7 @@
         </aside>
     </div>
 
+    <!-- build:node js/node-modules.js -->
     <script src="../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../node_modules/angular/angular.min.js"></script>
     <script src="../node_modules/@uirouter/angularjs/release/angular-ui-router.min.js"></script>
@@ -98,6 +99,9 @@
     <script src="../node_modules/moment/min/moment.min.js"></script>
     <script src="../node_modules/sly-scrolling/dist/sly.min.js"></script>
     <script src="../node_modules/toastr/build/toastr.min.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:app js/app.js -->
     <script src="app/app.js"></script>
     <script src="app/error-handler.js"></script>
     <script src="app/http-interceptor.js"></script>
@@ -144,6 +148,7 @@
     <script src="app/tags/tags.service.js"></script>
     <script src="app/tags/tags-list.controller.js"></script>
     <script src="app/tags/tags-new.controller.js"></script>
+    <!-- endbuild -->
 
     <script>
         toastr.options.timeOut = 5000;
