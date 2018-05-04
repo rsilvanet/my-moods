@@ -25,7 +25,7 @@
     "locawebstyle": "^3.10.0",
     "lodash": "^4.17.5",
     "moment": "^2.22.1",
-    "sly": "0.0.1",
+    "sly-scrolling": "^1.6.1",
     "toastr": "^2.1.4"
   }
 }
