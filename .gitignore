@@ -10,4 +10,3 @@ src/MyMoods/MyMoods.csproj.user
 src/MyMoods/wwwroot/node_modules/**
 src/MyMoods/wwwroot/app/node_modules/**
 src/MyMoods/wwwroot/analytics/node_modules/**
-/src/MyMoods/wwwroot/app-vue/node_modules
