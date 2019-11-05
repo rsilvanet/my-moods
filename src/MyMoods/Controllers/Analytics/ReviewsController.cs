@@ -127,6 +127,7 @@ namespace MyMoods.Controllers.Analytics
         }
 
         [HttpGet("daily")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "MVC1004:Rename model bound parameter.", Justification = "<Pending>")]
         public async Task<IActionResult> GetDaily(string formId, DateTime date)
         {
             try
