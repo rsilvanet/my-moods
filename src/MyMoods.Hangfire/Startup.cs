@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MyMoods.Hangfire.Settings;
-using MyMoods.Services.Injection;
+using MyMoods.Services.Extensions;
 using Serilog;
 using System.IO;
 using System.Reflection;
@@ -28,7 +28,7 @@ namespace MyMoods
 
         public void ConfigureServices(IServiceCollection services)
         {
-            DefaultInjection.Inject(services, _configuration);
+            services.InjectServices(_configuration);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)

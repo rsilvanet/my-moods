@@ -5,11 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using MyMoods.Shared.Contracts;
 using System.Linq;
 
-namespace MyMoods.Services.Injection
+namespace MyMoods.Services.Extensions
 {
-    public static class DefaultInjection
+    public static class IServiceCollectionExtensions
     {
-        public static void Inject(IServiceCollection services, IConfigurationRoot config)
+        public static void InjectServices(this IServiceCollection services, IConfigurationRoot config)
         {
             var appStorage = new
             {

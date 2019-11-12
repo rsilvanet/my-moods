@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MyMoods.Services.Injection;
+using MyMoods.Services.Extensions;
 using MyMoods.Settings;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -30,7 +30,7 @@ namespace MyMoods
 
         public void ConfigureServices(IServiceCollection services)
         {
-            DefaultInjection.Inject(services, _configuration);
+            services.InjectServices(_configuration);
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
