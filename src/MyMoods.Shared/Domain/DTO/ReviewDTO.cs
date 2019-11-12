@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyMoods.Shared.Domain.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 

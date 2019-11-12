@@ -1,4 +1,6 @@
-﻿namespace MyMoods.Shared.Domain.DTO
+﻿using MyMoods.Shared.Domain.Enums;
+
+namespace MyMoods.Shared.Domain.DTO
 {
     public class MaslowCounterDTO
     {

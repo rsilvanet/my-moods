@@ -6,10 +6,7 @@ namespace MyMoods.Shared.Domain
     [BsonIgnoreExtraElements]
     public class Answer
     {
-        public Answer()
-        {
-
-        }
+        public Answer() { }
 
         public Answer(Question question)
         {

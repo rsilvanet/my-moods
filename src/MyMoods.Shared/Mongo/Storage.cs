@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using MyMoods.Shared.Contracts;
 using MyMoods.Shared.Domain;
+using MyMoods.Shared.Domain.Enums;
 using System.Collections.Generic;
 
 namespace MyMoods.Shared.Mongo

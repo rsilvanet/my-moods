@@ -1,13 +1,11 @@
-﻿using System.Linq;
+﻿using MyMoods.Shared.Domain.Enums;
+using System.Linq;
 
 namespace MyMoods.Shared.Domain.DTO
 {
     public class NotificationDTO
     {
-        public NotificationDTO()
-        {
-            Active = false;
-        }
+        public NotificationDTO() { }
 
         public NotificationDTO(Notification notification)
         {

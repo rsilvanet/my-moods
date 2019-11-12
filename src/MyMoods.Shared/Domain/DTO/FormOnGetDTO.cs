@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MyMoods.Shared.Domain.Enums;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace MyMoods.Shared.Domain.DTO

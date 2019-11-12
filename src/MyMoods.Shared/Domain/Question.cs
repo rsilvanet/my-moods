@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using MyMoods.Shared.Domain.Enums;
 using MyMoods.Shared.Mongo;
 using System.Collections.Generic;
 

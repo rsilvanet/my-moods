@@ -1,4 +1,5 @@
-﻿using MyMoods.Shared.Extensions;
+﻿using MyMoods.Shared.Domain.Enums;
+using MyMoods.Shared.Extensions;
 
 namespace MyMoods.Shared.Domain.DTO
 {

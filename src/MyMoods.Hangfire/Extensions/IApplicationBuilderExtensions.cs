@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using MyMoods.Hangfire.Filters;
 using MyMoods.Shared.Contracts;
-using MyMoods.Shared.Domain;
+using MyMoods.Shared.Domain.Enums;
 using System;
 
 namespace MyMoods.Hangfire.Extensions

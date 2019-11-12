@@ -2,10 +2,7 @@
 {
     public class FreeTextDTO
     {
-        public FreeTextDTO()
-        {
-
-        }
+        public FreeTextDTO() { }
 
         public FreeTextDTO(Question question)
         {

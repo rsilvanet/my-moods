@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyMoods.Shared.Contracts;
-using MyMoods.Shared.Domain;
 using MyMoods.Shared.Domain.DTO;
+using MyMoods.Shared.Domain.Enums;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

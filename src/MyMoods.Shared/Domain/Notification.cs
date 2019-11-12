@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using MyMoods.Shared.Domain.Enums;
 using System.Collections.Generic;
 
 namespace MyMoods.Shared.Domain
@@ -6,10 +7,7 @@ namespace MyMoods.Shared.Domain
     [BsonIgnoreExtraElements]
     public class Notification
     {
-        public Notification()
-        {
-
-        }
+        public Notification() { }
 
         public Notification(NotificationType type)
         {

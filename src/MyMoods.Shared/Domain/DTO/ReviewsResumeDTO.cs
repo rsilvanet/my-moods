@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyMoods.Shared.Domain.Enums;
+using System;
 
 namespace MyMoods.Shared.Domain.DTO
 {
