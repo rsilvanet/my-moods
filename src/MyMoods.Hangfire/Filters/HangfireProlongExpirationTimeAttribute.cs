@@ -3,9 +3,8 @@ using Hangfire.States;
 using Hangfire.Storage;
 using System;
 
-namespace MyMoods.Hangfire.Settings
+namespace MyMoods.Hangfire.Filters
 {
-
     public class HangfireProlongExpirationTimeAttribute : JobFilterAttribute, IApplyStateFilter
     {
         public void OnStateApplied(ApplyStateContext context, IWriteOnlyTransaction transaction)

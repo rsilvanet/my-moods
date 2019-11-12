@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using MyMoods.Hangfire.Settings;
+using MyMoods.Hangfire.Extensions;
 using MyMoods.Services.Extensions;
-using Serilog;
 using System.IO;
 using System.Reflection;
 
@@ -33,14 +32,8 @@ namespace MyMoods
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            var logger = new LoggerConfiguration()
-              .MinimumLevel.Information()
-              .WriteTo.RollingFile(Path.Combine(env.ContentRootPath, @"logs/{Date}.log"))
-              .CreateLogger();
-
-            loggerFactory.AddSerilog(logger);
-
-            HangfireConfiguration.Configure(app, _configuration);
+            app.ConfigureSerilog(loggerFactory, env.ContentRootPath);
+            app.ConfigureHangfire(_configuration);
         }
     }
 }

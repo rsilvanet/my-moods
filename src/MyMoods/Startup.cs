@@ -7,7 +7,6 @@ using MyMoods.Services.Extensions;
 using MyMoods.Settings;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Serilog;
 using System.IO;
 using System.Reflection;
 
@@ -28,33 +27,6 @@ namespace MyMoods
             _configuration = builder.Build();
         }
 
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.InjectServices(_configuration);
-
-            services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
-                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                    options.SerializerSettings.PreserveReferencesHandling = PreserveReferencesHandling.None;
-                });
-        }
-
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
-        {
-            var logger = new LoggerConfiguration()
-              .MinimumLevel.Information()
-              .WriteTo.RollingFile(Path.Combine(env.ContentRootPath, @"logs/{Date}.log"))
-              .CreateLogger();
-
-            loggerFactory.AddSerilog(logger);
-
-            app.UseMiddleware<AnalyticsAuthorizationMiddleware>();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-        }
-
         public void ConfigureJson(JsonSerializerSettings settings)
         {
             settings.Converters.Add(new StringEnumConverter());
@@ -62,5 +34,18 @@ namespace MyMoods
             settings.PreserveReferencesHandling = PreserveReferencesHandling.None;
         }
 
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.InjectServices(_configuration);
+            services.AddControllers().AddNewtonsoftJson(o => ConfigureJson(o.SerializerSettings));
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        {
+            app.ConfigureSerilog(loggerFactory, env.ContentRootPath);
+            app.UseMiddleware<AnalyticsAuthorizationMiddleware>();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+        }
     }
 }

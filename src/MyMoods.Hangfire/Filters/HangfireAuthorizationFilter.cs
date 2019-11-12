@@ -1,8 +1,7 @@
 ﻿using Hangfire.Dashboard;
 
-namespace MyMoods.Hangfire.Settings
+namespace MyMoods.Hangfire.Filters
 {
-
     public class HangfireAuthorizationFilter : IDashboardAuthorizationFilter
     {
         public bool Authorize(DashboardContext context)

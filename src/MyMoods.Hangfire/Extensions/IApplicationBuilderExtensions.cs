@@ -1,28 +1,17 @@
 ﻿using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using MyMoods.Hangfire.Filters;
 using MyMoods.Shared.Contracts;
 using MyMoods.Shared.Domain;
 using System;
 
-namespace MyMoods.Hangfire.Settings
+namespace MyMoods.Hangfire.Extensions
 {
-    public static class HangfireConfiguration
+    public static class IApplicationBuilderExtensions
     {
-        public static void Configure(IApplicationBuilder app, IConfigurationRoot config)
+        private static void RegisterRecurringJobs()
         {
-            var dashboardPath = config.GetSection("Host").GetValue<string>("HangfirePath");
-
-            var dashboardOptions = new DashboardOptions()
-            {
-                Authorization = new[] { new HangfireAuthorizationFilter() }
-            };
-
-            app.UseHangfireServer();
-            app.UseHangfireDashboard(dashboardPath, dashboardOptions);
-
-            GlobalJobFilters.Filters.Add(new HangfireProlongExpirationTimeAttribute());
-
             RecurringJob.RemoveIfExists("reminder-daily");
             RecurringJob.RemoveIfExists("reminder-weekly");
             RecurringJob.RemoveIfExists("reminder-monthly");
@@ -47,6 +36,23 @@ namespace MyMoods.Hangfire.Settings
                 "30 14 10 * *",
                 TimeZoneInfo.Utc
             );
+        }
+
+        public static void ConfigureHangfire(this IApplicationBuilder app, IConfigurationRoot config)
+        {
+            var dashboardPath = config.GetSection("Host").GetValue<string>("HangfirePath");
+
+            var dashboardOptions = new DashboardOptions()
+            {
+                Authorization = new[] { new HangfireAuthorizationFilter() }
+            };
+
+            app.UseHangfireServer();
+            app.UseHangfireDashboard(dashboardPath, dashboardOptions);
+
+            GlobalJobFilters.Filters.Add(new HangfireProlongExpirationTimeAttribute());
+            
+            RegisterRecurringJobs();
         }
     }
 }
