@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MyMoods.Shared.Util
+namespace MyMoods.Shared.Extensions
 {
     public static class DictionaryExtensions
     {

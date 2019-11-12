@@ -2,9 +2,9 @@
 using System.ComponentModel;
 using System.Linq;
 
-namespace MyMoods.Shared.Util
+namespace MyMoods.Shared.Extensions
 {
-    public static class UtilEnums
+    public static class UtilExtensions
     {
         public static string GetDescription(this Enum value)
         {

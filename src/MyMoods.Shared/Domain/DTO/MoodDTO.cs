@@ -1,4 +1,4 @@
-﻿using MyMoods.Shared.Util;
+﻿using MyMoods.Shared.Extensions;
 
 namespace MyMoods.Shared.Domain.DTO
 {
