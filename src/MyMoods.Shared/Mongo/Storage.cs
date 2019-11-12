@@ -25,7 +25,7 @@ namespace MyMoods.Shared.Mongo
         {
             var collection = _database.GetCollection<Tagg>("tags");
 
-            if (collection.Count(x => true) == 0)
+            if (collection.EstimatedDocumentCount() == 0)
             {
                 var tags = new List<Tagg>()
                 {
