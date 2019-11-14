@@ -1,5 +1,4 @@
 ﻿using MyMoods.Shared.Contracts;
-using MyMoods.Shared.Domain;
 using MyMoods.Shared.Domain.DTO;
 using MyMoods.Shared.Domain.Enums;
 using System;

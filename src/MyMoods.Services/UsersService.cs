@@ -1,5 +1,4 @@
-﻿using Hangfire;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using MyMoods.Shared.Contracts;
 using MyMoods.Shared.Domain;

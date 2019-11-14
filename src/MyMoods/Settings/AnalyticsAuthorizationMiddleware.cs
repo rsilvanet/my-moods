@@ -24,8 +24,8 @@ namespace MyMoods.Settings
             {
                 var noAuthRoutes = new string[]
                 {
-                        "/api/analytics/login",
-                        "/api/analytics/reset"
+                    "/api/analytics/login",
+                    "/api/analytics/reset"
                 };
 
                 if (!noAuthRoutes.Contains(context.Request.Path.Value.ToLower()))
@@ -36,8 +36,7 @@ namespace MyMoods.Settings
                         return;
                     }
 
-                    ObjectId oid;
-                    ObjectId.TryParse(context.Request.Headers["X-Company"], out oid);
+                    ObjectId.TryParse(context.Request.Headers["X-Company"], out var oid);
 
                     var company = await _storage.Companies
                         .Find(x => x.Id.Equals(oid))
